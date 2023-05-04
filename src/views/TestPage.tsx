@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unknown-property */
+
 import React from 'react';
 import Image from 'next/image';
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
@@ -12,13 +13,14 @@ import spotifyLogo from 'src/assets/img/small-logos/logo-spotify.svg';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faUser, faGear, faBell, faCheck } from '@fortawesome/free-solid-svg-icons';
+
 const TestPage = () => {
   return (
     <div className="m-0 font-sans antialiased font-normal text-base leading-default text-slate-500">
       {/* sidenav  */}
       <aside className="max-w-62.5 ease-nav-brand z-990 fixed inset-y-0 my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent">
         <div className="h-19.5">
-          <i className="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden" sidenav-close />
+          <i className="absolute top-0 right-0 hidden p-4 opacity-50 cursor-pointer fas fa-times text-slate-400 xl:hidden" sidenav-close="true" />
           <a className="block px-8 py-6 m-0 text-sm whitespace-nowrap text-slate-700" href="javascript:;" target="_blank" rel="noreferrer">
             <Image src={jnFirstLogo} className="inline w-10 h-full transition-all duration-200 ease-nav-brand max-h-8" alt="main_logo" />
             <span className="ml-1 font-semibold transition-all duration-200 ease-nav-brand">JF Groupware</span>
@@ -83,19 +85,19 @@ const TestPage = () => {
           <p className="invisible hidden text-gray-800 text-red-500 text-red-600 after:bg-gradient-to-tl after:from-gray-900 after:to-slate-800 after:from-blue-600 after:to-cyan-400 after:from-red-500 after:to-yellow-400 after:from-green-600 after:to-lime-400 after:from-red-600 after:to-rose-400 after:from-slate-600 after:to-slate-300 text-lime-500 text-cyan-500 text-slate-400 text-fuchsia-500" />
           <div
             className="after:opacity-65 after:bg-gradient-to-tl after:from-slate-600 after:to-slate-300 relative flex min-w-0 flex-col items-center break-words rounded-2xl border-0 border-solid border-blue-900 bg-white bg-clip-border shadow-none after:absolute after:top-0 after:bottom-0 after:left-0 after:z-10 after:block after:h-full after:w-full after:rounded-2xl after:content-['']"
-            sidenav-card
+            sidenav-card="true"
           >
             <div
               className="mb-7.5 absolute h-full w-full rounded-2xl bg-cover bg-center"
               style={{
-                backgroundImage: 'url("./assets/img/curved-images/white-curved.jpeg")',
+                backgroundImage: 'url("white-curved.jpeg")',
               }}
             />
             <div className="relative z-20 flex-auto w-full p-4 text-left text-white">
               <div className="flex items-center justify-center w-8 h-8 mb-4 text-center bg-white bg-center rounded-lg icon shadow-soft-2xl">
                 <i
                   className="top-0 z-10 text-transparent ni leading-none ni-diamond text-lg bg-gradient-to-tl from-slate-600 to-slate-300 bg-clip-text opacity-80"
-                  sidenav-card-icon
+                  sidenav-card-icon="true"
                 />
               </div>
               <div className="transition-all duration-200 ease-nav-brand">
@@ -119,7 +121,7 @@ const TestPage = () => {
         {/* Navbar */}
         <nav
           className="relative flex flex-wrap items-center justify-between px-0 py-2 mx-6 transition-all shadow-none duration-250 ease-soft-in rounded-2xl lg:flex-nowrap lg:justify-start"
-          navbar-main
+          navbar-main="true"
           navbar-scroll="true"
         >
           <div className="flex items-center justify-between w-full px-4 py-1 mx-auto flex-wrap-inherit">
@@ -161,7 +163,7 @@ const TestPage = () => {
                   </a>
                 </li>
                 <li className="flex items-center pl-4 xl:hidden">
-                  <a href="javascript:;" className="block p-0 transition-all ease-nav-brand text-sm text-slate-500" sidenav-trigger>
+                  <a href="javascript:;" className="block p-0 transition-all ease-nav-brand text-sm text-slate-500" sidenav-trigger="true">
                     <div className="w-4.5 overflow-hidden">
                       <i className="ease-soft mb-0.75 relative block h-0.5 rounded-sm bg-slate-500 transition-all" />
                       <i className="ease-soft mb-0.75 relative block h-0.5 rounded-sm bg-slate-500 transition-all" />
@@ -175,18 +177,23 @@ const TestPage = () => {
                       fixed-plugin-button-nav
                       className="cursor-pointer fa fa-cog"
                     /> */}
-                    <FontAwesomeIcon fixed-plugin-button-nav className="cursor-pointer" icon={faGear} />
+                    <FontAwesomeIcon fixed-plugin-button-nav="true" className="cursor-pointer" icon={faGear} />
                     {/* fixed-plugin-button-nav  */}
                   </a>
                 </li>
                 {/* notifications */}
                 <li className="relative flex items-center pr-2">
                   <p className="hidden transform-dropdown-show" />
-                  <a href="javascript:;" className="block p-0 transition-all text-sm ease-nav-brand text-slate-500" dropdown-trigger aria-expanded="false">
+                  <a
+                    href="javascript:;"
+                    className="block p-0 transition-all text-sm ease-nav-brand text-slate-500"
+                    dropdown-trigger="true"
+                    aria-expanded="false"
+                  >
                     <FontAwesomeIcon className="cursor-pointer" icon={faBell} />
                   </a>
                   <ul
-                    dropdown-menu
+                    dropdown-menu="true"
                     className="text-sm transform-dropdown before:font-awesome before:leading-default before:duration-350 before:ease-soft lg:shadow-soft-3xl duration-250 min-w-44 before:sm:right-7.5 before:text-5.5 pointer-events-none absolute right-0 top-0 z-50 origin-top list-none rounded-lg border-0 border-solid border-transparent bg-white bg-clip-padding px-2 py-4 text-left text-slate-500 opacity-0 transition-all before:absolute before:right-2 before:left-auto before:top-0 before:z-50 before:inline-block before:font-normal before:text-white before:antialiased before:transition-all before:content-['\f0d8'] sm:-mr-6 lg:absolute lg:right-0 lg:left-auto lg:mt-2 lg:block lg:cursor-pointer"
                   >
                     {/* add show class on dropdown open js */}
