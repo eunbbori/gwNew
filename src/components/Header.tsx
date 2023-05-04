@@ -39,7 +39,7 @@ const Header = () => {
           </ul>
         </div>
       </div>
-      <hr className="w-65 h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
+      <hr className="h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
     </>
   );
 };

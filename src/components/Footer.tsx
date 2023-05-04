@@ -5,16 +5,16 @@ import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
 const Footer = () => {
   return (
-    <footer className="min-w-full min-h-0 absolute tracking-tighter bottom-6">
+    <footer className="w-11/12 min-h-0 absolute tracking-tighter bottom-6">
       <section className="text-sm">
-        <hr className="w-65 h-px mt-5 bg-gray-200 border-0 dark:bg-gray-700" />
+        <hr className="w-full h-px mt-5 bg-gray-200 border-0 dark:bg-gray-700" />
         <nav className="flex justify-evenly w-3/12 mt-3">
           <a href="#">회사소개</a>
           <a href="#">이용약관 및 규칙</a>
           <a href="#">구매문의</a>
           <a href="#">요금제</a>
         </nav>
-        <hr className="w-65 h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
+        <hr className="h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
       </section>
       <section className="flex text-xs mt-7 ml-7">
         <a href="javascript:;" target="_blank" rel="noreferrer">
