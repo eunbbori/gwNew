@@ -7,9 +7,5 @@ import TestPage from '@/views/TestPage';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
-  return (
-    <>
-      <TestPage />
-    </>
-  );
+  return <></>;
 }
