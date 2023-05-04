@@ -5,7 +5,7 @@ import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
 const Footer = () => {
   return (
-    <footer className="tracking-tighter">
+    <footer className="min-w-full min-h-0 absolute tracking-tighter bottom-6">
       <section className="text-sm">
         <hr className="w-65 h-px mt-5 bg-gray-200 border-0 dark:bg-gray-700" />
         <nav className="flex justify-evenly w-3/12 mt-3">
