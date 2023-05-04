@@ -3,27 +3,20 @@ import React from 'react';
 import Image from 'next/image';
 
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faUser, faGear, faBell } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faGear, faBell } from '@fortawesome/free-solid-svg-icons';
+import Search from './Search';
+import CompanyLogo from './companyLogo';
 
 const Header = () => {
   return (
     <>
-      <div className="flex h-19.5">
-        <a className="flex px-8 py-4 m-0 text-base whitespace-nowrap" href="javascript:;" target="_blank" rel="noreferrer">
-          <Image src={jnFirstLogo} className="inline w-16 h-full" alt="main_logo" />
-          <span className="self-center ml-4 font-semibold text-sky-700">JF Groupware</span>
-        </a>
+      <div className="flex h-10">
+        <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
         <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
           <div className="flex">
-            <span className="text-sm ease-soft leading-5.6 absolute z-50 -ml-px flex h-full items-center whitespace-nowrap rounded-lg rounded-tr-none rounded-br-none border border-r-0 border-transparent bg-transparent py-2 px-2.5 text-center font-normal text-slate-500 transition-all">
-              <FontAwesomeIcon icon={faMagnifyingGlass} />
-            </span>
-            <input
-              type="text"
-              className="self-center pl-8.75 mr-5 text-sm focus:shadow-soft-primary-outline ease-soft leading-5.6 relative w-60 h-12 -ml-px block rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 pr-3 text-gray-700 transition-all placeholder:text-gray-500 focus:border-fuchsia-300 focus:outline-none focus:transition-shadow"
-              placeholder="Type here..."
-            />
+            <Search />
           </div>
           <ul className="flex">
             <li className="flex items-center">
@@ -46,7 +39,7 @@ const Header = () => {
           </ul>
         </div>
       </div>
-      <hr className="w-65 h-px mt-5 bg-gray-200 border-0 dark:bg-gray-700" />
+      <hr className="w-65 h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
     </>
   );
 };
