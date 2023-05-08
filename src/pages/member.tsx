@@ -10,22 +10,13 @@ import editIcon from 'src/assets/svg/edit.svg';
 
 import MenuItem from '../views/common/left/menuItem';
 import NavTitle from '@/views/common/NavTitle';
+import Menu from '@/views/common/left/menu';
 
 const Member = () => {
   return (
     <div className="m-0 font-sans antialiased font-normal text-base leading-default text-slate-500">
       {/* sidenav  */}
-      <aside className="max-w-62.5 ease-nav-brand z-990 fixed my-4 ml-4 block w-full -translate-x-full flex-wrap items-center justify-between overflow-y-auto rounded-2xl border-0 bg-white p-0 antialiased shadow-none transition-transform duration-200 xl:left-0 xl:translate-x-0 xl:bg-transparent">
-        <div className="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
-          <ul className="flex flex-col pl-0 mb-0">
-            <MenuItem menuNm="대시보드" imgSrc={laptopIcon} url="./pages/dashboard.html" />
-            <MenuItem menuNm="직원관리" imgSrc={userGroupIcon} url="./pages/tables.html" selected={true} />
-            <MenuItem menuNm="휴가관리" imgSrc={flightIcon} url="./pages/billing.html" />
-            <MenuItem menuNm="근태관리" imgSrc={alarmIcon} url="./pages/virtual-reality.html" />
-            <MenuItem menuNm="결제" imgSrc={editIcon} url="./pages/profile.html" />
-          </ul>
-        </div>
-      </aside>
+      <Menu selectedMenu={'member'} />
       {/* end sidenav */}
       <main className="ease-soft-in-out xl:ml-68.5 relative h-full max-h-screen rounded-xl transition-all duration-200">
         {/* Navbar */}
