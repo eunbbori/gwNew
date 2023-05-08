@@ -7,7 +7,7 @@ import jnFirstLogo from 'src/assets/img/jnfirst.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faGear, faBell } from '@fortawesome/free-solid-svg-icons';
 import Search from './Search';
-import CompanyLogo from './companyLogo';
+import CompanyLogo from './CompanyLogo';
 
 const Header = () => {
   return (
