@@ -27,19 +27,19 @@ const Menu = ({ selectedMenu }: IMenuProps) => {
       <div className="items-center block w-auto max-h-screen overflow-auto h-sidenav grow basis-full">
         <ul className="flex flex-col pl-0 mb-0">
           <Link href="/dashboard">
-            <MenuItem menuNm="대시보드" imgSrc={laptopIcon} selected={'dashboard' !== selectedMenu} />
+            <MenuItem menuNm="대시보드" imgSrc={laptopIcon} selected={'dashboard' === selectedMenu} />
           </Link>
           <Link href="/member">
-            <MenuItem menuNm="직원관리" imgSrc={userGroupIcon} selected={'member' !== selectedMenu} />
+            <MenuItem menuNm="직원관리" imgSrc={userGroupIcon} selected={'member' === selectedMenu} />
           </Link>
           <Link href="/dayoff">
-            <MenuItem menuNm="휴가관리" imgSrc={flightIcon} selected={'dayoff' !== selectedMenu} />
+            <MenuItem menuNm="휴가관리" imgSrc={flightIcon} selected={'dayoff' === selectedMenu} />
           </Link>
           <Link href="/attendance">
-            <MenuItem menuNm="근태관리" imgSrc={alarmIcon} selected={'attendance' !== selectedMenu} />
+            <MenuItem menuNm="근태관리" imgSrc={alarmIcon} selected={'attendance' === selectedMenu} />
           </Link>
           <Link href="/approval">
-            <MenuItem menuNm="결제" imgSrc={editIcon} selected={'approval' !== selectedMenu} />
+            <MenuItem menuNm="결제" imgSrc={editIcon} selected={'approval' === selectedMenu} />
           </Link>
         </ul>
       </div>
