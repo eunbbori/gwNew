@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import MenuItem from './menuItem';
 
 import laptopIcon from 'src/assets/svg/laptop.svg';
 import userGroupIcon from 'src/assets/svg/user-group.svg';
@@ -9,7 +8,7 @@ import editIcon from 'src/assets/svg/edit.svg';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-const MenuItem = dynamic(import('../left/menuItem'));
+const MenuItem = dynamic(import('./MenuItem'));
 export interface IMenuProps {
   selectedMenu: string;
 }

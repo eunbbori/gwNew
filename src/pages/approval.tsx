@@ -2,14 +2,9 @@
 
 import React from 'react';
 
-import laptopIcon from 'src/assets/svg/laptop.svg';
-import userGroupIcon from 'src/assets/svg/user-group.svg';
-import flightIcon from 'src/assets/svg/flight.svg';
-import alarmIcon from 'src/assets/svg/alarm.svg';
 import editIcon from 'src/assets/svg/edit.svg';
 import NavTitle from '@/views/common/NavTitle';
-import MenuItem from '@/views/common/left/menuItem';
-import Menu from '@/views/common/left/menu';
+import Menu from '@/views/common/left/Menu';
 
 const Approval = () => {
   return (

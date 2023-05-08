@@ -1,4 +1,4 @@
-import TableCell from './tableCell';
+import TableCell from './TableCell';
 
 export interface ITableRowsProps {
   name: string;
