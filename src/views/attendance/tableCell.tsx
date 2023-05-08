@@ -2,7 +2,7 @@ export interface ITableCellProps {
   cellData?: string;
 }
 
-export default function TableCell({ cellData }: ITableCellProps) {
+const TableCell = ({ cellData }: ITableCellProps) => {
   return (
     <td className="p-2 align-middle bg-transparent border-b whitespace-nowrap">
       <div className="flex px-2 py-1">
@@ -12,4 +12,6 @@ export default function TableCell({ cellData }: ITableCellProps) {
       </div>
     </td>
   );
-}
+};
+
+export default TableCell;

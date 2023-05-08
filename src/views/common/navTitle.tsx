@@ -5,7 +5,7 @@ export interface INavTitleProps {
   imgSrc: any;
 }
 
-export default function NavTitle({ navTitle, imgSrc }: INavTitleProps) {
+const NavTitle = ({ navTitle, imgSrc }: INavTitleProps) => {
   return (
     <nav>
       <Image className="inline" src={imgSrc} alt={navTitle} />
@@ -13,4 +13,6 @@ export default function NavTitle({ navTitle, imgSrc }: INavTitleProps) {
       <h6 className="inline mb-0 font-bold capitalize">{navTitle}</h6>
     </nav>
   );
-}
+};
+
+export default NavTitle;

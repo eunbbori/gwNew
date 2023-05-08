@@ -2,17 +2,17 @@
 
 import React from 'react';
 
-import DateMemberCnt from './attendance/dateMemberCnt';
-import TableHeader from './attendance/tableHeader';
-import TableRows from './attendance/tableRows';
-import MenuItem from './common/left/menuItem';
-import NavTitle from './common/navTitle';
-
 import laptopIcon from 'src/assets/svg/laptop.svg';
 import userGroupIcon from 'src/assets/svg/user-group.svg';
 import flightIcon from 'src/assets/svg/flight.svg';
 import alarmIcon from 'src/assets/svg/alarm.svg';
 import editIcon from 'src/assets/svg/edit.svg';
+
+import MenuItem from './common/left/menuItem';
+import NavTitle from './common/navTitle';
+import DateMemberCnt from './attendance/dateMemberCnt';
+import TableHeader from './attendance/tableHeader';
+import TableRows from './attendance/tableRows';
 
 const TestPage = () => {
   return (

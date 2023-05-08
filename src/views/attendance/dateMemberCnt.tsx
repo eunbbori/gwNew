@@ -6,7 +6,7 @@ export interface IDateMemberCntProps {
   cnt: number;
 }
 
-export default function DateMemberCnt({ dt, cnt }: IDateMemberCntProps) {
+const DateMemberCnt = ({ dt, cnt }: IDateMemberCntProps) => {
   const year = dt.getFullYear();
   const month = dt.getMonth() + 1;
   const sMonth = month >= 10 ? month : '0' + month;
@@ -24,4 +24,6 @@ export default function DateMemberCnt({ dt, cnt }: IDateMemberCntProps) {
       </p>
     </div>
   );
-}
+};
+
+export default DateMemberCnt;

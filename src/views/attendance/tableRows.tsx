@@ -1,4 +1,3 @@
-import { ReactElement, JSXElementConstructor, ReactFragment, ReactPortal } from 'react';
 import TableCell from './tableCell';
 
 export interface ITableRowsProps {
@@ -56,7 +55,7 @@ const attendanceData: ITableRowsProps[] = [
   },
 ];
 
-export default function TableRows() {
+const TableRows = () => {
   return (
     <>
       {attendanceData.map((e, id) => (
@@ -72,4 +71,6 @@ export default function TableRows() {
       ))}
     </>
   );
-}
+};
+
+export default TableRows;

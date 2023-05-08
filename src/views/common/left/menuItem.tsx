@@ -7,7 +7,7 @@ export interface IMenuItemProps {
   selected?: boolean;
 }
 
-export default function MenuItem({ menuNm, imgSrc, url, selected }: IMenuItemProps) {
+const MenuItem = ({ menuNm, imgSrc, url, selected }: IMenuItemProps) => {
   const anchorClass = 'py-2.7 text-sm ease-nav-brand my-0 mx-4 flex items-center whitespace-nowrap px-4 transition-colors ';
   const divClass = 'shadow-soft-2xl mr-2 flex h-10 w-10 items-center justify-center rounded-lg bg-white bg-center stroke-0 text-center xl:p-2.5 ';
   const anchorSelectedClass = 'shadow-soft-xl ounded-lg bg-white font-semibold text-slate-700';
@@ -23,4 +23,6 @@ export default function MenuItem({ menuNm, imgSrc, url, selected }: IMenuItemPro
       </a>
     </li>
   );
-}
+};
+
+export default MenuItem;
