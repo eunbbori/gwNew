@@ -1,9 +1,19 @@
+import TableCell from './TableCell';
 import { IGetEmployeeQuery } from '@/types/generated/types';
-import TableCell from './tableCell';
 
 type TableRowsProps = {
   data: IGetEmployeeQuery;
 };
+
+const fmtDate = (dt: Date) =>
+  dt && dt.getMonth() + '월' + dt.getDate() + '일 ' + dt.getHours().toString().padStart(2, '0') + ':' + dt.getMinutes().toString().padStart(2, '0');
+const calcWorkingTime = (startAt?: Date, endAt?: Date) =>
+  startAt &&
+  endAt &&
+  Math.floor(((+endAt - +startAt) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)) +
+    '시간 ' +
+    Math.floor(((+endAt - +startAt) % (1000 * 60 * 60)) / (1000 * 60)) +
+    '분 ';
 
 const TableRows = ({ data }: TableRowsProps) => {
   return (
@@ -12,37 +22,13 @@ const TableRows = ({ data }: TableRowsProps) => {
         const startAt: Date = e && e.startAt && new Date(e.startAt);
         const endAt: Date = e && e.endAt && new Date(e.endAt);
 
-        const startTm =
-          startAt &&
-          startAt.getMonth() +
-            '월' +
-            startAt.getDate() +
-            '일 ' +
-            startAt.getHours().toString().padStart(2, '0') +
-            ':' +
-            startAt.getMinutes().toString().padStart(2, '0');
-        const endTm =
-          endAt &&
-          endAt.getMonth() +
-            '월' +
-            endAt.getDate() +
-            '일 ' +
-            endAt.getHours().toString().padStart(2, '0') +
-            ':' +
-            endAt.getMinutes().toString().padStart(2, '0');
-
-        const gap = +endAt - +startAt;
-        const hour = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minute = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
-        const workTime = hour + '시간 ' + minute + '분 ';
-
         return (
           <tr key={id}>
             <TableCell cellData={e!['employeeName']} />
-            <TableCell cellData={workTime} />
+            <TableCell cellData={calcWorkingTime(startAt, endAt)} />
             <TableCell cellData={'출근'} />
-            <TableCell cellData={startTm} />
-            <TableCell cellData={endTm} />
+            <TableCell cellData={fmtDate(startAt)} />
+            <TableCell cellData={fmtDate(endAt)} />
             <TableCell cellData={'-'} />
             <TableCell cellData={'-'} />
           </tr>
