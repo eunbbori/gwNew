@@ -1,7 +1,0 @@
-query {
- employees {
-   employeeId
-   userId
-   employeeName
- }
-}

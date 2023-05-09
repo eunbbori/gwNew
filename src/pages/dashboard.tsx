@@ -7,19 +7,18 @@ import NavTitle from '@/views/common/NavTitle';
 import Menu from '@/views/common/left/Menu';
 
 import { useQuery } from '@apollo/client';
-
-// import QUERY_EMPLOYEES from '../../queryEmployees.graphql';
+import { GET_EMPLOYEES } from './graphql';
 
 const Dashboard = () => {
-  // const { data, loading, error } = useQuery(QUERY_EMPLOYEES);
+  const { data, loading, error } = useQuery(GET_EMPLOYEES);
 
   return (
     <>
-      {/* <div>
+      <div>
         {data.employees.map((emp: any) => (
           <div key={emp.employeeId}>{emp.employeeName}</div>
         ))}
-      </div> */}
+      </div>
       <div className="m-0 font-sans antialiased font-normal text-base leading-default text-slate-500">
         {/* sidenav  */}
         <Menu selectedMenu={'dashboard'} />
