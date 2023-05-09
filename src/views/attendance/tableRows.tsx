@@ -6,6 +6,11 @@ type TableRowsProps = {
 };
 
 const TableRows = ({ data }: TableRowsProps) => {
+  console.log('data', data);
+  console.log('data.employees', data.employees);
+  console.log('data.employees[0]', data?.employees![0]);
+  console.log('data.employees[0]', data?.employees![0]!['employeeName']);
+
   return (
     <>
       {data.employees!.map((e, id) => (

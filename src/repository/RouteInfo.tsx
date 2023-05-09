@@ -5,8 +5,6 @@ import flightIcon from 'src/assets/svg/flight.svg';
 import userGroupIcon from 'src/assets/svg/user-group.svg';
 
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
-import TableHeader from '@/views/attendance/TableHeader';
-import TableRows from '@/views/attendance/TableRows';
 import Attendance from '@/views/attendance/Attendance';
 
 export type RouteInfo = {
