@@ -15,14 +15,21 @@ const DateMemberCnt = ({ dt, cnt }: IDateMemberCntProps) => {
   const day = ['일', '월', '화', '수', '목', '금', '토'];
 
   return (
-    <div className="flex-none w-7/12 max-w-full px-3 mt-0 lg:w-1/2 lg:flex-none">
-      <h6>
-        {year + '-' + sMonth + '-' + sDate} ({day[dt.getDay()]})
-      </h6>
-      <p className="mb-0 leading-normal text-sm">
-        <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체 <span className="ml-1 font-semibold">{cnt}</span> 명
-      </p>
-    </div>
+    <>
+      <div className="flex-none w-7/12 max-w-full px-3 mt-0 lg:w-1/2 lg:flex-none">
+        <h6>
+          {year + '-' + sMonth + '-' + sDate} ({day[dt.getDay()]})
+        </h6>
+        <p className="mb-0 leading-normal text-sm">
+          <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체 <span className="ml-1 font-semibold">{cnt}</span> 명
+        </p>
+      </div>
+      <div className="flex-none w-7/12 max-w-full px-3 mt-0 -right-0 lg:w-1/2 lg:flex-none">
+        <button className="h-10 px-6 font-semibold rounded-md border border-slate-200 text-slate-800" type="button">
+          조회
+        </button>
+      </div>
+    </>
   );
 };
 
