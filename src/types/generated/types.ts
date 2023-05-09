@@ -13,7 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: any;
+  Date: Date;
 };
 
 export type IDepartment = {
@@ -42,7 +42,15 @@ export type IGetEmployeeQueryVariables = Exact<{ [key: string]: never }>;
 
 export type IGetEmployeeQuery = {
   __typename?: 'Query';
-  employees?: Array<{ __typename?: 'Employee'; employeeId?: number | null; userId?: string | null; employeeName?: string | null } | null> | null;
+  employees?: Array<{
+    __typename?: 'Employee';
+    employeeId?: number | null;
+    userId?: string | null;
+    employeeName?: string | null;
+    startAt?: any | null;
+    endAt?: any | null;
+    department?: { __typename?: 'Department'; departmentName?: string | null } | null;
+  } | null> | null;
 };
 
 export const GetEmployeeDocument = gql`
@@ -51,6 +59,11 @@ export const GetEmployeeDocument = gql`
       employeeId
       userId
       employeeName
+      startAt
+      endAt
+      department {
+        departmentName
+      }
     }
   }
 `;

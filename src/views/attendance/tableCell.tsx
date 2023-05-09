@@ -1,5 +1,5 @@
 export interface ITableCellProps {
-  cellData?: string;
+  cellData?: string | null;
 }
 
 const TableCell = ({ cellData }: ITableCellProps) => {

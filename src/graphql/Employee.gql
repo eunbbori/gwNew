@@ -3,5 +3,10 @@ query getEmployee {
     employeeId
     userId
     employeeName
+    startAt
+    endAt
+    department {
+      departmentName
+    }
   }
 }

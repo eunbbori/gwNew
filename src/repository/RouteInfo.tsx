@@ -7,6 +7,7 @@ import userGroupIcon from 'src/assets/svg/user-group.svg';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
+import Attendance from '@/views/attendance/Attendance';
 
 export type RouteInfo = {
   id: string;
@@ -29,16 +30,7 @@ export const routeInfos: RouteInfo[] = [
     name: '근태관리',
     img: alarmIcon,
     upper: <DateMemberCnt dt={new Date()} cnt={15} />,
-    lower: (
-      <>
-        <table className="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-          <TableHeader />
-          <tbody>
-            <TableRows />
-          </tbody>
-        </table>
-      </>
-    ),
+    lower: <Attendance />,
   },
   {
     id: 'dashboard',
