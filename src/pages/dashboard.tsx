@@ -14,11 +14,11 @@ const Dashboard = () => {
 
   return (
     <>
-      <div>
+      {/* <div>
         {data.employees.map((emp: any) => (
           <div key={emp.employeeId}>{emp.employeeName}</div>
         ))}
-      </div>
+      </div> */}
       <div className="m-0 font-sans antialiased font-normal text-base leading-default text-slate-500">
         {/* sidenav  */}
         <Menu selectedMenu={'dashboard'} />
