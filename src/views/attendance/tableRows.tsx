@@ -31,10 +31,15 @@ const TableRows = ({ data }: TableRowsProps) => {
             ':' +
             endAt.getMinutes().toString().padStart(2, '0');
 
+        const gap = +endAt - +startAt;
+        const hour = Math.floor((gap % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minute = Math.floor((gap % (1000 * 60 * 60)) / (1000 * 60));
+        const workTime = hour - 1 + '시간 ' + minute + '분 ';
+
         return (
           <tr key={id}>
             <TableCell cellData={e!['employeeName']} />
-            <TableCell cellData={''} />
+            <TableCell cellData={workTime} />
             <TableCell cellData={'출근'} />
             <TableCell cellData={startTm} />
             <TableCell cellData={endTm} />
