@@ -2,7 +2,11 @@
 
 module.exports = {
   mode: 'jit',
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: [
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/tailwind-datepicker-react/dist/**/*.{js,ts,jsx,tsx,mdx}',
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
+  ],
   presets: [],
   darkMode: 'class',
   theme: {
@@ -1357,5 +1361,5 @@ module.exports = {
     'active',
     'disabled',
   ],
-  plugins: [],
+  plugins: [require('flowbite/plugin')],
 };
