@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { toDateFormat } from '@/utils/toDateFormat';
+// import { ko } from 'date-fns/esm/locale';
 
 export interface IDateMemberCntProps {
   dt: Date;
@@ -17,7 +18,7 @@ const DateMemberCnt = ({ dt, cnt }: IDateMemberCntProps) => {
   const dateClickHandler = () => {
     console.log('selectedDate', toDateFormat(selectedDate!));
   };
-
+  const selectedDay = day[selectedDate!.getDay()];
   return (
     <>
       <div className="flex-none w-7/12 max-w-full px-3 mt-0 lg:w-1/2 lg:flex-none">
@@ -31,7 +32,7 @@ const DateMemberCnt = ({ dt, cnt }: IDateMemberCntProps) => {
       <div className="justify-end flex w-7/12 max-w-full px-3 mt-0 -right-0 lg:w-1/2">
         <div>
           <DatePicker
-            dateFormat="yyyy-MM-dd"
+            dateFormat={`yyyy-MM-dd (${selectedDay})`}
             minDate={new Date('2000-01-01')}
             maxDate={new Date()}
             shouldCloseOnSelect
