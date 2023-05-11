@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import '@/styles/datepicker.css';
 import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
