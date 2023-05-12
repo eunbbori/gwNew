@@ -42,3 +42,7 @@
   margin-top: 3px;
   margin-left: 3px;
 }
+
+.react-datepicker__input-container react-datepicker__view-calendar-icon input{
+  margin-bottom: 1rem;
+}

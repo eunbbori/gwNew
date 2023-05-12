@@ -1,0 +1,12 @@
+mutation getAttendance($date: Date!) {
+  attendanceInfo(date: $date) {
+    employeeId
+    userId
+    employeeName
+    startAt
+    endAt
+    department {
+      departmentName
+    }
+  }
+}
