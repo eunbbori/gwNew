@@ -2,15 +2,16 @@ import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
 import { useGetEmployeeWorkingQuery } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
-import { useState } from 'react';
 import { toDateFormatWithoutDay } from '@/utils/toDateFormat';
+import { useReactiveVar } from '@apollo/client';
+import attendanceDate from '@/modules/attendance';
 
 const Attendance = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const selectedAttendanceDate = useReactiveVar(attendanceDate);
 
   const { data, loading, error } = useGetEmployeeWorkingQuery({
     variables: {
-      dt: toDateFormatWithoutDay(selectedDate),
+      dt: toDateFormatWithoutDay(selectedAttendanceDate),
     },
   });
 
@@ -22,7 +23,7 @@ const Attendance = () => {
     <>
       <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0">
         <div className="flex flex-wrap mt-0 -mx-3">
-          <DateMemberCnt cnt={data!.employeeWorking?.length} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+          <DateMemberCnt cnt={data!.employeeWorking?.length} selectedDate={selectedAttendanceDate} />
         </div>
       </div>
       <div className="flex-auto p-6 px-0 pb-2">
