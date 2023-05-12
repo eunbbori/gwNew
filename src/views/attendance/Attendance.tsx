@@ -14,7 +14,7 @@ const Attendance = () => {
     <>
       <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid bg-white p-6 pb-0">
         <div className="flex flex-wrap mt-0 -mx-3">
-          <DateMemberCnt dt={new Date()} cnt={data.employees?.length || 0} />
+          <DateMemberCnt cnt={data.employees?.length || 0} />
         </div>
       </div>
       <div className="flex-auto p-6 px-0 pb-2">
