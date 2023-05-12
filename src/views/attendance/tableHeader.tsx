@@ -1,5 +1,5 @@
 const TableHeader = () => {
-  const headers: string[] = ['이름', '근무시간', '근태', '출근', '퇴근', '연장근무', '야간근무'];
+  const headers: string[] = ['이름', 'ID', '근무시간', '근태', '출근', '퇴근', '연장근무', '야간근무'];
 
   return (
     <thead className="align-bottom">

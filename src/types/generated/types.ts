@@ -13,7 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: Date;
+  Date: any;
 };
 
 export type IDepartment = {
@@ -27,16 +27,39 @@ export type IEmployee = {
   department?: Maybe<IDepartment>;
   employeeId?: Maybe<Scalars['Int']>;
   employeeName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type IEmployeeWorking = {
+  __typename?: 'EmployeeWorking';
+  department?: Maybe<IDepartment>;
+  employeeId?: Maybe<Scalars['Int']>;
+  employeeName?: Maybe<Scalars['String']>;
   endAt?: Maybe<Scalars['Date']>;
   startAt?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
+  workingDate?: Maybe<Scalars['Date']>;
+  workingType?: Maybe<IWorkingType>;
 };
 
 export type IQuery = {
   __typename?: 'Query';
   departments?: Maybe<Array<Maybe<IDepartment>>>;
+  employeeWorking?: Maybe<Array<Maybe<IEmployeeWorking>>>;
   employees?: Maybe<Array<Maybe<IEmployee>>>;
 };
+
+export type IQueryEmployeeWorkingArgs = {
+  dt?: InputMaybe<Scalars['String']>;
+};
+
+export enum IWorkingType {
+  FullDayoff = 'FULL_DAYOFF',
+  HalfDayoff = 'HALF_DAYOFF',
+  Military = 'MILITARY',
+  Sick = 'SICK',
+  Work = 'WORK',
+}
 
 export type IGetEmployeeQueryVariables = Exact<{ [key: string]: never }>;
 
@@ -47,9 +70,26 @@ export type IGetEmployeeQuery = {
     employeeId?: number | null;
     userId?: string | null;
     employeeName?: string | null;
+    department?: { __typename?: 'Department'; departmentName?: string | null } | null;
+  } | null> | null;
+};
+
+export type IGetEmployeeWorkingQueryVariables = Exact<{
+  dt?: InputMaybe<Scalars['String']>;
+}>;
+
+export type IGetEmployeeWorkingQuery = {
+  __typename?: 'Query';
+  employeeWorking?: Array<{
+    __typename?: 'EmployeeWorking';
+    employeeId?: number | null;
+    employeeName?: string | null;
+    userId?: string | null;
+    workingDate?: any | null;
+    workingType?: IWorkingType | null;
     startAt?: any | null;
     endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null> | null;
 };
 
@@ -59,8 +99,6 @@ export const GetEmployeeDocument = gql`
       employeeId
       userId
       employeeName
-      startAt
-      endAt
       department {
         departmentName
       }
@@ -94,3 +132,48 @@ export function useGetEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetEmployeeQueryHookResult = ReturnType<typeof useGetEmployeeQuery>;
 export type GetEmployeeLazyQueryHookResult = ReturnType<typeof useGetEmployeeLazyQuery>;
 export type GetEmployeeQueryResult = Apollo.QueryResult<IGetEmployeeQuery, IGetEmployeeQueryVariables>;
+export const GetEmployeeWorkingDocument = gql`
+  query getEmployeeWorking($dt: String) {
+    employeeWorking(dt: $dt) {
+      employeeId
+      employeeName
+      department {
+        departmentId
+        departmentName
+      }
+      userId
+      workingDate
+      workingType
+      startAt
+      endAt
+    }
+  }
+`;
+
+/**
+ * __useGetEmployeeWorkingQuery__
+ *
+ * To run a query within a React component, call `useGetEmployeeWorkingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEmployeeWorkingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEmployeeWorkingQuery({
+ *   variables: {
+ *      dt: // value for 'dt'
+ *   },
+ * });
+ */
+export function useGetEmployeeWorkingQuery(baseOptions?: Apollo.QueryHookOptions<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>(GetEmployeeWorkingDocument, options);
+}
+export function useGetEmployeeWorkingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>(GetEmployeeWorkingDocument, options);
+}
+export type GetEmployeeWorkingQueryHookResult = ReturnType<typeof useGetEmployeeWorkingQuery>;
+export type GetEmployeeWorkingLazyQueryHookResult = ReturnType<typeof useGetEmployeeWorkingLazyQuery>;
+export type GetEmployeeWorkingQueryResult = Apollo.QueryResult<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>;

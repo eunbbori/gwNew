@@ -3,10 +3,24 @@ query getEmployee {
     employeeId
     userId
     employeeName
-    startAt
-    endAt
     department {
       departmentName
     }
+  }
+}
+
+query getEmployeeWorking($dt: String) {
+  employeeWorking(dt: $dt) {
+    employeeId
+    employeeName
+    department {
+      departmentId
+      departmentName
+    }
+    userId
+    workingDate
+    workingType
+    startAt
+    endAt
   }
 }
