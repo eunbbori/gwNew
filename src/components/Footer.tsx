@@ -14,9 +14,9 @@ const Footer = () => {
           <a href="#">구매문의</a>
           <a href="#">요금제</a>
         </nav>
-        <hr className="h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
+        {/* <hr className="h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" /> */}
       </section>
-      <section className="flex text-xs mt-7 ml-7">
+      {/* <section className="flex text-xs mt-7 ml-7">
         <a href="javascript:;" target="_blank" rel="noreferrer">
           <Image src={jnFirstLogo} className="inline w-20 h-full" alt="main_logo" />
         </a>
@@ -27,7 +27,7 @@ const Footer = () => {
           <br></br>
           <p className="font-bold">Copyright © J&First Co.,Ltd. All Rights Reserved</p>
         </div>
-      </section>
+      </section> */}
     </footer>
   );
 };
