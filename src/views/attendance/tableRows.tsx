@@ -18,6 +18,7 @@ const TableRows = ({ data }: TableRowsProps) => {
           <tr key={id}>
             <TableCell cellData={e!['employeeName']} />
             <TableCell cellData={e!['userId']} />
+            <TableCell cellData={e!.department?.departmentName ?? ''} />
             <TableCell cellData={calculateDateDiff(startAt, endAt)} />
             <TableCell cellData={e ? getWorkingTypeName(e!['workingType']) : ''} />
             <TableCell cellData={toDateTimeWithoutYear(startAt)} />
