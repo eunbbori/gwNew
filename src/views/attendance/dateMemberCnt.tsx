@@ -37,6 +37,11 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
             shouldCloseOnSelect
             selected={selectedAttendanceDate}
             onChange={dateChangeHandler}
+            customInput={
+              <button>
+                <span className="pl-9">{toDateFormat(selectedAttendanceDate)}</span>
+              </button>
+            }
             showIcon
           />
         </div>
