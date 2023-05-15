@@ -3,6 +3,7 @@ import '@/styles/datepicker.css';
 import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { SessionProvider } from 'next-auth/react';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
@@ -11,10 +12,12 @@ const client = new ApolloClient({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ApolloProvider>
+    <SessionProvider>
+      <ApolloProvider client={client}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloProvider>
+    </SessionProvider>
   );
 }
