@@ -11,14 +11,14 @@ export default NextAuth({
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        email: { label: '이메일', type: 'email', placeholder: 'user@email.com' },
+        email: { label: '이메일', type: 'email', placeholder: 'user@jnfirst.com' },
         password: { label: '비밀번호', type: 'password' },
       },
       async authorize(credentials: any, req) {
         // Add logic here to look up the user from the credentials supplied
-        const user = { id: '1', name: 'test user', email: 'testuser@email.com' };
+        const user = { id: '1', name: '아이언맨', email: 'ironman@jnfirst.com' };
 
-        if (credentials.email === 'testuser@email.com' && credentials.password === 'test') {
+        if (credentials.email === 'ironman@jnfirst.com' && credentials.password === 'test') {
           // Any object returned will be saved in `user` property of the JWT
           return user;
         } else {

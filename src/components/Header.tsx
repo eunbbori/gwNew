@@ -10,6 +10,7 @@ import Search from './Search';
 import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
+import AttendanceBtnGroup from './AttendanceBtnGroup';
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -20,6 +21,7 @@ const Header = () => {
         <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
         <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
           <div className="flex">
+            <AttendanceBtnGroup />
             <Search />
           </div>
           <ul className="flex">
