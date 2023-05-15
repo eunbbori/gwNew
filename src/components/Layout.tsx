@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="m-7 p-2 text-slate-500">
       <Header />
-      <div className="">{children}</div>
+      <div>{children}</div>
       <Footer />
     </div>
   );
