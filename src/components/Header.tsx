@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
@@ -13,14 +13,20 @@ import { signOut, useSession } from 'next-auth/react';
 import AttendanceBtnGroup from './AttendanceBtnGroup';
 
 const Header = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
+
+  useEffect(() => {
+    const interval = setInterval(() => update(), 1000 * 60 * 60);
+    return () => clearInterval(interval);
+  }, [update]);
+
   if (status === 'authenticated') console.log('session', session);
   return (
     <>
       <div className="flex h-10">
         <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
         <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-          <div className="flex">
+          <div className="flex max-h-[50px] place-content-center">
             <AttendanceBtnGroup />
             <Search />
           </div>
