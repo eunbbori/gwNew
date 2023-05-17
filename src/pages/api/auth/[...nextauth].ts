@@ -4,7 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 export default NextAuth({
   providers: [
     CredentialsProvider({
-      name: '이메일,패스워드 방식',
+      // id: 'email-password-credential',
+      name: 'email',
       credentials: {
         email: { label: '이메일', type: 'email', placeholder: 'user@jnfirst.com' },
         password: { label: '비밀번호', type: 'password' },
@@ -20,6 +21,9 @@ export default NextAuth({
       },
     }),
   ],
+  // pages: {
+  //   signIn: '/login',
+  // },
   // session: {
   //   strategy: 'jwt',
   // },

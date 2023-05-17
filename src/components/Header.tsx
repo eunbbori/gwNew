@@ -1,16 +1,15 @@
 /* eslint-disable react/no-unknown-property */
 import React, { useEffect } from 'react';
-import Image from 'next/image';
 
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faGear, faBell, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
-import Search from './Search';
+import { faGear, faBell, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
 import { signOut, useSession } from 'next-auth/react';
 import AttendanceBtnGroup from './AttendanceBtnGroup';
+import AttendanceRecord from './AttendanceRecord';
 
 const Header = () => {
   const { data: session, status, update } = useSession();
@@ -28,21 +27,9 @@ const Header = () => {
         <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
           <div className="flex max-h-[50px]">
             <AttendanceBtnGroup />
-            <Search />
+            <AttendanceRecord />
           </div>
           <ul className="flex">
-            {status !== 'authenticated' ? (
-              <li className="flex items-center">
-                <Link href="/register">
-                  <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
-                    <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
-                    <span className="hidden sm:inline">회원가입</span>
-                  </div>
-                </Link>
-              </li>
-            ) : (
-              ''
-            )}
             {status === 'authenticated' ? (
               <li className="flex items-center">
                 <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
