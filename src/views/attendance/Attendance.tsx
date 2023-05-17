@@ -5,16 +5,21 @@ import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import { toDateFormatWithoutDay } from '@/utils/toDateFormat';
 import { useReactiveVar } from '@apollo/client';
 import attendanceDate from '@/modules/attendance';
+import { useAuthInfo } from '@/modules/useAuthInfo';
 
 const Attendance = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDate);
-
+  const token = useAuthInfo();
   const { data, loading, error } = useGetEmployeeWorkingQuery({
     variables: {
       dt: toDateFormatWithoutDay(selectedAttendanceDate),
     },
+    context: {
+      headers: {
+        authorization: token ? `Bearer ${token}` : '',
+      },
+    },
   });
-
   if (loading) return <p>Loading!!!</p>;
   if (error) return <p>ERROR: {error.message}</p>;
   if (!data) return <p>Not found</p>;
