@@ -26,7 +26,7 @@ const Header = () => {
       <div className="flex h-10">
         <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
         <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-          <div className="flex max-h-[50px] place-content-center">
+          <div className="flex max-h-[50px]">
             <AttendanceBtnGroup />
             <Search />
           </div>

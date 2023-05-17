@@ -21,7 +21,7 @@ const AttendanceBtnGroup = () => {
     console.log('off!');
   };
   return (
-    <ul className="flex">
+    <ul className="flex mr-8">
       {status === 'authenticated' && session.user?.email === 'ironman@jnfirst.com' ? (
         <>
           <li className="flex items-center">
