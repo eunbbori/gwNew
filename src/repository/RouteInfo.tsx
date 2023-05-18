@@ -43,7 +43,11 @@ export const routeInfos: RouteInfo[] = [
     id: 'member',
     name: '직원관리',
     img: userGroupIcon,
-    content: <>직원관리</>,
+    content: (
+      <>
+        <span>직원관리</span>
+      </>
+    ),
   },
 ];
 

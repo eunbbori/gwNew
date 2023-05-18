@@ -9,6 +9,15 @@ query getEmployee {
   }
 }
 
+mutation addEmployee($input: EmployeeAddInput!) {
+  employees(input: $input) {
+    employeeId
+    userId
+    employeeName
+    departmentName
+  }
+}
+
 query getEmployeeWorking($dt: String) {
   employeeWorking(dt: $dt) {
     employeeId
