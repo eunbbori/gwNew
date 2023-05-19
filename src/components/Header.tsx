@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
@@ -7,19 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGear, faBell, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
-import { signOut, useSession } from 'next-auth/react';
 import AttendanceBtnGroup from './AttendanceBtnGroup';
 import AttendanceRecord from './AttendanceRecord';
 
 const Header = () => {
-  const { data: session, status, update } = useSession();
-
-  useEffect(() => {
-    const interval = setInterval(() => update(), 1000 * 60 * 60);
-    return () => clearInterval(interval);
-  }, [update]);
-
-  if (status === 'authenticated') console.log('session', session);
   return (
     <>
       <div className="flex h-10">
@@ -30,27 +21,20 @@ const Header = () => {
             <AttendanceRecord />
           </div>
           <ul className="flex">
-            {status === 'authenticated' ? (
-              <li className="flex items-center">
+            {/* <li className="flex items-center">
+              <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
+                <FontAwesomeIcon className="sm:mr-1" icon={faRightToBracket} />
+                <button className="hidden sm:inline">로그아웃</button>
+              </div>
+            </li> */}
+            <li className="flex items-center">
+              <Link href="/api/auth/signin">
                 <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
                   <FontAwesomeIcon className="sm:mr-1" icon={faRightToBracket} />
-                  <button className="hidden sm:inline" onClick={() => signOut()}>
-                    로그아웃
-                  </button>
+                  <span className="hidden sm:inline">로그인</span>
                 </div>
-              </li>
-            ) : (
-              <>
-                <li className="flex items-center">
-                  <Link href="/api/auth/signin">
-                    <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
-                      <FontAwesomeIcon className="sm:mr-1" icon={faRightToBracket} />
-                      <span className="hidden sm:inline">로그인</span>
-                    </div>
-                  </Link>
-                </li>
-              </>
-            )}
+              </Link>
+            </li>
             <li className="flex items-center px-4">
               <a href="javascript:;" className="p-0 transition-all text-sm ease-nav-brand text-slate-500">
                 <FontAwesomeIcon fixed-plugin-button-nav="true" className="cursor-pointer" icon={faGear} />
