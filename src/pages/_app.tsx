@@ -2,9 +2,9 @@ import '@/styles/globals.css';
 import '@/styles/datepicker.css';
 import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
-import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, useReactiveVar } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { useTokens } from '@/modules/useTokens';
+import jwtTokens from '@/modules/jwtTokens';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
@@ -12,7 +12,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = useTokens().accessToken; //localStorage.getItem('token');
+  const token = jwtTokens().accessToken;
   // return the headers to the contetxt so httpLink can read them
   return {
     headers: {
