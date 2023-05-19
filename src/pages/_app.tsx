@@ -8,6 +8,7 @@ import jwtTokens from '@/modules/jwtTokens';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:4000',
+  // uri: 'http://localhost:8080/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
