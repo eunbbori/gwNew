@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "dev": "env-cmd -f env/.env.local next dev",
+    "build": "env-cmd -f env/.env.dev next build",
+    "start": "env-cmd -f env/.env.dev next start -p 3001",
     "lint": "next lint",
     "codegen": "graphql-codegen --config codegen.ts",
     "generate": "graphql-codegen"
@@ -21,7 +21,9 @@
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
     "date-fns": "^2.30.0",
+    "env-cmd": "^10.1.0",
     "graphql": "^16.6.0",
+    "jwt-decode": "^3.1.2",
     "next": "13.3.4",
     "next-auth": "^4.22.1",
     "react": "18.2.0",
