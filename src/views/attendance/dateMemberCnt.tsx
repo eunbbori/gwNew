@@ -3,9 +3,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { weekdaysKo, toDateFormat } from '@/utils/toDateFormat';
 import { useReactiveVar } from '@apollo/client';
 import attendanceDate from '@/modules/attendance';
+import format from 'date-fns/format';
+import { ko } from 'date-fns/locale';
 
 export interface IDateMemberCntProps {
   cnt: number | undefined;
@@ -18,7 +19,6 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
 
   const dateChangeHandler = (date: Date) => {
     attendanceDate(date);
-    console.log('pickDate', toDateFormat(selectedAttendanceDate!));
   };
 
   return (
@@ -31,7 +31,6 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
       <div className="justify-end flex w-7/12 max-w-full px-3 mt-0 -right-0 lg:w-1/2">
         <div>
           <DatePicker
-            dateFormat={`yyyy-MM-dd (${weekdaysKo[selectedAttendanceDate.getDay()]})`}
             minDate={new Date('2000-01-01')}
             maxDate={new Date()}
             shouldCloseOnSelect
@@ -39,7 +38,7 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
             onChange={dateChangeHandler}
             customInput={
               <button>
-                <span className="pl-9">{toDateFormat(selectedAttendanceDate)}</span>
+                <span className="pl-9">{format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)', { locale: ko })}</span>
               </button>
             }
             showIcon

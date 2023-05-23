@@ -2,7 +2,7 @@ import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
 import { useGetEmployeeWorkingQuery } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
-import { toDateFormatWithoutDay } from '@/utils/toDateFormat';
+import format from 'date-fns/format';
 import { useReactiveVar } from '@apollo/client';
 import attendanceDate from '@/modules/attendance';
 
@@ -11,7 +11,7 @@ const Attendance = () => {
 
   const { data, loading, error } = useGetEmployeeWorkingQuery({
     variables: {
-      dt: toDateFormatWithoutDay(selectedAttendanceDate),
+      dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
     },
   });
   if (loading) return <p>Loading!!!</p>;
