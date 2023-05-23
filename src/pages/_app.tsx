@@ -4,7 +4,8 @@ import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, useReactiveVar } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import jwtTokens from '@/modules/jwtTokens';
+import { jwtTokensVar } from '@/modules/gplReactVars';
+import { useEffect } from 'react';
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_BASE_API,
@@ -14,7 +15,7 @@ const httpLink = createHttpLink({
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
-  const token = jwtTokens().accessToken;
+  const token = jwtTokensVar().accessToken;
   // return the headers to the contetxt so httpLink can read them
   return {
     headers: {
@@ -30,6 +31,13 @@ const client = new ApolloClient({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    jwtTokensVar({
+      accessToken: sessionStorage.getItem('accessToken') || '',
+      refreshToken: sessionStorage.getItem('refreshToken') || '',
+    });
+  }, []);
+
   return (
     <ApolloProvider client={client}>
       <Layout>

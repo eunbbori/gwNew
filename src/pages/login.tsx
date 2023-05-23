@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthenticateMutation } from '@/types/generated/types';
-import jwtTokens from '@/modules/jwtTokens';
 import { useRouter } from 'next/navigation';
+import { jwtTokensVar } from '@/modules/gplReactVars';
 
 export interface loginFormValues {
   empEmail: string;
@@ -43,10 +43,15 @@ const Login: React.FC = () => {
         passwd: loginData.empPassword,
       },
     }).then((result) => {
-      jwtTokens({
-        accessToken: result.data?.authenticate?.accessToken || '',
-        refreshToken: result.data?.authenticate?.refreshToken || '',
+      const auth = result.data?.authenticate;
+
+      jwtTokensVar({
+        accessToken: auth?.accessToken || '',
+        refreshToken: auth?.accessToken || '',
       });
+
+      auth?.accessToken && sessionStorage.setItem('accessToken', auth?.accessToken);
+      auth?.refreshToken && sessionStorage.setItem('refreshToken', auth?.refreshToken);
 
       push('/');
     });
@@ -104,3 +109,6 @@ const Login: React.FC = () => {
   );
 };
 export default Login;
+function jwtTokens(arg0: { accessToken: string; refreshToken: string }) {
+  throw new Error('Function not implemented.');
+}
