@@ -1,0 +1,6 @@
+mutation authenticate($userId: String, $passwd: String) {
+  authenticate(userId: $userId, passwd: $passwd) {
+    accessToken
+    refreshToken
+  }
+}

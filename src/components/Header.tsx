@@ -1,37 +1,38 @@
 /* eslint-disable react/no-unknown-property */
-import React from 'react';
+import React, { useMemo } from 'react';
+import jwt_decode from 'jwt-decode';
 
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faGear, faBell, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faGear, faBell, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
 import AttendanceBtnGroup from './AttendanceBtnGroup';
 import AttendanceRecord from './AttendanceRecord';
+import jwtTokens, { AuthData } from '@/modules/jwtTokens';
+import { useReactiveVar } from '@apollo/client';
+import Search from './Search';
 
 const Header = () => {
+  const tokens = useReactiveVar(jwtTokens);
+
+  const useUserName = useMemo(() => {
+    console.log('before decode');
+    return tokens.accessToken ? jwt_decode<AuthData>(tokens.accessToken).userName : null;
+  }, [tokens]);
   return (
     <>
-      <div className="flex h-10">
+      <div className="flex h-10 ">
         <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
         <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-          <div className="flex max-h-[50px]">
-            <AttendanceBtnGroup />
-            <AttendanceRecord />
-          </div>
+          <div className="flex">{/* <Search /> */}</div>
           <ul className="flex">
-            {/* <li className="flex items-center">
-              <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
-                <FontAwesomeIcon className="sm:mr-1" icon={faRightToBracket} />
-                <button className="hidden sm:inline">로그아웃</button>
-              </div>
-            </li> */}
             <li className="flex items-center">
-              <Link href="/api/auth/signin">
-                <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
-                  <FontAwesomeIcon className="sm:mr-1" icon={faRightToBracket} />
-                  <span className="hidden sm:inline">로그인</span>
+              <Link href="/login">
+                <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
+                  <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
+                  <span className="hidden sm:inline">{useUserName ?? '로그인'}</span>
                 </div>
               </Link>
             </li>
