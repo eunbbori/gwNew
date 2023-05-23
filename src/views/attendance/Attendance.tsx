@@ -4,10 +4,10 @@ import { useGetEmployeeWorkingQuery } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import format from 'date-fns/format';
 import { useReactiveVar } from '@apollo/client';
-import attendanceDate from '@/modules/attendance';
+import { attendanceDateVar } from '@/modules/gplReactVars';
 
 const Attendance = () => {
-  const selectedAttendanceDate = useReactiveVar(attendanceDate);
+  const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
 
   const { data, loading, error } = useGetEmployeeWorkingQuery({
     variables: {

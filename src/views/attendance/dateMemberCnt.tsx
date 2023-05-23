@@ -4,9 +4,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useReactiveVar } from '@apollo/client';
-import attendanceDate from '@/modules/attendance';
 import format from 'date-fns/format';
 import { ko } from 'date-fns/locale';
+import { attendanceDateVar } from '@/modules/gplReactVars';
 
 export interface IDateMemberCntProps {
   cnt: number | undefined;
@@ -15,10 +15,10 @@ export interface IDateMemberCntProps {
 }
 
 const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
-  const selectedAttendanceDate = useReactiveVar(attendanceDate);
+  const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
 
   const dateChangeHandler = (date: Date) => {
-    attendanceDate(date);
+    attendanceDateVar(date);
   };
 
   return (
