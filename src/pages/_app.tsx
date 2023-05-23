@@ -7,7 +7,8 @@ import { setContext } from '@apollo/client/link/context';
 import jwtTokens from '@/modules/jwtTokens';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:4000',
+  uri: process.env.NEXT_PUBLIC_BASE_API,
+  // uri: 'http://localhost:4000',
   // uri: 'http://localhost:8080/graphql',
 });
 
