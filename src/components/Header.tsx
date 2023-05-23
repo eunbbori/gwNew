@@ -5,17 +5,17 @@ import jwt_decode from 'jwt-decode';
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faGear, faBell, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faGear, faBell, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
 import AttendanceBtnGroup from './AttendanceBtnGroup';
 import AttendanceRecord from './AttendanceRecord';
-import jwtTokens, { AuthData } from '@/modules/jwtTokens';
 import { useReactiveVar } from '@apollo/client';
 import Search from './Search';
+import { AuthData, jwtTokensVar } from '@/modules/gplReactVars';
 
 const Header = () => {
-  const tokens = useReactiveVar(jwtTokens);
+  const tokens = useReactiveVar(jwtTokensVar);
 
   const useUserName = useMemo(() => {
     console.log('before decode');
@@ -29,12 +29,27 @@ const Header = () => {
           <div className="flex">{/* <Search /> */}</div>
           <ul className="flex">
             <li className="flex items-center">
-              <Link href="/login">
-                <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
-                  <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
-                  <span className="hidden sm:inline">{useUserName ?? '로그인'}</span>
+              {tokens.accessToken ? (
+                <div
+                  onClick={() => {
+                    sessionStorage.clear();
+                    window.location.href = '/';
+                  }}
+                  className="cursor-pointer block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500"
+                >
+                  <span className="hidden sm:inline ml-5">
+                    <FontAwesomeIcon className="sm:mr-1" icon={faRightFromBracket} />
+                    {useUserName}
+                  </span>
                 </div>
-              </Link>
+              ) : (
+                <Link href="/login">
+                  <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
+                    <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
+                    <span className="hidden sm:inline">로그인</span>
+                  </div>
+                </Link>
+              )}
             </li>
             <li className="flex items-center px-4">
               <a href="javascript:;" className="p-0 transition-all text-sm ease-nav-brand text-slate-500">
