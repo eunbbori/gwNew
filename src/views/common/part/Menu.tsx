@@ -12,6 +12,17 @@ const MenuItem = dynamic(import('./MenuItem'));
 export interface IMenuProps {
   selectedMenu: string;
 }
+
+const employeeSubMenu = [
+  {
+    menuTitle: '직원목록',
+    linkTitle: 'listEmp',
+  },
+  {
+    menuTitle: '직원등록',
+    linkTitle: 'addEmp',
+  },
+];
 const Menu = ({ selectedMenu }: IMenuProps) => {
   const [mounted, setMounted] = useState<boolean>(false);
   useEffect(() => {
@@ -29,7 +40,7 @@ const Menu = ({ selectedMenu }: IMenuProps) => {
             <MenuItem menuNm="대시보드" imgSrc={laptopIcon} selected={'dashboard' === selectedMenu} />
           </Link>
           <Link href="/member">
-            <MenuItem menuNm="직원관리" imgSrc={userGroupIcon} selected={'member' === selectedMenu} />
+            <MenuItem menuNm="직원관리" imgSrc={userGroupIcon} selected={'member' === selectedMenu} submenu={employeeSubMenu} />
           </Link>
           <Link href="/dayoff">
             <MenuItem menuNm="휴가관리" imgSrc={flightIcon} selected={'dayoff' === selectedMenu} />
