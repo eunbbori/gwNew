@@ -28,7 +28,7 @@ const MenuItem = ({ menuNm, imgSrc, selected, submenu }: IMenuItemProps) => {
           <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">{menuNm}</span>
         </a>
       </li>
-      <div className="w-[200px] text-sm font-semibold hidden peer-hover:flex hover:flex flex-col drop-shadow-lg ml-5">
+      <div className="w-[190px] text-center text-sm font-semibold hidden peer-hover:flex hover:flex flex-col drop-shadow-lg ml-5">
         {submenu &&
           submenu.map((subMenu, idx) => (
             <div key={idx}>
