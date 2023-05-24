@@ -8,14 +8,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faGear, faBell, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
-import AttendanceBtnGroup from './AttendanceBtnGroup';
-import AttendanceRecord from './AttendanceRecord';
+import AttendanceBtnGroup from './Attendance/AttendanceBtnGroup';
+import AttendanceRecord from './Attendance/AttendanceRecord';
 import { useReactiveVar } from '@apollo/client';
 import Search from './Search';
-import { AuthData, jwtTokensVar } from '@/modules/gplReactVars';
+import { AuthData, jwtTokensVar } from '@/modules/gqlReactVars';
 
 const Header = () => {
   const tokens = useReactiveVar(jwtTokensVar);
+  const attendanceDivClass = 'relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft';
 
   const useUserName = useMemo(() => {
     console.log('before decode');
@@ -25,8 +26,13 @@ const Header = () => {
     <>
       <div className="flex h-10 ">
         <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
-        <div className="justify-end relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft">
-          <div className="flex">{/* <Search /> */}</div>
+        <div className={`${tokens.accessToken ? 'justify-between ' + attendanceDivClass : 'justify-end ' + attendanceDivClass}`}>
+          {tokens.accessToken && (
+            <div className="flex ml-[50px]">
+              <AttendanceBtnGroup />
+              <AttendanceRecord />
+            </div>
+          )}
           <ul className="flex">
             <li className="flex items-center">
               {tokens.accessToken ? (
@@ -35,7 +41,7 @@ const Header = () => {
                     sessionStorage.clear();
                     window.location.href = '/';
                   }}
-                  className="cursor-pointer block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500"
+                  className="self-center cursor-pointer block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500"
                 >
                   <span className="hidden sm:inline ml-5">
                     <FontAwesomeIcon className="sm:mr-1" icon={faRightFromBracket} />
