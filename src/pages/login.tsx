@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthenticateMutation } from '@/types/generated/types';
 import { useRouter } from 'next/navigation';
-import { jwtTokensVar } from '@/modules/gplReactVars';
+import { jwtTokensVar } from '@/modules/gqlReactVars';
 
 export interface loginFormValues {
   empEmail: string;

@@ -19,3 +19,5 @@ export type AuthData = {
 export const attendanceDateVar = makeVar(new Date());
 // OffTime Date
 export const offTimeVar = makeVar(new Date());
+// Attendance Time
+export const attendanceTimeVar = makeVar(new Date());

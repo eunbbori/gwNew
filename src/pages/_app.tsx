@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, useReactiveVar } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { jwtTokensVar } from '@/modules/gplReactVars';
+import { jwtTokensVar } from '@/modules/gqlReactVars';
 import { useEffect } from 'react';
 
 const httpLink = createHttpLink({

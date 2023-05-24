@@ -6,7 +6,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useReactiveVar } from '@apollo/client';
 import format from 'date-fns/format';
 import { ko } from 'date-fns/locale';
-import { attendanceDateVar } from '@/modules/gplReactVars';
+import { attendanceDateVar } from '@/modules/gqlReactVars';
 
 export interface IDateMemberCntProps {
   cnt: number | undefined;
