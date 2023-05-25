@@ -49,7 +49,7 @@ const Header = () => {
                   </span>
                 </div>
               ) : (
-                <Link href="/login">
+                <Link href="auth/login">
                   <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
                     <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
                     <span className="hidden sm:inline">로그인</span>

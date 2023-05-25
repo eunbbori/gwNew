@@ -16,11 +16,11 @@ export interface IMenuProps {
 const employeeSubMenu = [
   {
     menuTitle: '직원목록',
-    linkTitle: 'listEmp',
+    linkTitle: 'employee/listEmp',
   },
   {
     menuTitle: '직원등록',
-    linkTitle: 'addEmp',
+    linkTitle: 'employee/addEmp',
   },
 ];
 const Menu = ({ selectedMenu }: IMenuProps) => {

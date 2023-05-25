@@ -21,12 +21,12 @@ const MenuItem = ({ menuNm, imgSrc, selected, submenu }: IMenuItemProps) => {
   return (
     <>
       <li className="peer mt-0.5 w-full">
-        <a className={anchorClass + (selected ? anchorSelectedClass : '')}>
+        <div className={anchorClass + (selected ? anchorSelectedClass : '')}>
           <div className={divClass + (selected ? divSelectedClass : '')}>
             <Image src={imgSrc} alt={menuNm} />
           </div>
           <span className="ml-1 duration-300 opacity-100 pointer-events-none ease-soft">{menuNm}</span>
-        </a>
+        </div>
       </li>
       <div className="w-[190px] text-center text-sm font-semibold hidden peer-hover:flex hover:flex flex-col drop-shadow-lg ml-5">
         {submenu &&
