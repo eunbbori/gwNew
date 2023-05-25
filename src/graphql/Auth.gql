@@ -2,5 +2,55 @@ mutation authenticate($userId: String, $passwd: String) {
   authenticate(userId: $userId, passwd: $passwd) {
     accessToken
     refreshToken
+    startAt
+    endAt
+    workingType
+  }
+}
+
+mutation validate {
+  validate {
+    startAt
+    endAt
+    workingType
+  }
+}
+
+mutation refresh($userId: String, $refreshToken: String) {
+  refresh(userId: $userId, refreshToken: $refreshToken) {
+    accessToken
+    refreshToken
+  }
+}
+
+mutation goToWork {
+  goToWork {
+    employeeId
+    userId
+    employeeName
+    department {
+      departmentId
+      departmentName
+    }
+    workingDate
+    workingType
+    startAt
+    endAt
+  }
+}
+
+mutation leaveWork {
+  leaveWork {
+    employeeId
+    userId
+    employeeName
+    department {
+      departmentId
+      departmentName
+    }
+    workingDate
+    workingType
+    startAt
+    endAt
   }
 }

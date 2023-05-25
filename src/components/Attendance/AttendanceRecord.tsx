@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import format from 'date-fns/format';
-import { attendanceTimeVar, offTimeVar } from '@/modules/gqlReactVars';
+import parseISO from 'date-fns/parseISO';
+import { startEndAtVar } from '@/modules/gqlReactVars';
 
 const AttendanceRecord = () => {
-  const workStartTime = useReactiveVar(attendanceTimeVar);
-  const attendanceState = JSON.parse(sessionStorage.getItem('attendanceState') || '');
-  const attendanceTime = JSON.parse(sessionStorage.getItem('attendanceTime') || '');
-
+  const startEndAt = useReactiveVar(startEndAtVar);
+  //const attendanceState = JSON.parse(sessionStorage.getItem('startAt') || '');
+  //const attendanceTime = sessionStorage.getItem('startAt') && JSON.parse(sessionStorage.getItem('startAt') || '');
+  /*
   const [mounted, setMounted] = useState<boolean>(false);
   useEffect(() => {
     setMounted(true);
@@ -16,10 +17,17 @@ const AttendanceRecord = () => {
   if (!mounted) {
     return null;
   }
+  */
 
   return (
     <div className="self-center">
-      <span>출근시각 : {attendanceState ? `${format(workStartTime, 'MM-dd HH:mm')}` : '출근버튼을 눌러주세요'}</span>
+      <span>
+        {startEndAt.endAt
+          ? '퇴근시각 : ' + format(parseISO(startEndAt.endAt), 'MM-dd HH:mm')
+          : startEndAt.startAt
+          ? '출근시각 : ' + format(parseISO(startEndAt.startAt), 'MM-dd HH:mm')
+          : ''}
+      </span>
     </div>
   );
 };

@@ -16,6 +16,22 @@ export type Scalars = {
   Date: any;
 };
 
+export type IAttendInfo = {
+  __typename?: 'AttendInfo';
+  endAt?: Maybe<Scalars['Date']>;
+  startAt?: Maybe<Scalars['Date']>;
+  workingType?: Maybe<IWorkingType>;
+};
+
+export type IAuthInfo = {
+  __typename?: 'AuthInfo';
+  accessToken?: Maybe<Scalars['String']>;
+  endAt?: Maybe<Scalars['Date']>;
+  refreshToken?: Maybe<Scalars['String']>;
+  startAt?: Maybe<Scalars['Date']>;
+  workingType?: Maybe<IWorkingType>;
+};
+
 export type IDepartment = {
   __typename?: 'Department';
   departmentId?: Maybe<Scalars['ID']>;
@@ -52,8 +68,11 @@ export type IEmployeeWorking = {
 export type IMutation = {
   __typename?: 'Mutation';
   addEmployee?: Maybe<IEmployee>;
-  authenticate?: Maybe<ITokens>;
+  authenticate?: Maybe<IAuthInfo>;
+  goToWork?: Maybe<IEmployeeWorking>;
+  leaveWork?: Maybe<IEmployeeWorking>;
   refresh?: Maybe<ITokens>;
+  validate?: Maybe<IAttendInfo>;
 };
 
 export type IMutationAddEmployeeArgs = {
@@ -81,6 +100,11 @@ export type IQueryEmployeeWorkingArgs = {
   dt?: InputMaybe<Scalars['String']>;
 };
 
+export type ISubscription = {
+  __typename?: 'Subscription';
+  attended?: Maybe<IEmployeeWorking>;
+};
+
 export type ITokens = {
   __typename?: 'Tokens';
   accessToken?: Maybe<Scalars['String']>;
@@ -102,7 +126,65 @@ export type IAuthenticateMutationVariables = Exact<{
 
 export type IAuthenticateMutation = {
   __typename?: 'Mutation';
-  authenticate?: { __typename?: 'Tokens'; accessToken?: string | null; refreshToken?: string | null } | null;
+  authenticate?: {
+    __typename?: 'AuthInfo';
+    accessToken?: string | null;
+    refreshToken?: string | null;
+    startAt?: any | null;
+    endAt?: any | null;
+    workingType?: IWorkingType | null;
+  } | null;
+};
+
+export type IValidateMutationVariables = Exact<{ [key: string]: never }>;
+
+export type IValidateMutation = {
+  __typename?: 'Mutation';
+  validate?: { __typename?: 'AttendInfo'; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
+};
+
+export type IRefreshMutationVariables = Exact<{
+  userId?: InputMaybe<Scalars['String']>;
+  refreshToken?: InputMaybe<Scalars['String']>;
+}>;
+
+export type IRefreshMutation = {
+  __typename?: 'Mutation';
+  refresh?: { __typename?: 'Tokens'; accessToken?: string | null; refreshToken?: string | null } | null;
+};
+
+export type IGoToWorkMutationVariables = Exact<{ [key: string]: never }>;
+
+export type IGoToWorkMutation = {
+  __typename?: 'Mutation';
+  goToWork?: {
+    __typename?: 'EmployeeWorking';
+    employeeId?: number | null;
+    userId?: string | null;
+    employeeName?: string | null;
+    workingDate?: any | null;
+    workingType?: IWorkingType | null;
+    startAt?: any | null;
+    endAt?: any | null;
+    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+  } | null;
+};
+
+export type ILeaveWorkMutationVariables = Exact<{ [key: string]: never }>;
+
+export type ILeaveWorkMutation = {
+  __typename?: 'Mutation';
+  leaveWork?: {
+    __typename?: 'EmployeeWorking';
+    employeeId?: number | null;
+    userId?: string | null;
+    employeeName?: string | null;
+    workingDate?: any | null;
+    workingType?: IWorkingType | null;
+    startAt?: any | null;
+    endAt?: any | null;
+    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+  } | null;
 };
 
 export type IGetEmployeeQueryVariables = Exact<{ [key: string]: never }>;
@@ -142,6 +224,9 @@ export const AuthenticateDocument = gql`
     authenticate(userId: $userId, passwd: $passwd) {
       accessToken
       refreshToken
+      startAt
+      endAt
+      workingType
     }
   }
 `;
@@ -172,6 +257,159 @@ export function useAuthenticateMutation(baseOptions?: Apollo.MutationHookOptions
 export type AuthenticateMutationHookResult = ReturnType<typeof useAuthenticateMutation>;
 export type AuthenticateMutationResult = Apollo.MutationResult<IAuthenticateMutation>;
 export type AuthenticateMutationOptions = Apollo.BaseMutationOptions<IAuthenticateMutation, IAuthenticateMutationVariables>;
+export const ValidateDocument = gql`
+  mutation validate {
+    validate {
+      startAt
+      endAt
+      workingType
+    }
+  }
+`;
+export type IValidateMutationFn = Apollo.MutationFunction<IValidateMutation, IValidateMutationVariables>;
+
+/**
+ * __useValidateMutation__
+ *
+ * To run a mutation, you first call `useValidateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useValidateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [validateMutation, { data, loading, error }] = useValidateMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useValidateMutation(baseOptions?: Apollo.MutationHookOptions<IValidateMutation, IValidateMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IValidateMutation, IValidateMutationVariables>(ValidateDocument, options);
+}
+export type ValidateMutationHookResult = ReturnType<typeof useValidateMutation>;
+export type ValidateMutationResult = Apollo.MutationResult<IValidateMutation>;
+export type ValidateMutationOptions = Apollo.BaseMutationOptions<IValidateMutation, IValidateMutationVariables>;
+export const RefreshDocument = gql`
+  mutation refresh($userId: String, $refreshToken: String) {
+    refresh(userId: $userId, refreshToken: $refreshToken) {
+      accessToken
+      refreshToken
+    }
+  }
+`;
+export type IRefreshMutationFn = Apollo.MutationFunction<IRefreshMutation, IRefreshMutationVariables>;
+
+/**
+ * __useRefreshMutation__
+ *
+ * To run a mutation, you first call `useRefreshMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRefreshMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [refreshMutation, { data, loading, error }] = useRefreshMutation({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      refreshToken: // value for 'refreshToken'
+ *   },
+ * });
+ */
+export function useRefreshMutation(baseOptions?: Apollo.MutationHookOptions<IRefreshMutation, IRefreshMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IRefreshMutation, IRefreshMutationVariables>(RefreshDocument, options);
+}
+export type RefreshMutationHookResult = ReturnType<typeof useRefreshMutation>;
+export type RefreshMutationResult = Apollo.MutationResult<IRefreshMutation>;
+export type RefreshMutationOptions = Apollo.BaseMutationOptions<IRefreshMutation, IRefreshMutationVariables>;
+export const GoToWorkDocument = gql`
+  mutation goToWork {
+    goToWork {
+      employeeId
+      userId
+      employeeName
+      department {
+        departmentId
+        departmentName
+      }
+      workingDate
+      workingType
+      startAt
+      endAt
+    }
+  }
+`;
+export type IGoToWorkMutationFn = Apollo.MutationFunction<IGoToWorkMutation, IGoToWorkMutationVariables>;
+
+/**
+ * __useGoToWorkMutation__
+ *
+ * To run a mutation, you first call `useGoToWorkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGoToWorkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [goToWorkMutation, { data, loading, error }] = useGoToWorkMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGoToWorkMutation(baseOptions?: Apollo.MutationHookOptions<IGoToWorkMutation, IGoToWorkMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IGoToWorkMutation, IGoToWorkMutationVariables>(GoToWorkDocument, options);
+}
+export type GoToWorkMutationHookResult = ReturnType<typeof useGoToWorkMutation>;
+export type GoToWorkMutationResult = Apollo.MutationResult<IGoToWorkMutation>;
+export type GoToWorkMutationOptions = Apollo.BaseMutationOptions<IGoToWorkMutation, IGoToWorkMutationVariables>;
+export const LeaveWorkDocument = gql`
+  mutation leaveWork {
+    leaveWork {
+      employeeId
+      userId
+      employeeName
+      department {
+        departmentId
+        departmentName
+      }
+      workingDate
+      workingType
+      startAt
+      endAt
+    }
+  }
+`;
+export type ILeaveWorkMutationFn = Apollo.MutationFunction<ILeaveWorkMutation, ILeaveWorkMutationVariables>;
+
+/**
+ * __useLeaveWorkMutation__
+ *
+ * To run a mutation, you first call `useLeaveWorkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveWorkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leaveWorkMutation, { data, loading, error }] = useLeaveWorkMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLeaveWorkMutation(baseOptions?: Apollo.MutationHookOptions<ILeaveWorkMutation, ILeaveWorkMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ILeaveWorkMutation, ILeaveWorkMutationVariables>(LeaveWorkDocument, options);
+}
+export type LeaveWorkMutationHookResult = ReturnType<typeof useLeaveWorkMutation>;
+export type LeaveWorkMutationResult = Apollo.MutationResult<ILeaveWorkMutation>;
+export type LeaveWorkMutationOptions = Apollo.BaseMutationOptions<ILeaveWorkMutation, ILeaveWorkMutationVariables>;
 export const GetEmployeeDocument = gql`
   query getEmployee {
     employees {

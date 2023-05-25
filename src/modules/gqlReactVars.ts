@@ -15,9 +15,11 @@ export type AuthData = {
   departmentName: string;
 };
 
+// Today startAt time of currently login user
+export const startEndAtVar = makeVar({
+  startAt: '',
+  endAt: '',
+});
+
 // Attendance Date
 export const attendanceDateVar = makeVar(new Date());
-// OffTime Date
-export const offTimeVar = makeVar(new Date());
-// Attendance Time
-export const attendanceTimeVar = makeVar(new Date());

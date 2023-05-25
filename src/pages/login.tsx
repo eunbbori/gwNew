@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAuthenticateMutation } from '@/types/generated/types';
 import { useRouter } from 'next/navigation';
-import { jwtTokensVar } from '@/modules/gqlReactVars';
+import { jwtTokensVar, startEndAtVar } from '@/modules/gqlReactVars';
 
 export interface loginFormValues {
   empEmail: string;
@@ -50,8 +50,10 @@ const Login: React.FC = () => {
         refreshToken: auth?.accessToken || '',
       });
 
-      auth?.accessToken && sessionStorage.setItem('accessToken', auth?.accessToken);
-      auth?.refreshToken && sessionStorage.setItem('refreshToken', auth?.refreshToken);
+      startEndAtVar({ startAt: auth?.startAt, endAt: auth?.endAt });
+
+      auth?.accessToken && sessionStorage.setItem('accessToken', auth.accessToken);
+      auth?.refreshToken && sessionStorage.setItem('refreshToken', auth.refreshToken);
 
       push('/');
     });
@@ -109,6 +111,3 @@ const Login: React.FC = () => {
   );
 };
 export default Login;
-function jwtTokens(arg0: { accessToken: string; refreshToken: string }) {
-  throw new Error('Function not implemented.');
-}
