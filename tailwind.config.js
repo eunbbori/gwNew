@@ -2,7 +2,7 @@
 
 module.exports = {
   mode: 'jit',
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './node_modules/tw-elements/dist/js/**/*.js'],
   presets: [],
   darkMode: 'class',
   theme: {
@@ -1357,5 +1357,5 @@ module.exports = {
     'active',
     'disabled',
   ],
-  plugins: [],
+  plugins: [require('tw-elements/dist/plugin.cjs')],
 };

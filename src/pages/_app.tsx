@@ -5,8 +5,13 @@ import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, useReactiveVar } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { jwtTokensVar } from '@/modules/gqlReactVars';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import Script from 'next/script';
+import dynamic from 'next/dynamic';
 
+// const DynamicHeader = dynamic(() => import('../views/common/part/Menu2'), {
+//   ssr: false,
+// });
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_BASE_API,
   // uri: 'http://localhost:4000',
@@ -39,10 +44,12 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ApolloProvider client={client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ApolloProvider>
+    <>
+      <ApolloProvider client={client}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ApolloProvider>
+    </>
   );
 }
