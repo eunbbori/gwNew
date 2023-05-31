@@ -6,13 +6,21 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
+import dynamic from 'next/dynamic';
+const DynamicSideMenu = dynamic(() => import('@/components/SideMenu'), {
+  ssr: false,
+});
+
 const Layout = ({ children }: LayoutProps) => {
   return (
-    <div className="m-7 p-2 text-slate-500">
-      <Header />
-      <div>{children}</div>
-      <Footer />
-    </div>
+    <>
+      <DynamicSideMenu />
+      <div className="mr-[2rem] ml-[5rem] mt-[2rem] p-2 text-slate-500">
+        <Header />
+        <div>{children}</div>
+        <Footer />
+      </div>
+    </>
   );
 };
 
