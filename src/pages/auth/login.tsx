@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useAuthenticateMutation } from '@/types/generated/types';
+import { useLoginMutation } from '@/types/generated/types';
 import { useRouter } from 'next/navigation';
 import { jwtTokensVar, startEndAtVar } from '@/modules/gqlReactVars';
 
@@ -11,7 +11,7 @@ export interface loginFormValues {
   empPassword: string;
 }
 
-const Login: React.FC = () => {
+const Login = () => {
   const loginSchema = yup.object().shape({
     empEmail: yup
       .string()
@@ -34,28 +34,26 @@ const Login: React.FC = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const [authenticateMutation, { data, loading, error }] = useAuthenticateMutation();
+  const [loginMutation, { data, loading, error }] = useLoginMutation();
+
+  if (loading) return <>Submitting...</>;
+  if (error) return <>Submission error! ${error.message}</>;
 
   const onLogin = (loginData: loginFormValues) => {
-    authenticateMutation({
+    loginMutation({
       variables: {
         userId: loginData.empEmail,
         passwd: loginData.empPassword,
       },
-    }).then((result) => {
-      const auth = result.data?.authenticate;
+      onCompleted: (data) => {
+        const auth = data?.login;
 
-      jwtTokensVar({
-        accessToken: auth?.accessToken || '',
-        refreshToken: auth?.accessToken || '',
-      });
+        jwtTokensVar({ accessToken: auth?.accessToken || '' });
+        startEndAtVar({ startAt: auth?.startAt, endAt: auth?.endAt });
 
-      startEndAtVar({ startAt: auth?.startAt, endAt: auth?.endAt });
-
-      auth?.accessToken && sessionStorage.setItem('accessToken', auth.accessToken);
-      auth?.refreshToken && sessionStorage.setItem('refreshToken', auth.refreshToken);
-
-      push('/');
+        //auth?.accessToken && sessionStorage.setItem('accessToken', auth.accessToken);
+        push('/');
+      },
     });
   };
 

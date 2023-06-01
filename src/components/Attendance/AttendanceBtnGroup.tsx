@@ -19,16 +19,16 @@ const AttendanceBtnGroup = () => {
 
   const handleAttendanceBtn = () => {
     if (!startEndAt.startAt) {
-      goToWorkMutation().then((result) => {
-        const goToWork = result.data?.goToWork;
-
-        goToWork && startEndAtVar({ ...startEndAt, startAt: goToWork.startAt });
+      goToWorkMutation({
+        onCompleted: (data) => {
+          data?.goToWork && startEndAtVar({ ...startEndAt, startAt: data.goToWork.startAt });
+        },
       });
     } else {
-      leaveWorkMutation().then((result) => {
-        const leaveWork = result.data?.leaveWork;
-
-        leaveWork && startEndAtVar({ ...startEndAt, endAt: leaveWork.endAt });
+      leaveWorkMutation({
+        onCompleted: (data) => {
+          data?.leaveWork && startEndAtVar({ ...startEndAt, endAt: data.leaveWork.endAt });
+        },
       });
     }
   };

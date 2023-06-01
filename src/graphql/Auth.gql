@@ -1,25 +1,30 @@
-mutation authenticate($userId: String, $passwd: String) {
-  authenticate(userId: $userId, passwd: $passwd) {
+mutation login($userId: String, $passwd: String) {
+  login(userId: $userId, passwd: $passwd) {
     accessToken
-    refreshToken
     startAt
     endAt
     workingType
   }
 }
 
-mutation validate {
-  validate {
-    startAt
-    endAt
-    workingType
+mutation logout {
+  logout {
+    employeeId
+    userId
+    employeeName
+    department {
+      departmentName
+    }
+    email
   }
 }
 
-mutation refresh($userId: String, $refreshToken: String) {
-  refresh(userId: $userId, refreshToken: $refreshToken) {
+mutation refresh {
+  refresh {
     accessToken
-    refreshToken
+    startAt
+    endAt
+    workingType
   }
 }
 

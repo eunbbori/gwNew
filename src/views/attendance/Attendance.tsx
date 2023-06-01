@@ -13,10 +13,10 @@ const Attendance = () => {
     variables: {
       dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
     },
+    fetchPolicy: 'no-cache',
   });
   if (loading) return <p>Loading!!!</p>;
   if (error) return <p>ERROR: {error.message}</p>;
-  if (!data) return <p>Not found</p>;
 
   return (
     <>

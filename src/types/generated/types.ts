@@ -16,18 +16,10 @@ export type Scalars = {
   Date: any;
 };
 
-export type IAttendInfo = {
-  __typename?: 'AttendInfo';
-  endAt?: Maybe<Scalars['Date']>;
-  startAt?: Maybe<Scalars['Date']>;
-  workingType?: Maybe<IWorkingType>;
-};
-
 export type IAuthInfo = {
   __typename?: 'AuthInfo';
   accessToken?: Maybe<Scalars['String']>;
   endAt?: Maybe<Scalars['Date']>;
-  refreshToken?: Maybe<Scalars['String']>;
   startAt?: Maybe<Scalars['Date']>;
   workingType?: Maybe<IWorkingType>;
 };
@@ -41,6 +33,7 @@ export type IDepartment = {
 export type IEmployee = {
   __typename?: 'Employee';
   department?: Maybe<IDepartment>;
+  email?: Maybe<Scalars['String']>;
   employeeId?: Maybe<Scalars['ID']>;
   employeeName?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
@@ -68,24 +61,19 @@ export type IEmployeeWorking = {
 export type IMutation = {
   __typename?: 'Mutation';
   addEmployee?: Maybe<IEmployee>;
-  authenticate?: Maybe<IAuthInfo>;
   goToWork?: Maybe<IEmployeeWorking>;
   leaveWork?: Maybe<IEmployeeWorking>;
-  refresh?: Maybe<ITokens>;
-  validate?: Maybe<IAttendInfo>;
+  login?: Maybe<IAuthInfo>;
+  logout?: Maybe<IEmployee>;
+  refresh?: Maybe<IAuthInfo>;
 };
 
 export type IMutationAddEmployeeArgs = {
   input?: InputMaybe<IEmployeeInput>;
 };
 
-export type IMutationAuthenticateArgs = {
+export type IMutationLoginArgs = {
   passwd?: InputMaybe<Scalars['String']>;
-  userId?: InputMaybe<Scalars['String']>;
-};
-
-export type IMutationRefreshArgs = {
-  refreshToken?: InputMaybe<Scalars['String']>;
   userId?: InputMaybe<Scalars['String']>;
 };
 
@@ -105,12 +93,6 @@ export type ISubscription = {
   attended?: Maybe<IEmployeeWorking>;
 };
 
-export type ITokens = {
-  __typename?: 'Tokens';
-  accessToken?: Maybe<Scalars['String']>;
-  refreshToken?: Maybe<Scalars['String']>;
-};
-
 export enum IWorkingType {
   FullDayoff = 'FULL_DAYOFF',
   HalfDayoff = 'HALF_DAYOFF',
@@ -119,38 +101,35 @@ export enum IWorkingType {
   Work = 'WORK',
 }
 
-export type IAuthenticateMutationVariables = Exact<{
+export type ILoginMutationVariables = Exact<{
   userId?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
 }>;
 
-export type IAuthenticateMutation = {
+export type ILoginMutation = {
   __typename?: 'Mutation';
-  authenticate?: {
-    __typename?: 'AuthInfo';
-    accessToken?: string | null;
-    refreshToken?: string | null;
-    startAt?: any | null;
-    endAt?: any | null;
-    workingType?: IWorkingType | null;
+  login?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
+};
+
+export type ILogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type ILogoutMutation = {
+  __typename?: 'Mutation';
+  logout?: {
+    __typename?: 'Employee';
+    employeeId?: string | null;
+    userId?: string | null;
+    employeeName?: string | null;
+    email?: string | null;
+    department?: { __typename?: 'Department'; departmentName?: string | null } | null;
   } | null;
 };
 
-export type IValidateMutationVariables = Exact<{ [key: string]: never }>;
-
-export type IValidateMutation = {
-  __typename?: 'Mutation';
-  validate?: { __typename?: 'AttendInfo'; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
-};
-
-export type IRefreshMutationVariables = Exact<{
-  userId?: InputMaybe<Scalars['String']>;
-  refreshToken?: InputMaybe<Scalars['String']>;
-}>;
+export type IRefreshMutationVariables = Exact<{ [key: string]: never }>;
 
 export type IRefreshMutation = {
   __typename?: 'Mutation';
-  refresh?: { __typename?: 'Tokens'; accessToken?: string | null; refreshToken?: string | null } | null;
+  refresh?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
 };
 
 export type IGoToWorkMutationVariables = Exact<{ [key: string]: never }>;
@@ -196,6 +175,7 @@ export type IGetEmployeeQuery = {
     employeeId?: string | null;
     userId?: string | null;
     employeeName?: string | null;
+    email?: string | null;
     department?: { __typename?: 'Department'; departmentName?: string | null } | null;
   } | null> | null;
 };
@@ -219,83 +199,88 @@ export type IGetEmployeeWorkingQuery = {
   } | null> | null;
 };
 
-export const AuthenticateDocument = gql`
-  mutation authenticate($userId: String, $passwd: String) {
-    authenticate(userId: $userId, passwd: $passwd) {
+export const LoginDocument = gql`
+  mutation login($userId: String, $passwd: String) {
+    login(userId: $userId, passwd: $passwd) {
       accessToken
-      refreshToken
       startAt
       endAt
       workingType
     }
   }
 `;
-export type IAuthenticateMutationFn = Apollo.MutationFunction<IAuthenticateMutation, IAuthenticateMutationVariables>;
+export type ILoginMutationFn = Apollo.MutationFunction<ILoginMutation, ILoginMutationVariables>;
 
 /**
- * __useAuthenticateMutation__
+ * __useLoginMutation__
  *
- * To run a mutation, you first call `useAuthenticateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAuthenticateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [authenticateMutation, { data, loading, error }] = useAuthenticateMutation({
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
  *      userId: // value for 'userId'
  *      passwd: // value for 'passwd'
  *   },
  * });
  */
-export function useAuthenticateMutation(baseOptions?: Apollo.MutationHookOptions<IAuthenticateMutation, IAuthenticateMutationVariables>) {
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<ILoginMutation, ILoginMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<IAuthenticateMutation, IAuthenticateMutationVariables>(AuthenticateDocument, options);
+  return Apollo.useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument, options);
 }
-export type AuthenticateMutationHookResult = ReturnType<typeof useAuthenticateMutation>;
-export type AuthenticateMutationResult = Apollo.MutationResult<IAuthenticateMutation>;
-export type AuthenticateMutationOptions = Apollo.BaseMutationOptions<IAuthenticateMutation, IAuthenticateMutationVariables>;
-export const ValidateDocument = gql`
-  mutation validate {
-    validate {
-      startAt
-      endAt
-      workingType
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<ILoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<ILoginMutation, ILoginMutationVariables>;
+export const LogoutDocument = gql`
+  mutation logout {
+    logout {
+      employeeId
+      userId
+      employeeName
+      department {
+        departmentName
+      }
+      email
     }
   }
 `;
-export type IValidateMutationFn = Apollo.MutationFunction<IValidateMutation, IValidateMutationVariables>;
+export type ILogoutMutationFn = Apollo.MutationFunction<ILogoutMutation, ILogoutMutationVariables>;
 
 /**
- * __useValidateMutation__
+ * __useLogoutMutation__
  *
- * To run a mutation, you first call `useValidateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useValidateMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [validateMutation, { data, loading, error }] = useValidateMutation({
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
  *   variables: {
  *   },
  * });
  */
-export function useValidateMutation(baseOptions?: Apollo.MutationHookOptions<IValidateMutation, IValidateMutationVariables>) {
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<ILogoutMutation, ILogoutMutationVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<IValidateMutation, IValidateMutationVariables>(ValidateDocument, options);
+  return Apollo.useMutation<ILogoutMutation, ILogoutMutationVariables>(LogoutDocument, options);
 }
-export type ValidateMutationHookResult = ReturnType<typeof useValidateMutation>;
-export type ValidateMutationResult = Apollo.MutationResult<IValidateMutation>;
-export type ValidateMutationOptions = Apollo.BaseMutationOptions<IValidateMutation, IValidateMutationVariables>;
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<ILogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<ILogoutMutation, ILogoutMutationVariables>;
 export const RefreshDocument = gql`
-  mutation refresh($userId: String, $refreshToken: String) {
-    refresh(userId: $userId, refreshToken: $refreshToken) {
+  mutation refresh {
+    refresh {
       accessToken
-      refreshToken
+      startAt
+      endAt
+      workingType
     }
   }
 `;
@@ -314,8 +299,6 @@ export type IRefreshMutationFn = Apollo.MutationFunction<IRefreshMutation, IRefr
  * @example
  * const [refreshMutation, { data, loading, error }] = useRefreshMutation({
  *   variables: {
- *      userId: // value for 'userId'
- *      refreshToken: // value for 'refreshToken'
  *   },
  * });
  */
@@ -419,6 +402,7 @@ export const GetEmployeeDocument = gql`
       department {
         departmentName
       }
+      email
     }
   }
 `;
