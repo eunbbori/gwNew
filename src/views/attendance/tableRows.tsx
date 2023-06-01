@@ -30,7 +30,7 @@ const TableRows = ({ data }: TableRowsProps) => {
             <TableCell cellData={calculateDateDiff(startAt, endAt)} />
             <TableCell cellData={getWorkingTypeName(e?.workingType)} />
             <TableCell cellData={format(startAt, 'MM-dd HH:mm')} />
-            <TableCell cellData={format(endAt, 'MM-dd HH:mm')} />
+            <TableCell cellData={endAt ? format(endAt, 'MM-dd HH:mm') : '-'} />
             <TableCell cellData={'-'} />
             <TableCell cellData={'-'} />
           </tr>
