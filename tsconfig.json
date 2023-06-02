@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
+    "target": "es5" /* ECMAScript 목표 버전 설정: 'ES3'(기본), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
+    "lib": ["dom", "dom.iterable", "esnext"] /* 컴파일 과정에 사용될 라이브러리 파일 설정 */,
+    "allowJs": true /* JavaScript 파일 컴파일 허용 */,
     "skipLibCheck": true,
-    "strict": true,
+    "strict": true /* 모든 엄격한 유형 검사 옵션 활성화 */,
+    "noImplicitAny": true /* 명시적이지 않은 'any' 유형으로 표현식 및 선언 사용 시 오류 발생 */,
+    "strictNullChecks": true /* 엄격한 null 검사 사용 */,
+    "noImplicitReturns": true /* 함수가 값을 반환하지 않을 경우, 오류로 보고 */,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
+    "esModuleInterop": true /* 모든 가져오기에 대한 네임스페이스 객체 생성을 통해 CommonJS와 ES 모듈 간의 상호 운용성을 제공. 'allowSyntheticDefaultImports' 암시 */,
+    "module": "esnext" /* 생성될 모듈 코드 설정: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
+    "moduleResolution": "node" /* 모듈 분석 방법 설정: 'node' (Node.js) 또는 'classic' (TypeScript pre-1.6). */,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -17,7 +20,7 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "typeRoots" : ["./@types", "./node_modules/@types"]
+    "typeRoots": ["./@types", "./node_modules/@types"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

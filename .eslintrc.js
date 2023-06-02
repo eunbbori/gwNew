@@ -13,6 +13,7 @@ module.exports = {
   ],
   parser: '@typescript-eslint/parser', // ESLint 파서를 지정합니다.
   parserOptions: {
+    // project: './tsconfig.json',
     ecmaFeatures: {
       jsx: true, // JSX를 파싱할 수 있습니다.
     },
