@@ -1,4 +1,4 @@
-import { startEndAtVar, jwtTokensVar } from '@/modules/gqlReactVars';
+import { startEndAtVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
 import React, { useState } from 'react';
 import { useGoToWorkMutation, useLeaveWorkMutation } from '@/types/generated/types';

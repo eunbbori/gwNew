@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 import format from 'date-fns/format';
 import parseISO from 'date-fns/parseISO';
-import { startEndAtVar } from '@/modules/gqlReactVars';
+import { startEndAtVar } from '@/stores/gqlReactVars';
 
 const AttendanceRecord = () => {
   const startEndAt = useReactiveVar(startEndAtVar);

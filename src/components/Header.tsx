@@ -12,7 +12,7 @@ import AttendanceBtnGroup from './Attendance/AttendanceBtnGroup';
 import AttendanceRecord from './Attendance/AttendanceRecord';
 import { useReactiveVar } from '@apollo/client';
 
-import { AuthData, jwtTokensVar, startEndAtVar } from '@/modules/gqlReactVars';
+import { AuthData, jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
 import { useRefreshMutation, useLogoutMutation } from '@/types/generated/types';
 
 const Header = () => {

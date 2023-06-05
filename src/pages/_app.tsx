@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, useReactiveVar } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { jwtTokensVar } from '@/modules/gqlReactVars';
+import { jwtTokensVar } from '@/stores/gqlReactVars';
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_BASE_API,
