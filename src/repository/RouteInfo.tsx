@@ -41,7 +41,7 @@ export const routeInfos: RouteInfo[] = [
     submenu: [
       {
         menuTitle: '출퇴근',
-        linkTitle: 'listAttendance',
+        linkTitle: '/listAttendance',
       },
       {
         menuTitle: 'test4',
@@ -93,11 +93,11 @@ export const routeInfos: RouteInfo[] = [
     submenu: [
       {
         menuTitle: '구성원',
-        linkTitle: 'listEmp',
+        linkTitle: '/listEmp',
       },
       {
         menuTitle: '직원등록',
-        linkTitle: 'addEmp',
+        linkTitle: '/addEmp',
       },
     ],
   },

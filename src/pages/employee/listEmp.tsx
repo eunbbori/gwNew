@@ -2,7 +2,7 @@ import ListEmployee from '@/views/employee/ListEmployee';
 import React from 'react';
 import dynamic from 'next/dynamic';
 
-const listEmp = () => {
+const ListEmp = () => {
   return (
     <>
       <ListEmployee />
@@ -10,4 +10,4 @@ const listEmp = () => {
   );
 };
 
-export default listEmp;
+export default ListEmp;
