@@ -8,7 +8,6 @@ import { GraphQLWsLink } from '@Apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { setContext } from '@apollo/client/link/context';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
-import 'tw-elements/dist/css/tw-elements.min.css';
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_BASE_API,
