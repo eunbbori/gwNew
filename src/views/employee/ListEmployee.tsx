@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AllEmployeeProfile from './AllEmployeeProfile';
 import TeamEmployeeProfile from './TeamEmployeeProfile';
+import { useGetAllEmployeeQuery } from '@/types/generated/types';
 
 const EmployeeList = () => {
   const [allMenuSelected, setAllMenuSelected] = useState(true);
   const allClass = ' cursor-pointer';
   const teamClass = 'mt-[12px] cursor-pointer';
+  const { data } = useGetAllEmployeeQuery();
 
   const myAllClickHandler = () => {
     setAllMenuSelected(true);
@@ -33,7 +35,7 @@ const EmployeeList = () => {
         <div className="bg-[white] pt-[20px] pr-[35px] pb-[25px] pl-[30px] rounded-xl">
           <div className="flex flex-col">
             <div className="text-[22px] text-[#333333] mt-[16px] font-bold leading-[32px]">제이앤퍼스트</div>
-            <div className="text-[13px] text-[#3366FF] font-bold">전체 4명</div>
+            <div className="text-[13px] text-[#3366FF] font-bold">전체 {data?.employees?.length}명</div>
           </div>
         </div>
       </div>

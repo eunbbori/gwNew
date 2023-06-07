@@ -1,11 +1,16 @@
-query getEmployee {
+query getAllEmployee {
   employees {
     employeeId
     userId
     employeeName
     department {
+      departmentId
       departmentName
     }
+  }
+  departments {
+    departmentId
+    departmentName
   }
 }
 

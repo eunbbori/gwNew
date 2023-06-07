@@ -166,18 +166,18 @@ export type ILeaveWorkMutation = {
   } | null;
 };
 
-export type IGetEmployeeQueryVariables = Exact<{ [key: string]: never }>;
+export type IGetAllEmployeeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type IGetEmployeeQuery = {
+export type IGetAllEmployeeQuery = {
   __typename?: 'Query';
   employees?: Array<{
     __typename?: 'Employee';
     employeeId?: string | null;
     userId?: string | null;
     employeeName?: string | null;
-    email?: string | null;
-    department?: { __typename?: 'Department'; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
   } | null> | null;
+  departments?: Array<{ __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null> | null;
 };
 
 export type IGetEmployeeWorkingQueryVariables = Exact<{
@@ -393,46 +393,50 @@ export function useLeaveWorkMutation(baseOptions?: Apollo.MutationHookOptions<IL
 export type LeaveWorkMutationHookResult = ReturnType<typeof useLeaveWorkMutation>;
 export type LeaveWorkMutationResult = Apollo.MutationResult<ILeaveWorkMutation>;
 export type LeaveWorkMutationOptions = Apollo.BaseMutationOptions<ILeaveWorkMutation, ILeaveWorkMutationVariables>;
-export const GetEmployeeDocument = gql`
-  query getEmployee {
+export const GetAllEmployeeDocument = gql`
+  query getAllEmployee {
     employees {
       employeeId
       userId
       employeeName
       department {
+        departmentId
         departmentName
       }
-      email
+    }
+    departments {
+      departmentId
+      departmentName
     }
   }
 `;
 
 /**
- * __useGetEmployeeQuery__
+ * __useGetAllEmployeeQuery__
  *
- * To run a query within a React component, call `useGetEmployeeQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEmployeeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllEmployeeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllEmployeeQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetEmployeeQuery({
+ * const { data, loading, error } = useGetAllEmployeeQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetEmployeeQuery(baseOptions?: Apollo.QueryHookOptions<IGetEmployeeQuery, IGetEmployeeQueryVariables>) {
+export function useGetAllEmployeeQuery(baseOptions?: Apollo.QueryHookOptions<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<IGetEmployeeQuery, IGetEmployeeQueryVariables>(GetEmployeeDocument, options);
+  return Apollo.useQuery<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>(GetAllEmployeeDocument, options);
 }
-export function useGetEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetEmployeeQuery, IGetEmployeeQueryVariables>) {
+export function useGetAllEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<IGetEmployeeQuery, IGetEmployeeQueryVariables>(GetEmployeeDocument, options);
+  return Apollo.useLazyQuery<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>(GetAllEmployeeDocument, options);
 }
-export type GetEmployeeQueryHookResult = ReturnType<typeof useGetEmployeeQuery>;
-export type GetEmployeeLazyQueryHookResult = ReturnType<typeof useGetEmployeeLazyQuery>;
-export type GetEmployeeQueryResult = Apollo.QueryResult<IGetEmployeeQuery, IGetEmployeeQueryVariables>;
+export type GetAllEmployeeQueryHookResult = ReturnType<typeof useGetAllEmployeeQuery>;
+export type GetAllEmployeeLazyQueryHookResult = ReturnType<typeof useGetAllEmployeeLazyQuery>;
+export type GetAllEmployeeQueryResult = Apollo.QueryResult<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>;
 export const GetEmployeeWorkingDocument = gql`
   query getEmployeeWorking($dt: String) {
     employeeWorking(dt: $dt) {
