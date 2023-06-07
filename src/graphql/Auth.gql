@@ -59,3 +59,19 @@ mutation leaveWork {
     endAt
   }
 }
+
+subscription attended {
+  attended {
+    employeeId
+    employeeName
+    department {
+      departmentId
+      departmentName
+    }
+    userId
+    workingDate
+    workingType
+    startAt
+    endAt
+  }
+}

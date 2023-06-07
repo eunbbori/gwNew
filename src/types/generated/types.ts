@@ -68,9 +68,11 @@ export type IMutation = {
   refresh?: Maybe<IAuthInfo>;
 };
 
+
 export type IMutationAddEmployeeArgs = {
   input?: InputMaybe<IEmployeeInput>;
 };
+
 
 export type IMutationLoginArgs = {
   passwd?: InputMaybe<Scalars['String']>;
@@ -83,6 +85,7 @@ export type IQuery = {
   employeeWorking?: Maybe<Array<Maybe<IEmployeeWorking>>>;
   employees?: Maybe<Array<Maybe<IEmployee>>>;
 };
+
 
 export type IQueryEmployeeWorkingArgs = {
   dt?: InputMaybe<Scalars['String']>;
@@ -98,7 +101,7 @@ export enum IWorkingType {
   HalfDayoff = 'HALF_DAYOFF',
   Military = 'MILITARY',
   Sick = 'SICK',
-  Work = 'WORK',
+  Work = 'WORK'
 }
 
 export type ILoginMutationVariables = Exact<{
@@ -106,109 +109,57 @@ export type ILoginMutationVariables = Exact<{
   passwd?: InputMaybe<Scalars['String']>;
 }>;
 
-export type ILoginMutation = {
-  __typename?: 'Mutation';
-  login?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
-};
 
-export type ILogoutMutationVariables = Exact<{ [key: string]: never }>;
+export type ILoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'AuthInfo', accessToken?: string | null, startAt?: any | null, endAt?: any | null, workingType?: IWorkingType | null } | null };
 
-export type ILogoutMutation = {
-  __typename?: 'Mutation';
-  logout?: {
-    __typename?: 'Employee';
-    employeeId?: string | null;
-    userId?: string | null;
-    employeeName?: string | null;
-    email?: string | null;
-    department?: { __typename?: 'Department'; departmentName?: string | null } | null;
-  } | null;
-};
+export type ILogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type IRefreshMutationVariables = Exact<{ [key: string]: never }>;
 
-export type IRefreshMutation = {
-  __typename?: 'Mutation';
-  refresh?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
-};
+export type ILogoutMutation = { __typename?: 'Mutation', logout?: { __typename?: 'Employee', employeeId?: string | null, userId?: string | null, employeeName?: string | null, email?: string | null, department?: { __typename?: 'Department', departmentName?: string | null } | null } | null };
 
-export type IGoToWorkMutationVariables = Exact<{ [key: string]: never }>;
+export type IRefreshMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type IGoToWorkMutation = {
-  __typename?: 'Mutation';
-  goToWork?: {
-    __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
-    userId?: string | null;
-    employeeName?: string | null;
-    workingDate?: any | null;
-    workingType?: IWorkingType | null;
-    startAt?: any | null;
-    endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
-  } | null;
-};
 
-export type ILeaveWorkMutationVariables = Exact<{ [key: string]: never }>;
+export type IRefreshMutation = { __typename?: 'Mutation', refresh?: { __typename?: 'AuthInfo', accessToken?: string | null, startAt?: any | null, endAt?: any | null, workingType?: IWorkingType | null } | null };
 
-export type ILeaveWorkMutation = {
-  __typename?: 'Mutation';
-  leaveWork?: {
-    __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
-    userId?: string | null;
-    employeeName?: string | null;
-    workingDate?: any | null;
-    workingType?: IWorkingType | null;
-    startAt?: any | null;
-    endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
-  } | null;
-};
+export type IGoToWorkMutationVariables = Exact<{ [key: string]: never; }>;
 
-export type IGetAllEmployeeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type IGetAllEmployeeQuery = {
-  __typename?: 'Query';
-  employees?: Array<{
-    __typename?: 'Employee';
-    employeeId?: string | null;
-    userId?: string | null;
-    employeeName?: string | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
-  } | null> | null;
-  departments?: Array<{ __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null> | null;
-};
+export type IGoToWorkMutation = { __typename?: 'Mutation', goToWork?: { __typename?: 'EmployeeWorking', employeeId?: number | null, userId?: string | null, employeeName?: string | null, workingDate?: any | null, workingType?: IWorkingType | null, startAt?: any | null, endAt?: any | null, department?: { __typename?: 'Department', departmentId?: string | null, departmentName?: string | null } | null } | null };
+
+export type ILeaveWorkMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ILeaveWorkMutation = { __typename?: 'Mutation', leaveWork?: { __typename?: 'EmployeeWorking', employeeId?: number | null, userId?: string | null, employeeName?: string | null, workingDate?: any | null, workingType?: IWorkingType | null, startAt?: any | null, endAt?: any | null, department?: { __typename?: 'Department', departmentId?: string | null, departmentName?: string | null } | null } | null };
+
+export type IAttendedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IAttendedSubscription = { __typename?: 'Subscription', attended?: { __typename?: 'EmployeeWorking', employeeId?: number | null, employeeName?: string | null, userId?: string | null, workingDate?: any | null, workingType?: IWorkingType | null, startAt?: any | null, endAt?: any | null, department?: { __typename?: 'Department', departmentId?: string | null, departmentName?: string | null } | null } | null };
+
+export type IGetAllEmployeeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type IGetAllEmployeeQuery = { __typename?: 'Query', employees?: Array<{ __typename?: 'Employee', employeeId?: string | null, userId?: string | null, employeeName?: string | null, department?: { __typename?: 'Department', departmentId?: string | null, departmentName?: string | null } | null } | null> | null, departments?: Array<{ __typename?: 'Department', departmentId?: string | null, departmentName?: string | null } | null> | null };
 
 export type IGetEmployeeWorkingQueryVariables = Exact<{
   dt?: InputMaybe<Scalars['String']>;
 }>;
 
-export type IGetEmployeeWorkingQuery = {
-  __typename?: 'Query';
-  employeeWorking?: Array<{
-    __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
-    employeeName?: string | null;
-    userId?: string | null;
-    workingDate?: any | null;
-    workingType?: IWorkingType | null;
-    startAt?: any | null;
-    endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
-  } | null> | null;
-};
+
+export type IGetEmployeeWorkingQuery = { __typename?: 'Query', employeeWorking?: Array<{ __typename?: 'EmployeeWorking', employeeId?: number | null, employeeName?: string | null, userId?: string | null, workingDate?: any | null, workingType?: IWorkingType | null, startAt?: any | null, endAt?: any | null, department?: { __typename?: 'Department', departmentId?: string | null, departmentName?: string | null } | null } | null> | null };
+
 
 export const LoginDocument = gql`
-  mutation login($userId: String, $passwd: String) {
-    login(userId: $userId, passwd: $passwd) {
-      accessToken
-      startAt
-      endAt
-      workingType
-    }
+    mutation login($userId: String, $passwd: String) {
+  login(userId: $userId, passwd: $passwd) {
+    accessToken
+    startAt
+    endAt
+    workingType
   }
-`;
+}
+    `;
 export type ILoginMutationFn = Apollo.MutationFunction<ILoginMutation, ILoginMutationVariables>;
 
 /**
@@ -230,25 +181,25 @@ export type ILoginMutationFn = Apollo.MutationFunction<ILoginMutation, ILoginMut
  * });
  */
 export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<ILoginMutation, ILoginMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ILoginMutation, ILoginMutationVariables>(LoginDocument, options);
+      }
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<ILoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<ILoginMutation, ILoginMutationVariables>;
 export const LogoutDocument = gql`
-  mutation logout {
-    logout {
-      employeeId
-      userId
-      employeeName
-      department {
-        departmentName
-      }
-      email
+    mutation logout {
+  logout {
+    employeeId
+    userId
+    employeeName
+    department {
+      departmentName
     }
+    email
   }
-`;
+}
+    `;
 export type ILogoutMutationFn = Apollo.MutationFunction<ILogoutMutation, ILogoutMutationVariables>;
 
 /**
@@ -268,22 +219,22 @@ export type ILogoutMutationFn = Apollo.MutationFunction<ILogoutMutation, ILogout
  * });
  */
 export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<ILogoutMutation, ILogoutMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<ILogoutMutation, ILogoutMutationVariables>(LogoutDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ILogoutMutation, ILogoutMutationVariables>(LogoutDocument, options);
+      }
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<ILogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<ILogoutMutation, ILogoutMutationVariables>;
 export const RefreshDocument = gql`
-  mutation refresh {
-    refresh {
-      accessToken
-      startAt
-      endAt
-      workingType
-    }
+    mutation refresh {
+  refresh {
+    accessToken
+    startAt
+    endAt
+    workingType
   }
-`;
+}
+    `;
 export type IRefreshMutationFn = Apollo.MutationFunction<IRefreshMutation, IRefreshMutationVariables>;
 
 /**
@@ -303,29 +254,29 @@ export type IRefreshMutationFn = Apollo.MutationFunction<IRefreshMutation, IRefr
  * });
  */
 export function useRefreshMutation(baseOptions?: Apollo.MutationHookOptions<IRefreshMutation, IRefreshMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<IRefreshMutation, IRefreshMutationVariables>(RefreshDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IRefreshMutation, IRefreshMutationVariables>(RefreshDocument, options);
+      }
 export type RefreshMutationHookResult = ReturnType<typeof useRefreshMutation>;
 export type RefreshMutationResult = Apollo.MutationResult<IRefreshMutation>;
 export type RefreshMutationOptions = Apollo.BaseMutationOptions<IRefreshMutation, IRefreshMutationVariables>;
 export const GoToWorkDocument = gql`
-  mutation goToWork {
-    goToWork {
-      employeeId
-      userId
-      employeeName
-      department {
-        departmentId
-        departmentName
-      }
-      workingDate
-      workingType
-      startAt
-      endAt
+    mutation goToWork {
+  goToWork {
+    employeeId
+    userId
+    employeeName
+    department {
+      departmentId
+      departmentName
     }
+    workingDate
+    workingType
+    startAt
+    endAt
   }
-`;
+}
+    `;
 export type IGoToWorkMutationFn = Apollo.MutationFunction<IGoToWorkMutation, IGoToWorkMutationVariables>;
 
 /**
@@ -345,29 +296,29 @@ export type IGoToWorkMutationFn = Apollo.MutationFunction<IGoToWorkMutation, IGo
  * });
  */
 export function useGoToWorkMutation(baseOptions?: Apollo.MutationHookOptions<IGoToWorkMutation, IGoToWorkMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<IGoToWorkMutation, IGoToWorkMutationVariables>(GoToWorkDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IGoToWorkMutation, IGoToWorkMutationVariables>(GoToWorkDocument, options);
+      }
 export type GoToWorkMutationHookResult = ReturnType<typeof useGoToWorkMutation>;
 export type GoToWorkMutationResult = Apollo.MutationResult<IGoToWorkMutation>;
 export type GoToWorkMutationOptions = Apollo.BaseMutationOptions<IGoToWorkMutation, IGoToWorkMutationVariables>;
 export const LeaveWorkDocument = gql`
-  mutation leaveWork {
-    leaveWork {
-      employeeId
-      userId
-      employeeName
-      department {
-        departmentId
-        departmentName
-      }
-      workingDate
-      workingType
-      startAt
-      endAt
+    mutation leaveWork {
+  leaveWork {
+    employeeId
+    userId
+    employeeName
+    department {
+      departmentId
+      departmentName
     }
+    workingDate
+    workingType
+    startAt
+    endAt
   }
-`;
+}
+    `;
 export type ILeaveWorkMutationFn = Apollo.MutationFunction<ILeaveWorkMutation, ILeaveWorkMutationVariables>;
 
 /**
@@ -387,29 +338,68 @@ export type ILeaveWorkMutationFn = Apollo.MutationFunction<ILeaveWorkMutation, I
  * });
  */
 export function useLeaveWorkMutation(baseOptions?: Apollo.MutationHookOptions<ILeaveWorkMutation, ILeaveWorkMutationVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<ILeaveWorkMutation, ILeaveWorkMutationVariables>(LeaveWorkDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ILeaveWorkMutation, ILeaveWorkMutationVariables>(LeaveWorkDocument, options);
+      }
 export type LeaveWorkMutationHookResult = ReturnType<typeof useLeaveWorkMutation>;
 export type LeaveWorkMutationResult = Apollo.MutationResult<ILeaveWorkMutation>;
 export type LeaveWorkMutationOptions = Apollo.BaseMutationOptions<ILeaveWorkMutation, ILeaveWorkMutationVariables>;
-export const GetAllEmployeeDocument = gql`
-  query getAllEmployee {
-    employees {
-      employeeId
-      userId
-      employeeName
-      department {
-        departmentId
-        departmentName
-      }
+export const AttendedDocument = gql`
+    subscription attended {
+  attended {
+    employeeId
+    employeeName
+    department {
+      departmentId
+      departmentName
     }
-    departments {
+    userId
+    workingDate
+    workingType
+    startAt
+    endAt
+  }
+}
+    `;
+
+/**
+ * __useAttendedSubscription__
+ *
+ * To run a query within a React component, call `useAttendedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useAttendedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAttendedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAttendedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<IAttendedSubscription, IAttendedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<IAttendedSubscription, IAttendedSubscriptionVariables>(AttendedDocument, options);
+      }
+export type AttendedSubscriptionHookResult = ReturnType<typeof useAttendedSubscription>;
+export type AttendedSubscriptionResult = Apollo.SubscriptionResult<IAttendedSubscription>;
+export const GetAllEmployeeDocument = gql`
+    query getAllEmployee {
+  employees {
+    employeeId
+    userId
+    employeeName
+    department {
       departmentId
       departmentName
     }
   }
-`;
+  departments {
+    departmentId
+    departmentName
+  }
+}
+    `;
 
 /**
  * __useGetAllEmployeeQuery__
@@ -427,33 +417,33 @@ export const GetAllEmployeeDocument = gql`
  * });
  */
 export function useGetAllEmployeeQuery(baseOptions?: Apollo.QueryHookOptions<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>(GetAllEmployeeDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>(GetAllEmployeeDocument, options);
+      }
 export function useGetAllEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>(GetAllEmployeeDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>(GetAllEmployeeDocument, options);
+        }
 export type GetAllEmployeeQueryHookResult = ReturnType<typeof useGetAllEmployeeQuery>;
 export type GetAllEmployeeLazyQueryHookResult = ReturnType<typeof useGetAllEmployeeLazyQuery>;
 export type GetAllEmployeeQueryResult = Apollo.QueryResult<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>;
 export const GetEmployeeWorkingDocument = gql`
-  query getEmployeeWorking($dt: String) {
-    employeeWorking(dt: $dt) {
-      employeeId
-      employeeName
-      department {
-        departmentId
-        departmentName
-      }
-      userId
-      workingDate
-      workingType
-      startAt
-      endAt
+    query getEmployeeWorking($dt: String) {
+  employeeWorking(dt: $dt) {
+    employeeId
+    employeeName
+    department {
+      departmentId
+      departmentName
     }
+    userId
+    workingDate
+    workingType
+    startAt
+    endAt
   }
-`;
+}
+    `;
 
 /**
  * __useGetEmployeeWorkingQuery__
@@ -472,13 +462,13 @@ export const GetEmployeeWorkingDocument = gql`
  * });
  */
 export function useGetEmployeeWorkingQuery(baseOptions?: Apollo.QueryHookOptions<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>(GetEmployeeWorkingDocument, options);
-}
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>(GetEmployeeWorkingDocument, options);
+      }
 export function useGetEmployeeWorkingLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>(GetEmployeeWorkingDocument, options);
-}
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>(GetEmployeeWorkingDocument, options);
+        }
 export type GetEmployeeWorkingQueryHookResult = ReturnType<typeof useGetEmployeeWorkingQuery>;
 export type GetEmployeeWorkingLazyQueryHookResult = ReturnType<typeof useGetEmployeeWorkingLazyQuery>;
 export type GetEmployeeWorkingQueryResult = Apollo.QueryResult<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>;
