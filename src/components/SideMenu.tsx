@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { Sidenav, initTE } from 'tw-elements';
 import { routeInfos } from '../repository/RouteInfo';
 import Link from 'next/link';
+import Head from 'next/head';
+import Script from 'next/script';
 
 const SideMenu = () => {
   useEffect(() => {
@@ -11,6 +13,9 @@ const SideMenu = () => {
 
   return (
     <>
+      <Head>
+        <Script type="text/javascript" strategy="beforeInteractive" src="@/node_modules/tw-elements/dist/js/tw-elements.umd.min.js" />
+      </Head>
       <div>
         <nav
           id="sidenav-4"
