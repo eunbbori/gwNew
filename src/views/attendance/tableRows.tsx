@@ -18,7 +18,7 @@ type TableRowsProps = {
 const TableRows = ({ data }: TableRowsProps) => {
   return (
     <>
-      {data!.employeeWorking!.map((e, id) => {
+      {data?.employeeWorking!.map((e, id) => {
         const startAt: Date = e && e.startAt && new Date(e.startAt);
         const endAt: Date = e && e.endAt && new Date(e.endAt);
 
