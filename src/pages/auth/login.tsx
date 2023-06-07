@@ -36,8 +36,8 @@ const Login = () => {
 
   const [loginMutation, { data, loading, error }] = useLoginMutation();
 
-  if (loading) return <>Submitting...</>;
-  if (error) return <>Submission error! ${error.message}</>;
+  //if (loading) return <>`Submitting...`</>;
+  //if (error) return <>Submission error! {error.message}</>;
 
   const onLogin = (loginData: loginFormValues) => {
     loginMutation({
@@ -54,12 +54,16 @@ const Login = () => {
         //auth?.accessToken && sessionStorage.setItem('accessToken', auth.accessToken);
         push('/');
       },
+      onError: (err) => {
+        alert('Check Your Id & Password!');
+        push('/');
+      },
     });
   };
 
   return (
     <div className="w-full mr-auto ml-auto px-6">
-      <div className="w-full max-w-full px-3 mx-auto md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12 mt-[150px] mb-[200px]">
+      <div className="w-full max-w-full px-3 mx-auto md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12 mt-[0px] mb-[200px] pt-[150px]">
         <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 shadow-soft-xl rounded-2xl bg-clip-border">
           <div className="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
             <div className="p-6 pb-0 mb-0 bg-transparent border-b-0 rounded-t-2xl">
