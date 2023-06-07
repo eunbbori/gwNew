@@ -3,12 +3,12 @@ import '@/styles/datepicker.css';
 import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, split, useReactiveVar } from '@apollo/client';
-import { getMainDefinition } from '@apollo/client/utilities'
-import { GraphQLWsLink } from '@Apollo/client/link/subscriptions'
-import { createClient } from 'graphql-ws'
+import { getMainDefinition } from '@apollo/client/utilities';
+import { GraphQLWsLink } from '@Apollo/client/link/subscriptions';
+import { createClient } from 'graphql-ws';
 import { setContext } from '@apollo/client/link/context';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
-import "tw-elements/dist/css/tw-elements.min.css";
+import 'tw-elements/dist/css/tw-elements.min.css';
 
 const httpLink = createHttpLink({
   uri: process.env.NEXT_PUBLIC_BASE_API,
@@ -17,9 +17,11 @@ const httpLink = createHttpLink({
   // uri: 'http://localhost:8080/graphql',
 });
 
-const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:4000/subscription'
-}))
+const wsLink = new GraphQLWsLink(
+  createClient({
+    url: 'ws://localhost:4000/subscription',
+  }),
+);
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -35,15 +37,12 @@ const authLink = setContext((_, { headers }) => {
 
 const splitLink = split(
   ({ query }) => {
-    const definition = getMainDefinition(query)
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    )
+    const definition = getMainDefinition(query);
+    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
   },
   wsLink,
-  authLink.concat(httpLink)
-)
+  authLink.concat(httpLink),
+);
 
 const client = new ApolloClient({
   link: splitLink,
