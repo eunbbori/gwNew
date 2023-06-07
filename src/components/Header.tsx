@@ -14,15 +14,15 @@ import { useReactiveVar } from '@apollo/client';
 
 import { AuthData, jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
 import { useRefreshMutation, useLogoutMutation } from '@/types/generated/types';
+import { useRouter } from 'next/router';
 
 const Header = () => {
   const [refreshMutation /*, { data, loading, error }*/] = useRefreshMutation();
   const [logoutMutation] = useLogoutMutation();
-  /*
-  if (loading) return <>Refreshing...</>
-  if (error) return <>Refreshing error! ${error.message}</>
-*/
+
   const tokens = useReactiveVar(jwtTokensVar);
+
+  const { push } = useRouter();
 
   const attendanceDivClass = 'relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft';
 
@@ -42,7 +42,8 @@ const Header = () => {
         }
       },
       onError: (err) => {
-        console.log(err);
+        push('/');
+        //console.log(err);
       },
     });
   }, []);
@@ -74,7 +75,7 @@ const Header = () => {
                   onClick={handleLogout}
                   className="self-center cursor-pointer block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500"
                 >
-                  <span className="hidden sm:inline ml-5">
+                  <span className="sm:inline ml-5">
                     <FontAwesomeIcon className="sm:mr-1" icon={faRightFromBracket} />
                     {useUserName}
                   </span>
@@ -83,7 +84,7 @@ const Header = () => {
                 <Link href="/auth/login">
                   <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
                     <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
-                    <span className="hidden sm:inline">로그인</span>
+                    <span className="sm:inline">로그인</span>
                   </div>
                 </Link>
               )}
