@@ -52,7 +52,8 @@ const Header = () => {
     logoutMutation({
       onCompleted: () => {
         jwtTokensVar(undefined);
-        window.location.href = '/';
+        push('/');
+        //window.location.href = '/';
       },
     });
   };

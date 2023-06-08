@@ -2,7 +2,7 @@ import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
 import { useGetEmployeeWorkingQuery, useAttendedSubscription } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { useRouter } from 'next/navigation';
 import { useReactiveVar } from '@apollo/client';
 import { attendanceDateVar } from '@/stores/gqlReactVars';
@@ -11,7 +11,7 @@ const Attendance = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
   const { push } = useRouter();
 
-  const { data, loading, error } = useGetEmployeeWorkingQuery({
+  const { data, refetch } = useGetEmployeeWorkingQuery({
     variables: {
       dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
     },
@@ -23,7 +23,10 @@ const Attendance = () => {
 
   const { data: subData, loading: subLoading } = useAttendedSubscription({
     onData: (options) => {
-      data?.employeeWorking?.push({ ...options.data.data?.attended });
+      if (isToday(selectedAttendanceDate))
+        refetch({
+          dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
+        });
     },
   });
 
