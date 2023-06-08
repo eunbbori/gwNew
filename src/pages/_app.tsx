@@ -4,7 +4,7 @@ import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, split, useReactiveVar } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
-import { GraphQLWsLink } from '@Apollo/client/link/subscriptions';
+import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { setContext } from '@apollo/client/link/context';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
