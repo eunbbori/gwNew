@@ -8,7 +8,6 @@ export interface ITeamEmpProfileProps {
 }
 const TeamProfileList = ({ deptId, deptName }: ITeamEmpProfileProps) => {
   const { data } = useGetAllEmployeeQuery();
-  // console.log(data?.employees?.filter((dept) => dept?.department?.departmentId === '2'));
 
   return (
     <ul className="mb-60px">
