@@ -1,15 +1,21 @@
 import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
-import { useGetEmployeeWorkingQuery, useAttendedSubscription } from '@/types/generated/types';
+import { useGetEmployeeWorkingQuery, useAttendedSubscription, useRefreshMutation } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import { format, isToday } from 'date-fns';
-import { useRouter } from 'next/navigation';
 import { useReactiveVar } from '@apollo/client';
-import { attendanceDateVar } from '@/stores/gqlReactVars';
+import { attendanceDateVar, setLocalFromToken } from '@/stores/gqlReactVars';
+import { useCallback } from 'react';
 
 const Attendance = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
-  const { push } = useRouter();
+  const [refreshMutation] = useRefreshMutation();
+
+  const refetchEmployeeWorking = useCallback(() => {
+    refetch({
+      dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
+    });
+  }, [selectedAttendanceDate]);
 
   const { data, refetch } = useGetEmployeeWorkingQuery({
     variables: {
@@ -17,16 +23,20 @@ const Attendance = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      push('/');
+      if (err.message === 'NO TOKEN') {
+        refreshMutation({
+          onCompleted: (data) => {
+            setLocalFromToken(data);
+            refetchEmployeeWorking();
+          },
+        });
+      }
     },
   });
 
   const { data: subData, loading: subLoading } = useAttendedSubscription({
     onData: (options) => {
-      if (isToday(selectedAttendanceDate))
-        refetch({
-          dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
-        });
+      if (isToday(selectedAttendanceDate)) refetchEmployeeWorking();
     },
   });
 

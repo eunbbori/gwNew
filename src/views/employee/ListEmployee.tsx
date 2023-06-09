@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import AllEmployeeProfile from './AllEmployeeProfile';
 import TeamEmployeeProfile from './TeamEmployeeProfile';
-import { useGetAllEmployeeQuery } from '@/types/generated/types';
+import { useGetAllEmployeeQuery, useRefreshMutation } from '@/types/generated/types';
+import { setLocalFromToken, startEndAtVar } from '@/stores/gqlReactVars';
 
 const EmployeeList = () => {
   const [allMenuSelected, setAllMenuSelected] = useState(true);
+  const [refreshMutation /*, { data, loading, error }*/] = useRefreshMutation();
+
   const allClass = ' cursor-pointer';
   const teamClass = 'mt-[12px] cursor-pointer';
-  const { data } = useGetAllEmployeeQuery();
+  const { data, refetch } = useGetAllEmployeeQuery({
+    onError: (err) => {
+      if (err.message.startsWith('NO TOKEN')) {
+        refreshMutation({
+          onCompleted: (data) => {
+            setLocalFromToken(data);
+            refetch();
+          },
+        });
+      }
+    },
+  });
 
   const myAllClickHandler = () => {
     setAllMenuSelected(true);
@@ -39,7 +53,7 @@ const EmployeeList = () => {
           </div>
         </div>
       </div>
-      <div className="row-span-2 col-span-2">{allMenuSelected ? <AllEmployeeProfile /> : <TeamEmployeeProfile />}</div>
+      <div className="row-span-2 col-span-2">{allMenuSelected ? <AllEmployeeProfile list={data} /> : <TeamEmployeeProfile list={data} />}</div>
     </div>
   );
 };

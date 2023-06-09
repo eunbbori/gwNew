@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import jwt_decode from 'jwt-decode';
 
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
@@ -12,12 +12,11 @@ import AttendanceBtnGroup from './Attendance/AttendanceBtnGroup';
 import AttendanceRecord from './Attendance/AttendanceRecord';
 import { useReactiveVar } from '@apollo/client';
 
-import { AuthData, jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
-import { useRefreshMutation, useLogoutMutation } from '@/types/generated/types';
+import { AuthData, jwtTokensVar } from '@/stores/gqlReactVars';
+import { useLogoutMutation } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 
 const Header = () => {
-  const [refreshMutation /*, { data, loading, error }*/] = useRefreshMutation();
   const [logoutMutation] = useLogoutMutation();
 
   const tokens = useReactiveVar(jwtTokensVar);
@@ -30,30 +29,11 @@ const Header = () => {
     return tokens?.accessToken ? jwt_decode<AuthData>(tokens.accessToken).userName : null;
   }, [tokens]);
 
-  useEffect(() => {
-    refreshMutation({
-      onCompleted: (data) => {
-        if (data?.refresh) {
-          jwtTokensVar({ accessToken: data.refresh?.accessToken || '' });
-          startEndAtVar({
-            startAt: data.refresh?.startAt,
-            endAt: data.refresh?.endAt,
-          });
-        }
-      },
-      onError: (err) => {
-        push('/');
-        //console.log(err);
-      },
-    });
-  }, []);
-
   const handleLogout = () => {
     logoutMutation({
       onCompleted: () => {
         jwtTokensVar(undefined);
         push('/');
-        //window.location.href = '/';
       },
     });
   };

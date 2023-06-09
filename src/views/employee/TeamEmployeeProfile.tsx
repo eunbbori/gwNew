@@ -1,12 +1,11 @@
 import TeamProfileList from '@/components/Employee/Profile/TeamProfileList';
-import { useGetAllEmployeeQuery } from '@/types/generated/types';
+import { IGetAllEmployeeQuery } from '@/types/generated/types';
 import React from 'react';
 
-const TeamEmployeeProfile = () => {
-  const { data } = useGetAllEmployeeQuery();
+const TeamEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
   return (
     <div className="bg-[white] p-[30px] rounded-xl">
-      {data?.departments?.map((dept, idx) => (
+      {list?.departments?.map((dept, idx) => (
         <TeamProfileList key={idx} deptId={dept?.departmentId} deptName={dept?.departmentName} />
       ))}
     </div>

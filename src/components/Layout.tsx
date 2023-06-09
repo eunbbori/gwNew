@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import dynamic from 'next/dynamic';
+import { useRefreshMutation } from '@/types/generated/types';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -12,6 +13,8 @@ const DynamicSideMenu = dynamic(() => import('@/components/SideMenu'), {
 });
 
 const Layout = ({ children }: LayoutProps) => {
+  const [refreshMutation /*, { data, loading, error }*/] = useRefreshMutation();
+
   return (
     <>
       <DynamicSideMenu />
