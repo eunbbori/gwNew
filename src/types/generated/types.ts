@@ -45,17 +45,24 @@ export type IDepartment = {
 
 export type IEmployee = {
   __typename?: 'Employee';
+  contractType?: Maybe<Scalars['String']>;
   department?: Maybe<IDepartment>;
   email?: Maybe<Scalars['String']>;
   employeeId?: Maybe<Scalars['ID']>;
-  employeeName?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
 };
 
 export type IEmployeeInput = {
+  contractType?: InputMaybe<Scalars['String']>;
   departmentId?: InputMaybe<Scalars['Int']>;
-  employeeName?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['Date']>;
   userId?: InputMaybe<Scalars['String']>;
 };
 
@@ -63,8 +70,8 @@ export type IEmployeeWorking = {
   __typename?: 'EmployeeWorking';
   department?: Maybe<IDepartment>;
   employeeId?: Maybe<Scalars['Int']>;
-  employeeName?: Maybe<Scalars['String']>;
   endAt?: Maybe<Scalars['Date']>;
+  name?: Maybe<Scalars['String']>;
   startAt?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
   workingDate?: Maybe<Scalars['Date']>;
@@ -137,7 +144,7 @@ export type ILogoutMutation = {
     __typename?: 'Employee';
     employeeId?: string | null;
     userId?: string | null;
-    employeeName?: string | null;
+    name?: string | null;
     email?: string | null;
     department?: { __typename?: 'Department'; departmentName?: string | null } | null;
   } | null;
@@ -158,7 +165,7 @@ export type IGoToWorkMutation = {
     __typename?: 'EmployeeWorking';
     employeeId?: number | null;
     userId?: string | null;
-    employeeName?: string | null;
+    name?: string | null;
     workingDate?: any | null;
     workingType?: IWorkingType | null;
     startAt?: any | null;
@@ -175,7 +182,7 @@ export type ILeaveWorkMutation = {
     __typename?: 'EmployeeWorking';
     employeeId?: number | null;
     userId?: string | null;
-    employeeName?: string | null;
+    name?: string | null;
     workingDate?: any | null;
     workingType?: IWorkingType | null;
     startAt?: any | null;
@@ -191,7 +198,7 @@ export type IAttendedSubscription = {
   attended?: {
     __typename?: 'EmployeeWorking';
     employeeId?: number | null;
-    employeeName?: string | null;
+    name?: string | null;
     userId?: string | null;
     workingDate?: any | null;
     workingType?: IWorkingType | null;
@@ -209,7 +216,7 @@ export type IGetAllEmployeeQuery = {
     __typename?: 'Employee';
     employeeId?: string | null;
     userId?: string | null;
-    employeeName?: string | null;
+    name?: string | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
   } | null> | null;
   departments?: Array<{ __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null> | null;
@@ -224,7 +231,7 @@ export type IGetEmployeeWorkingQuery = {
   employeeWorking?: Array<{
     __typename?: 'EmployeeWorking';
     employeeId?: number | null;
-    employeeName?: string | null;
+    name?: string | null;
     userId?: string | null;
     workingDate?: any | null;
     workingType?: IWorkingType | null;
@@ -232,6 +239,24 @@ export type IGetEmployeeWorkingQuery = {
     endAt?: any | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
   } | null> | null;
+};
+
+export type IAddEmployeeMutationVariables = Exact<{
+  input: IEmployeeInput;
+}>;
+
+export type IAddEmployeeMutation = {
+  __typename?: 'Mutation';
+  addEmployee?: {
+    __typename?: 'Employee';
+    userId?: string | null;
+    name?: string | null;
+    email?: string | null;
+    contractType?: string | null;
+    phone?: string | null;
+    startDate?: any | null;
+    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+  } | null;
 };
 
 export const LoginDocument = gql`
@@ -276,7 +301,7 @@ export const LogoutDocument = gql`
     logout {
       employeeId
       userId
-      employeeName
+      name
       department {
         departmentName
       }
@@ -349,7 +374,7 @@ export const GoToWorkDocument = gql`
     goToWork {
       employeeId
       userId
-      employeeName
+      name
       department {
         departmentId
         departmentName
@@ -391,7 +416,7 @@ export const LeaveWorkDocument = gql`
     leaveWork {
       employeeId
       userId
-      employeeName
+      name
       department {
         departmentId
         departmentName
@@ -432,7 +457,7 @@ export const AttendedDocument = gql`
   subscription attended {
     attended {
       employeeId
-      employeeName
+      name
       department {
         departmentId
         departmentName
@@ -472,7 +497,7 @@ export const GetAllEmployeeDocument = gql`
     employees {
       employeeId
       userId
-      employeeName
+      name
       department {
         departmentId
         departmentName
@@ -515,7 +540,7 @@ export const GetEmployeeWorkingDocument = gql`
   query getEmployeeWorking($dt: String) {
     employeeWorking(dt: $dt) {
       employeeId
-      employeeName
+      name
       department {
         departmentId
         departmentName
@@ -556,3 +581,45 @@ export function useGetEmployeeWorkingLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetEmployeeWorkingQueryHookResult = ReturnType<typeof useGetEmployeeWorkingQuery>;
 export type GetEmployeeWorkingLazyQueryHookResult = ReturnType<typeof useGetEmployeeWorkingLazyQuery>;
 export type GetEmployeeWorkingQueryResult = Apollo.QueryResult<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>;
+export const AddEmployeeDocument = gql`
+  mutation addEmployee($input: EmployeeInput!) {
+    addEmployee(input: $input) {
+      userId
+      name
+      email
+      department {
+        departmentId
+        departmentName
+      }
+      contractType
+      phone
+      startDate
+    }
+  }
+`;
+export type IAddEmployeeMutationFn = Apollo.MutationFunction<IAddEmployeeMutation, IAddEmployeeMutationVariables>;
+
+/**
+ * __useAddEmployeeMutation__
+ *
+ * To run a mutation, you first call `useAddEmployeeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddEmployeeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addEmployeeMutation, { data, loading, error }] = useAddEmployeeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddEmployeeMutation(baseOptions?: Apollo.MutationHookOptions<IAddEmployeeMutation, IAddEmployeeMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IAddEmployeeMutation, IAddEmployeeMutationVariables>(AddEmployeeDocument, options);
+}
+export type AddEmployeeMutationHookResult = ReturnType<typeof useAddEmployeeMutation>;
+export type AddEmployeeMutationResult = Apollo.MutationResult<IAddEmployeeMutation>;
+export type AddEmployeeMutationOptions = Apollo.BaseMutationOptions<IAddEmployeeMutation, IAddEmployeeMutationVariables>;

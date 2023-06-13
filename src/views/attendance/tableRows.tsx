@@ -24,7 +24,7 @@ const TableRows = ({ data }: TableRowsProps) => {
 
         return (
           <tr key={id}>
-            <TableCell cellData={e?.employeeName} />
+            <TableCell cellData={e?.name} />
             <TableCell cellData={e?.userId} />
             <TableCell cellData={e?.department?.departmentName} />
             <TableCell cellData={calculateDateDiff(startAt, endAt)} />

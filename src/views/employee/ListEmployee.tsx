@@ -19,8 +19,8 @@ const EmployeeList = () => {
   });
 
   useEffect(() => {
-    if (jwtTokens.accessToken) {
-      console.log('TToKKEEN: ' + jwtTokens.accessToken);
+    if (jwtTokens?.accessToken) {
+      console.log('TToKKEEN: ' + jwtTokens?.accessToken);
       getAllEmployeeQuery();
     }
   }, [jwtTokens]);

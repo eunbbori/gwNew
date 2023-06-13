@@ -21,7 +21,7 @@ const TeamProfileList = ({ deptId, deptName }: ITeamEmpProfileProps) => {
           {data?.employees
             ?.filter((dept) => dept?.department?.departmentId === deptId)
             .map((emp, idx) => (
-              <Profile key={idx} empName={emp?.employeeName} />
+              <Profile key={idx} empName={emp?.name} />
             ))}
         </div>
       </li>

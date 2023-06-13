@@ -11,7 +11,7 @@ mutation logout {
   logout {
     employeeId
     userId
-    employeeName
+    name
     department {
       departmentName
     }
@@ -32,7 +32,7 @@ mutation goToWork {
   goToWork {
     employeeId
     userId
-    employeeName
+    name
     department {
       departmentId
       departmentName
@@ -48,7 +48,7 @@ mutation leaveWork {
   leaveWork {
     employeeId
     userId
-    employeeName
+    name
     department {
       departmentId
       departmentName
@@ -63,7 +63,7 @@ mutation leaveWork {
 subscription attended {
   attended {
     employeeId
-    employeeName
+    name
     department {
       departmentId
       departmentName

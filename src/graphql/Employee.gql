@@ -2,7 +2,7 @@ query getAllEmployee {
   employees {
     employeeId
     userId
-    employeeName
+    name
     department {
       departmentId
       departmentName
@@ -17,7 +17,7 @@ query getAllEmployee {
 query getEmployeeWorking($dt: String) {
   employeeWorking(dt: $dt) {
     employeeId
-    employeeName
+    name
     department {
       departmentId
       departmentName
@@ -27,5 +27,20 @@ query getEmployeeWorking($dt: String) {
     workingType
     startAt
     endAt
+  }
+}
+
+mutation addEmployee($input: EmployeeInput!) {
+  addEmployee(input: $input) {
+    userId
+    name
+    email
+    department {
+      departmentId
+      departmentName
+    }
+    contractType
+    phone
+    startDate
   }
 }
