@@ -11,14 +11,16 @@ import createApolloClient from '@/repository/GraphqlConfig';
 const client = createApolloClient();
 
 const RefreshPreprocessor = () => {
-  const [refreshMutation] = useRefreshMutation();
+  const [refreshMutation, { data, loading, error }] = useRefreshMutation();
 
   async function refreshSync() {
-    const data = await refreshMutation();
-    console.log('Refresh Finished!');
-    if (data.data) setLocalFromToken(data.data);
-    else if (data.errors) console.log('App: ' + data.errors[0].message);
-    else console.log('App: Something wrong happend!');
+    try {
+      const refresh = await refreshMutation();
+      console.log('Refresh Finished!');
+      if (refresh.data) setLocalFromToken(refresh.data);
+    } catch (err) {
+      console.log(err); // NO REFRESH: first startup message, so just ignore it
+    }
   }
 
   useEffect(() => {
