@@ -1,12 +1,16 @@
-import ListEmployee from '@/views/employee/ListEmployee';
 import React from 'react';
+import dynamic from 'next/dynamic';
 
-const ListEmp = () => {
+const DynamicListEmployee = dynamic(() => import('@/views/employee/ListEmployee'), {
+  ssr: false,
+});
+
+const listEmp = () => {
   return (
     <>
-      <ListEmployee />
+      <DynamicListEmployee />
     </>
   );
 };
 
-export default ListEmp;
+export default listEmp;

@@ -1,15 +1,14 @@
 import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
-import { useGetEmployeeWorkingQuery, useAttendedSubscription, useRefreshMutation } from '@/types/generated/types';
+import { useGetEmployeeWorkingQuery, useAttendedSubscription } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import { format, isToday } from 'date-fns';
 import { useReactiveVar } from '@apollo/client';
-import { attendanceDateVar, setLocalFromToken } from '@/stores/gqlReactVars';
+import { attendanceDateVar } from '@/stores/gqlReactVars';
 import { useCallback } from 'react';
 
-const Attendance = () => {
+const useMyEmployeeWorking = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
-  const [refreshMutation] = useRefreshMutation();
 
   const refetchEmployeeWorking = useCallback(() => {
     refetch({
@@ -23,18 +22,17 @@ const Attendance = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      if (err.message === 'NO TOKEN') {
-        refreshMutation({
-          onCompleted: (data) => {
-            setLocalFromToken(data);
-            refetchEmployeeWorking();
-          },
-        });
-      }
+      alert('Plz Login first!');
     },
   });
 
-  const { data: subData, loading: subLoading } = useAttendedSubscription({
+  return { selectedAttendanceDate, refetchEmployeeWorking, data };
+};
+
+const Attendance = () => {
+  const { selectedAttendanceDate, refetchEmployeeWorking, data } = useMyEmployeeWorking();
+
+  useAttendedSubscription({
     onData: (options) => {
       if (isToday(selectedAttendanceDate)) refetchEmployeeWorking();
     },

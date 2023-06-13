@@ -8,13 +8,11 @@ const nextConfig = {
     });
     return config;
   },
-  reactStrictMode: true,
+  //reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
   },
 };
-
-module.exports = nextConfig;
 
 // module.exports = {
 //   webpack: (config) => {

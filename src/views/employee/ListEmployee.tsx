@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import AllEmployeeProfile from './AllEmployeeProfile';
 import TeamEmployeeProfile from './TeamEmployeeProfile';
-import { useGetAllEmployeeQuery, useRefreshMutation } from '@/types/generated/types';
-import { setLocalFromToken, startEndAtVar } from '@/stores/gqlReactVars';
+import { useGetAllEmployeeQuery } from '@/types/generated/types';
+import { jwtTokensVar } from '@/stores/gqlReactVars';
 
 const EmployeeList = () => {
   const [allMenuSelected, setAllMenuSelected] = useState(true);
-  const [refreshMutation /*, { data, loading, error }*/] = useRefreshMutation();
 
+  console.log('EmployeeList started! - ' + jwtTokensVar()?.accessToken);
   const allClass = ' cursor-pointer';
   const teamClass = 'mt-[12px] cursor-pointer';
-  const { data, refetch } = useGetAllEmployeeQuery({
+  const { data } = useGetAllEmployeeQuery({
+    fetchPolicy: jwtTokensVar()?.accessToken ? 'network-only' : 'cache-first',
+    onCompleted: () => {
+      console.log('EmployeeList Completed!');
+    },
     onError: (err) => {
-      if (err.message.startsWith('NO TOKEN')) {
-        refreshMutation({
-          onCompleted: (data) => {
-            setLocalFromToken(data);
-            refetch();
-          },
-        });
-      }
+      //alert('Plz Login first!' + jwtTokensVar()?.accessToken);
     },
   });
 

@@ -25,6 +25,7 @@ export const attendanceDateVar = makeVar(new Date());
 export const setLocalFromToken = (data: IRefreshMutation) => {
   if (data?.refresh) {
     jwtTokensVar({ accessToken: data.refresh?.accessToken || '' });
+    console.log('Access Token is refreshed!');
     startEndAtVar({
       startAt: data.refresh?.startAt,
       endAt: data.refresh?.endAt,
