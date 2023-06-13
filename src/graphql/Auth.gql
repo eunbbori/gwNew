@@ -1,5 +1,5 @@
-mutation login($userId: String, $passwd: String) {
-  login(userId: $userId, passwd: $passwd) {
+mutation login($email: String, $passwd: String) {
+  login(email: $email, passwd: $passwd) {
     accessToken
     startAt
     endAt

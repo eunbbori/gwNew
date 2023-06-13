@@ -42,7 +42,7 @@ const Login = () => {
   const onLogin = (loginData: loginFormValues) => {
     loginMutation({
       variables: {
-        userId: loginData.empEmail,
+        email: loginData.empEmail,
         passwd: loginData.empPassword,
       },
       onCompleted: (data) => {
@@ -55,10 +55,10 @@ const Login = () => {
         push('/');
       },
       onError: (err) => {
-        alert(err.message)
-        alert('Check Your Id & Password!')
-        push('/')
-      }
+        alert(err.message);
+        alert('Check Your Id & Password!');
+        push('/');
+      },
     });
   };
 

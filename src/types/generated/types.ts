@@ -24,6 +24,19 @@ export type IAuthInfo = {
   workingType?: Maybe<IWorkingType>;
 };
 
+export type ICode = {
+  __typename?: 'Code';
+  code?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
+export type ICodes = {
+  __typename?: 'Codes';
+  codes?: Maybe<Array<Maybe<ICode>>>;
+  parentCode?: Maybe<Scalars['String']>;
+  parentName?: Maybe<Scalars['String']>;
+};
+
 export type IDepartment = {
   __typename?: 'Department';
   departmentId?: Maybe<Scalars['ID']>;
@@ -73,15 +86,20 @@ export type IMutationAddEmployeeArgs = {
 };
 
 export type IMutationLoginArgs = {
+  email?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
-  userId?: InputMaybe<Scalars['String']>;
 };
 
 export type IQuery = {
   __typename?: 'Query';
+  codes?: Maybe<Array<Maybe<ICodes>>>;
   departments?: Maybe<Array<Maybe<IDepartment>>>;
   employeeWorking?: Maybe<Array<Maybe<IEmployeeWorking>>>;
   employees?: Maybe<Array<Maybe<IEmployee>>>;
+};
+
+export type IQueryCodesArgs = {
+  parents?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type IQueryEmployeeWorkingArgs = {
@@ -102,7 +120,7 @@ export enum IWorkingType {
 }
 
 export type ILoginMutationVariables = Exact<{
-  userId?: InputMaybe<Scalars['String']>;
+  email?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
 }>;
 
@@ -217,8 +235,8 @@ export type IGetEmployeeWorkingQuery = {
 };
 
 export const LoginDocument = gql`
-  mutation login($userId: String, $passwd: String) {
-    login(userId: $userId, passwd: $passwd) {
+  mutation login($email: String, $passwd: String) {
+    login(email: $email, passwd: $passwd) {
       accessToken
       startAt
       endAt
@@ -241,7 +259,7 @@ export type ILoginMutationFn = Apollo.MutationFunction<ILoginMutation, ILoginMut
  * @example
  * const [loginMutation, { data, loading, error }] = useLoginMutation({
  *   variables: {
- *      userId: // value for 'userId'
+ *      email: // value for 'email'
  *      passwd: // value for 'passwd'
  *   },
  * });
