@@ -2,21 +2,22 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
 
 export interface EmployeeFormValues {
   userId: string;
-  employeeName: string;
+  name: string;
   email: string;
   password: string;
-  department: string;
-  contract: string;
+  departmentId: number;
+  contractType: string;
   phone: string;
-  joinDate: string;
+  startDate: string;
 }
 const AddEmployee: React.FC = () => {
   const schema = yup.object().shape({
     userId: yup.string().required('아이디는 필수 입력사항입니다.'),
-    employeeName: yup.string().required('이름은 필수 입력사항입니다.'),
+    name: yup.string().required('이름은 필수 입력사항입니다.'),
     department: yup.string().required('부서명은 필수 입력사항입니다.'),
     phone: yup
       .string()
@@ -26,7 +27,7 @@ const AddEmployee: React.FC = () => {
       .string()
       .required('이메일은 필수 입력사항입니다')
       .matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/, '이메일 형식에 맞지 않습니다.'),
-    joinDate: yup
+    startDate: yup
       .string()
       .required('입사일은 필수 입력사항입니다')
       .matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
@@ -43,9 +44,31 @@ const AddEmployee: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
+  const [addEmployeeMutation] = useAddEmployeeMutation();
+
   const onAddEmployee = (inputData: EmployeeFormValues) => {
-    const { userId, email, employeeName: empName, department: deptName, contract: contractType, phone, joinDate } = inputData;
     console.log(inputData);
+    const { userId, email, name, departmentId, contractType, phone, startDate } = inputData;
+    const input: IEmployeeInput = {
+      userId,
+      email,
+      name,
+      departmentId,
+      contractType,
+      phone,
+      startDate,
+    };
+    addEmployeeMutation({
+      variables: {
+        input,
+      },
+      onCompleted: (data) => {
+        console.log('data가 저장됐습니다', data);
+      },
+      onError: (err) => {
+        alert(err.message);
+      },
+    });
   };
   return (
     <div className="w-full mr-auto ml-auto mt-[25vh] px-6">
@@ -73,14 +96,14 @@ const AddEmployee: React.FC = () => {
                   <div>
                     <p className="text-sm text-[#484848] w-[200px]">이름</p>
                     <input
-                      {...register('employeeName')}
+                      {...register('name')}
                       placeholder="이름을 입력해주세요"
                       type="text"
                       className={inputClassName}
                       aria-label="Name"
                       aria-describedby="Name-addon"
                     />
-                    <div className={errMsgClassName}>{errors.employeeName?.message}</div>
+                    <div className={errMsgClassName}>{errors.name?.message}</div>
                   </div>
                 </div>
                 <div className="mb-4">
@@ -110,18 +133,18 @@ const AddEmployee: React.FC = () => {
                 <div className="mb-4 flex justify-between">
                   <div>
                     <p className="text-sm text-[#484848] w-[300px]">부서</p>
-                    <select className={inputClassName} {...register('department')} placeholder="부서를 선택해주세요">
-                      <option value="0">경영지원부</option>
-                      <option value="1">연구소</option>
-                      <option value="2">개발부</option>
+                    <select className={inputClassName} {...register('departmentId')} placeholder="부서를 선택해주세요">
+                      <option value="1">경영지원부</option>
+                      <option value="2">연구소</option>
+                      <option value="3">개발부</option>
                     </select>
                   </div>
                   <div>
                     <p className="text-sm text-[#484848] w-[200px]">계약형태</p>
-                    <select className={inputClassName} {...register('contract')} placeholder="계약형태를 선택해주세요">
-                      <option value="0">정규직</option>
-                      <option value="1">프리랜서</option>
-                      <option value="2">계약직</option>
+                    <select className={inputClassName} {...register('contractType')} placeholder="계약형태를 선택해주세요">
+                      <option value="1">정규직</option>
+                      <option value="2">프리랜서</option>
+                      <option value="3">계약직</option>
                     </select>
                   </div>
                 </div>
@@ -138,8 +161,8 @@ const AddEmployee: React.FC = () => {
                 </div>
                 <div className="mb-4">
                   <p className="text-sm text-[#484848]">입사일(YYYY-MM-DD)</p>
-                  <input {...register('joinDate')} placeholder="YYYY-MM-DD" className={inputClassName} aria-label="Name" aria-describedby="Name-addon" />
-                  <div className={errMsgClassName}>{errors.joinDate?.message}</div>
+                  <input {...register('startDate')} placeholder="YYYY-MM-DD" className={inputClassName} aria-label="Name" aria-describedby="Name-addon" />
+                  <div className={errMsgClassName}>{errors.startDate?.message}</div>
                 </div>
                 <div className="mb-4"></div>
                 <div className="text-center">
