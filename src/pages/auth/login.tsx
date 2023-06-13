@@ -55,10 +55,10 @@ const Login = () => {
         push('/');
       },
       onError: (err) => {
-        alert(err.message);
-        alert('Check Your Id & Password!');
-        push('/');
-      },
+        alert(err.message)
+        alert('Check Your Id & Password!')
+        push('/')
+      }
     });
   };
 

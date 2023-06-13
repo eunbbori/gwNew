@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AllEmployeeProfile from './AllEmployeeProfile';
 import TeamEmployeeProfile from './TeamEmployeeProfile';
-import { useGetAllEmployeeQuery } from '@/types/generated/types';
+import { useGetAllEmployeeLazyQuery, useGetAllEmployeeQuery } from '@/types/generated/types';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
+import { useReactiveVar } from '@apollo/client';
 
 const EmployeeList = () => {
   const [allMenuSelected, setAllMenuSelected] = useState(true);
 
-  console.log('EmployeeList started! - ' + jwtTokensVar()?.accessToken);
+  const jwtTokens = useReactiveVar(jwtTokensVar);
+
   const allClass = ' cursor-pointer';
   const teamClass = 'mt-[12px] cursor-pointer';
-  const { data } = useGetAllEmployeeQuery({
-    fetchPolicy: jwtTokensVar()?.accessToken ? 'network-only' : 'cache-first',
-    onCompleted: () => {
-      console.log('EmployeeList Completed!');
-    },
+  const [getAllEmployeeQuery, { data }] = useGetAllEmployeeLazyQuery({
     onError: (err) => {
-      //alert('Plz Login first!' + jwtTokensVar()?.accessToken);
+      alert('Plz Login first!');
     },
   });
+
+  useEffect(() => {
+    if (jwtTokens.accessToken) {
+      console.log('TToKKEEN: ' + jwtTokens.accessToken);
+      getAllEmployeeQuery();
+    }
+  }, [jwtTokens]);
 
   const myAllClickHandler = () => {
     setAllMenuSelected(true);
