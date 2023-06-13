@@ -6,10 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 export interface EmployeeFormValues {
   userId: string;
   employeeName: string;
+  email: string;
+  password: string;
   department: string;
   contract: string;
   phone: string;
-  email: string;
   joinDate: string;
 }
 const AddEmployee: React.FC = () => {
@@ -42,8 +43,9 @@ const AddEmployee: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const onAddEmployee = (data: EmployeeFormValues) => {
-    console.log(data);
+  const onAddEmployee = (inputData: EmployeeFormValues) => {
+    const { userId, email, employeeName: empName, department: deptName, contract: contractType, phone, joinDate } = inputData;
+    console.log(inputData);
   };
   return (
     <div className="w-full mr-auto ml-auto mt-[25vh] px-6">
@@ -57,10 +59,10 @@ const AddEmployee: React.FC = () => {
               <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
                 <div className="mb-4 flex justify-between">
                   <div>
-                    <p className="text-sm text-[#484848] w-[300px]">아이디(회사 이메일)</p>
+                    <p className="text-sm text-[#484848] w-[300px]">아이디</p>
                     <input
                       {...register('userId')}
-                      placeholder="id@jnfirst.co.kr"
+                      placeholder="아이디를 입력해주세요"
                       type="text"
                       className={inputClassName}
                       aria-label="Id"
@@ -81,6 +83,30 @@ const AddEmployee: React.FC = () => {
                     <div className={errMsgClassName}>{errors.employeeName?.message}</div>
                   </div>
                 </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#484848]">회사 이메일</p>
+                  <input
+                    {...register('email')}
+                    placeholder="회사 이메일을 입력해주세요"
+                    type="email"
+                    className={inputClassName}
+                    aria-label="Name"
+                    aria-describedby="Name-addon"
+                  />
+                  <div className={errMsgClassName}>{errors.email?.message}</div>
+                </div>
+                <div className="mb-4">
+                  <p className="text-sm text-[#484848]">임시 비밀번호</p>
+                  <input
+                    {...register('password')}
+                    placeholder="비밀번호를 입력해주세요"
+                    type="password"
+                    className={inputClassName}
+                    aria-label="Name"
+                    aria-describedby="Name-addon"
+                  />
+                  <div className={errMsgClassName}>{errors.password?.message}</div>
+                </div>
                 <div className="mb-4 flex justify-between">
                   <div>
                     <p className="text-sm text-[#484848] w-[300px]">부서</p>
@@ -93,9 +119,9 @@ const AddEmployee: React.FC = () => {
                   <div>
                     <p className="text-sm text-[#484848] w-[200px]">계약형태</p>
                     <select className={inputClassName} {...register('contract')} placeholder="계약형태를 선택해주세요">
-                      <option value="0">선택안됨</option>
-                      <option value="1">정규직</option>
-                      <option value="2">프리랜서</option>
+                      <option value="0">정규직</option>
+                      <option value="1">프리랜서</option>
+                      <option value="2">계약직</option>
                     </select>
                   </div>
                 </div>
@@ -111,19 +137,7 @@ const AddEmployee: React.FC = () => {
                   <div className={errMsgClassName}>{errors.phone?.message}</div>
                 </div>
                 <div className="mb-4">
-                  <p className="text-sm text-[#484848]">이메일(개인)</p>
-                  <input
-                    {...register('email')}
-                    placeholder="개인 이메일을 입력해주세요"
-                    type="email"
-                    className={inputClassName}
-                    aria-label="Name"
-                    aria-describedby="Name-addon"
-                  />
-                  <div className={errMsgClassName}>{errors.email?.message}</div>
-                </div>
-                <div className="mb-4">
-                  <p className="text-sm text-[#484848]">입사일</p>
+                  <p className="text-sm text-[#484848]">입사일(YYYY-MM-DD)</p>
                   <input {...register('joinDate')} placeholder="YYYY-MM-DD" className={inputClassName} aria-label="Name" aria-describedby="Name-addon" />
                   <div className={errMsgClassName}>{errors.joinDate?.message}</div>
                 </div>
