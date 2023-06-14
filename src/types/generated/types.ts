@@ -259,6 +259,20 @@ export type IAddEmployeeMutation = {
   } | null;
 };
 
+export type IGetCodesQueryVariables = Exact<{
+  parents?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
+}>;
+
+export type IGetCodesQuery = {
+  __typename?: 'Query';
+  codes?: Array<{
+    __typename?: 'Codes';
+    parentCode?: string | null;
+    parentName?: string | null;
+    codes?: Array<{ __typename?: 'Code'; code?: string | null; name?: string | null } | null> | null;
+  } | null> | null;
+};
+
 export const LoginDocument = gql`
   mutation login($email: String, $passwd: String) {
     login(email: $email, passwd: $passwd) {
@@ -623,3 +637,43 @@ export function useAddEmployeeMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddEmployeeMutationHookResult = ReturnType<typeof useAddEmployeeMutation>;
 export type AddEmployeeMutationResult = Apollo.MutationResult<IAddEmployeeMutation>;
 export type AddEmployeeMutationOptions = Apollo.BaseMutationOptions<IAddEmployeeMutation, IAddEmployeeMutationVariables>;
+export const GetCodesDocument = gql`
+  query getCodes($parents: [String]) {
+    codes(parents: $parents) {
+      parentCode
+      parentName
+      codes {
+        code
+        name
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetCodesQuery__
+ *
+ * To run a query within a React component, call `useGetCodesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCodesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCodesQuery({
+ *   variables: {
+ *      parents: // value for 'parents'
+ *   },
+ * });
+ */
+export function useGetCodesQuery(baseOptions?: Apollo.QueryHookOptions<IGetCodesQuery, IGetCodesQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<IGetCodesQuery, IGetCodesQueryVariables>(GetCodesDocument, options);
+}
+export function useGetCodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<IGetCodesQuery, IGetCodesQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<IGetCodesQuery, IGetCodesQueryVariables>(GetCodesDocument, options);
+}
+export type GetCodesQueryHookResult = ReturnType<typeof useGetCodesQuery>;
+export type GetCodesLazyQueryHookResult = ReturnType<typeof useGetCodesLazyQuery>;
+export type GetCodesQueryResult = Apollo.QueryResult<IGetCodesQuery, IGetCodesQueryVariables>;

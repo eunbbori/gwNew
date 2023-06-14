@@ -13,6 +13,7 @@ const EmployeeList = () => {
   const allClass = ' cursor-pointer';
   const teamClass = 'mt-[12px] cursor-pointer';
   const [getAllEmployeeQuery, { data }] = useGetAllEmployeeLazyQuery({
+    fetchPolicy: 'no-cache',
     onError: (err) => {
       alert('Plz Login first!');
     },

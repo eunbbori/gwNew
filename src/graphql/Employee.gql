@@ -44,3 +44,14 @@ mutation addEmployee($input: EmployeeInput!) {
     startDate
   }
 }
+
+query getCodes($parents: [String]) {
+  codes(parents: $parents) {
+    parentCode
+    parentName
+    codes {
+      code
+      name
+    }
+  }
+}

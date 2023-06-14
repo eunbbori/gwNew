@@ -1,24 +1,43 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
+import { IEmployeeInput, useAddEmployeeMutation, useGetAllEmployeeLazyQuery, useGetCodesLazyQuery } from '@/types/generated/types';
+import { jwtTokensVar } from '@/stores/gqlReactVars';
+import { useReactiveVar } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 export interface EmployeeFormValues {
   userId: string;
   name: string;
   email: string;
-  password: string;
-  departmentId: number;
+  passwd: string;
+  departmentId: string;
   contractType: string;
   phone: string;
   startDate: string;
 }
 const AddEmployee: React.FC = () => {
+  const router = useRouter();
+  const jwtTokens = useReactiveVar(jwtTokensVar);
+  const [getAllEmployeeQuery, { data: deptData }] = useGetAllEmployeeLazyQuery();
+  const [getCodesQuery, { data }] = useGetCodesLazyQuery({
+    variables: {
+      parents: ['contractType'],
+    },
+    onError: (err) => {
+      alert('err');
+    },
+  });
+  useEffect(() => {
+    if (jwtTokens?.accessToken) {
+      getAllEmployeeQuery();
+      getCodesQuery();
+    }
+  }, [jwtTokens]);
   const schema = yup.object().shape({
     userId: yup.string().required('아이디는 필수 입력사항입니다.'),
     name: yup.string().required('이름은 필수 입력사항입니다.'),
-    department: yup.string().required('부서명은 필수 입력사항입니다.'),
     phone: yup
       .string()
       .required('핸드폰 번호는 필수 입력사항입니다.')
@@ -48,12 +67,13 @@ const AddEmployee: React.FC = () => {
 
   const onAddEmployee = (inputData: EmployeeFormValues) => {
     console.log(inputData);
-    const { userId, email, name, departmentId, contractType, phone, startDate } = inputData;
+    const { userId, name, email, passwd, departmentId, contractType, phone, startDate } = inputData;
     const input: IEmployeeInput = {
       userId,
-      email,
       name,
-      departmentId,
+      email,
+      passwd,
+      departmentId: parseInt(departmentId),
       contractType,
       phone,
       startDate,
@@ -63,7 +83,10 @@ const AddEmployee: React.FC = () => {
         input,
       },
       onCompleted: (data) => {
-        console.log('data가 저장됐습니다', data);
+        alert('등록됐습니다.');
+        router.reload();
+
+        console.log('data가 저장됐습니다', data.addEmployee?.userId);
       },
       onError: (err) => {
         alert(err.message);
@@ -121,30 +144,35 @@ const AddEmployee: React.FC = () => {
                 <div className="mb-4">
                   <p className="text-sm text-[#484848]">임시 비밀번호</p>
                   <input
-                    {...register('password')}
+                    {...register('passwd')}
                     placeholder="비밀번호를 입력해주세요"
                     type="password"
                     className={inputClassName}
                     aria-label="Name"
                     aria-describedby="Name-addon"
                   />
-                  <div className={errMsgClassName}>{errors.password?.message}</div>
+                  <div className={errMsgClassName}>{errors.passwd?.message}</div>
                 </div>
                 <div className="mb-4 flex justify-between">
                   <div>
                     <p className="text-sm text-[#484848] w-[300px]">부서</p>
                     <select className={inputClassName} {...register('departmentId')} placeholder="부서를 선택해주세요">
-                      <option value="1">경영지원부</option>
-                      <option value="2">연구소</option>
-                      <option value="3">개발부</option>
+                      {deptData?.departments?.map((dept, idx) => (
+                        <option key={idx} value={dept?.departmentId ?? ''}>
+                          {dept?.departmentName}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div>
                     <p className="text-sm text-[#484848] w-[200px]">계약형태</p>
                     <select className={inputClassName} {...register('contractType')} placeholder="계약형태를 선택해주세요">
-                      <option value="1">정규직</option>
-                      <option value="2">프리랜서</option>
-                      <option value="3">계약직</option>
+                      {data?.codes &&
+                        data?.codes[0]?.codes?.map((code, idx) => (
+                          <option key={idx} value={code?.code ?? ''}>
+                            {code?.name}
+                          </option>
+                        ))}
                     </select>
                   </div>
                 </div>
