@@ -11,10 +11,16 @@ import Link from 'next/link';
 import AttendanceBtnGroup from './Attendance/AttendanceBtnGroup';
 import AttendanceRecord from './Attendance/AttendanceRecord';
 import { useReactiveVar } from '@apollo/client';
+import Image from 'next/image';
 
 import { AuthData, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useLogoutMutation } from '@/types/generated/types';
 import { useRouter } from 'next/router';
+
+type IUserInfo = {
+  userName: string;
+  photoUrl: string;
+};
 
 const Header = () => {
   const [logoutMutation] = useLogoutMutation();
@@ -25,8 +31,12 @@ const Header = () => {
 
   const attendanceDivClass = 'relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft';
 
-  const useUserName = useMemo(() => {
-    return tokens?.accessToken ? jwt_decode<AuthData>(tokens.accessToken).userName : null;
+  const useUserInfo: IUserInfo | null = useMemo(() => {
+    if (tokens?.accessToken) {
+      const decoded = jwt_decode<AuthData>(tokens.accessToken);
+      return { userName: decoded.userName, photoUrl: decoded.photoUrl || '' };
+    }
+    return null;
   }, [tokens]);
 
   const handleLogout = () => {
@@ -58,7 +68,17 @@ const Header = () => {
                 >
                   <span className="sm:inline ml-5">
                     <FontAwesomeIcon className="sm:mr-1" icon={faRightFromBracket} />
-                    {useUserName}
+                    {useUserInfo?.photoUrl ? (
+                      <Image
+                        className="inline rounded-5"
+                        src={'http://localhost:4000/employees/' + useUserInfo?.photoUrl}
+                        alt={useUserInfo?.userName || ''}
+                        width={40}
+                        height={40}
+                      />
+                    ) : (
+                      useUserInfo?.userName
+                    )}
                   </span>
                 </div>
               ) : (

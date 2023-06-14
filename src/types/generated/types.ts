@@ -51,6 +51,7 @@ export type IEmployee = {
   employeeId?: Maybe<Scalars['ID']>;
   name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
+  photoUrl?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
 };
@@ -217,6 +218,11 @@ export type IGetAllEmployeeQuery = {
     employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
+    contractType?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    startDate?: any | null;
+    photoUrl?: string | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
   } | null> | null;
   departments?: Array<{ __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null> | null;
@@ -516,6 +522,11 @@ export const GetAllEmployeeDocument = gql`
         departmentId
         departmentName
       }
+      contractType
+      phone
+      email
+      startDate
+      photoUrl
     }
     departments {
       departmentId

@@ -7,6 +7,11 @@ query getAllEmployee {
       departmentId
       departmentName
     }
+    contractType
+    phone
+    email
+    startDate
+    photoUrl
   }
   departments {
     departmentId

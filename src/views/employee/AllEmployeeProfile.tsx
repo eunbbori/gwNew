@@ -5,7 +5,7 @@ import React from 'react';
 const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
   return (
     <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
-      {list?.employees ? list?.employees?.map((emp, idx) => <Profile key={idx} empName={emp?.name} />) : 'Not loaded Yet'}
+      {list?.employees ? list?.employees?.map((emp, idx) => <Profile key={idx} empName={emp?.name} photoUrl={emp?.photoUrl || ''} />) : 'Not loaded Yet'}
     </div>
   );
 };

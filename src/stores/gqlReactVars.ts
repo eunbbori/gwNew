@@ -11,6 +11,7 @@ export type AuthData = {
   userId: string;
   userName: string;
   departmentName: string;
+  photoUrl?: string;
 };
 
 // Today startAt time of currently login user
