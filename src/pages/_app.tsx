@@ -6,7 +6,7 @@ import { ApolloProvider } from '@apollo/client';
 import { setLocalFromToken } from '@/stores/gqlReactVars';
 import { useEffect } from 'react';
 import { useRefreshMutation } from '@/types/generated/types';
-import createApolloClient from '@/repository/GraphqlConfig';
+import createApolloClient from '@/repository/ConfigApolloClient';
 
 const client = createApolloClient();
 
