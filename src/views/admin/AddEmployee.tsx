@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Select, { GroupBase } from 'react-select';
+import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,11 +18,26 @@ export interface EmployeeFormValues {
   contractType: string;
   phone: string;
   startDate: string;
+  reactSelect: string;
 }
+
+interface IOption {
+  value: string;
+  label: string;
+}
+
 const AddEmployee: React.FC = () => {
   const router = useRouter();
   const jwtTokens = useReactiveVar(jwtTokensVar);
+
   const [getAllEmployeeQuery, { data: deptData }] = useGetAllEmployeeLazyQuery();
+
+  const deptOptions =
+    deptData?.departments?.map((dept) => ({
+      value: dept?.departmentId ?? '',
+      label: dept?.departmentName ?? '',
+    })) ?? [];
+
   const [getCodesQuery, { data }] = useGetCodesLazyQuery({
     variables: {
       parents: ['contractType'],
@@ -29,6 +46,13 @@ const AddEmployee: React.FC = () => {
       alert('err');
     },
   });
+  const contractOptions =
+    (data?.codes &&
+      data?.codes[0]?.codes?.map((code) => ({
+        value: code?.code ?? '',
+        label: code?.name ?? '',
+      }))) ??
+    [];
   useEffect(() => {
     if (jwtTokens?.accessToken) {
       getAllEmployeeQuery();
@@ -50,6 +74,8 @@ const AddEmployee: React.FC = () => {
       .string()
       .required('입사일은 필수 입력사항입니다')
       .matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
+    contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
+    departmentId: yup.string().required('부서는 필수 선택사항입니다'),
   });
   const inputClassName =
     'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
@@ -57,9 +83,9 @@ const AddEmployee: React.FC = () => {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<EmployeeFormValues>({
-    // mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
@@ -97,11 +123,11 @@ const AddEmployee: React.FC = () => {
     <div className="w-full mr-auto ml-auto mt-[25vh] px-6">
       <div className="flex flex-wrap -mx-3 -mt-48 md:-mt-56 lg:-mt-48">
         <div className="w-full max-w-full px-3 mx-auto mt-0 md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
-          <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 rounded-2xl bg-clip-border">
+          <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 rounded-2xl bg-clip-border items-center">
             <div className="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
               <h5 className="font-bold text-[#484848] text-[20px]">직원 추가</h5>
             </div>
-            <div className="flex-auto p-6">
+            <div className="flex-auto p-6 w-[600px]">
               <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
                 <div className="mb-4 flex justify-between">
                   <div>
@@ -154,26 +180,56 @@ const AddEmployee: React.FC = () => {
                   <div className={errMsgClassName}>{errors.passwd?.message}</div>
                 </div>
                 <div className="mb-4 flex justify-between">
-                  <div>
-                    <p className="text-sm text-[#484848] w-[300px]">부서</p>
-                    <select className={inputClassName} {...register('departmentId')} placeholder="부서를 선택해주세요">
+                  <div className="w-[250px]">
+                    <p className="text-sm text-[#484848]">부서</p>
+                    <Controller
+                      control={control}
+                      name="departmentId"
+                      render={({ field: { onChange, value } }) => (
+                        <Select
+                          options={deptOptions}
+                          placeholder="부서를 선택해주세요"
+                          onChange={(selectedOption: IOption | null) => onChange(selectedOption?.value)}
+                          value={deptOptions.find((c) => c.value === value)}
+                        />
+                      )}
+                    />
+                    <div className={errMsgClassName}>{errors.departmentId?.message}</div>
+                    {/* <select className={inputClassName} {...register('departmentId')} placeholder="부서를 선택해주세요">
                       {deptData?.departments?.map((dept, idx) => (
                         <option key={idx} value={dept?.departmentId ?? ''}>
                           {dept?.departmentName}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
                   </div>
-                  <div>
-                    <p className="text-sm text-[#484848] w-[200px]">계약형태</p>
-                    <select className={inputClassName} {...register('contractType')} placeholder="계약형태를 선택해주세요">
+                  <div className="w-[250px]">
+                    <p className="text-sm text-[#484848]">계약형태</p>
+                    <Controller
+                      control={control}
+                      name="contractType"
+                      render={({ field: { onChange, value } }) => (
+                        <Select
+                          className=""
+                          options={contractOptions}
+                          placeholder="계약형태를 선택해주세요"
+                          onChange={(selectedOption: IOption | null) => {
+                            const selectedValue = selectedOption ? selectedOption.value : contractOptions[0]?.value || null;
+                            onChange(selectedValue);
+                          }}
+                          value={contractOptions.find((c) => c.value === value)}
+                        />
+                      )}
+                    />
+                    <div className={errMsgClassName}>{errors.contractType?.message}</div>
+                    {/* <select className={inputClassName} {...register('contractType')} placeholder="계약형태를 선택해주세요">
                       {data?.codes &&
                         data?.codes[0]?.codes?.map((code, idx) => (
                           <option key={idx} value={code?.code ?? ''}>
                             {code?.name}
                           </option>
                         ))}
-                    </select>
+                    </select> */}
                   </div>
                 </div>
                 <div className="mb-4">
