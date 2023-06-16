@@ -1,7 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
-
-import jnFirstLogo from 'src/assets/img/jnfirst.png';
 
 const Footer = () => {
   return (

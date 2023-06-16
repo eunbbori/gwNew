@@ -1,12 +1,12 @@
 import '@/styles/globals.css';
 import '@/styles/datepicker.css';
-import Layout from '@/components/Layout';
 import type { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 import { setLocalFromToken } from '@/stores/gqlReactVars';
 import { useEffect } from 'react';
 import { useRefreshMutation } from '@/types/generated/types';
 import createApolloClient from '@/repository/ConfigApolloClient';
+import dynamic from 'next/dynamic';
 
 const client = createApolloClient();
 
@@ -30,15 +30,17 @@ const RefreshPreprocessor = () => {
   return <></>;
 };
 
+const DynamicLayout = dynamic(() => import('@/components/Layout'), { ssr: false });
+
 export default function App({ Component, pageProps }: AppProps) {
   console.log('Front App is Launched!');
   return (
     <>
       <ApolloProvider client={client}>
         <RefreshPreprocessor />
-        <Layout>
+        <DynamicLayout>
           <Component {...pageProps} />
-        </Layout>
+        </DynamicLayout>
       </ApolloProvider>
     </>
   );

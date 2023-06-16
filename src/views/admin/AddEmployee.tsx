@@ -120,11 +120,11 @@ const AddEmployee: React.FC = () => {
     });
   };
   return (
-    <div className="w-full mr-auto ml-auto mt-[25vh] px-6">
+    <div className="w-full mr-auto ml-auto px-6">
       <div className="flex flex-wrap -mx-3 -mt-48 md:-mt-56 lg:-mt-48">
-        <div className="w-full max-w-full px-3 mx-auto mt-0 md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
-          <div className="relative z-0 flex flex-col min-w-0 break-words bg-white border-0 rounded-2xl bg-clip-border items-center">
-            <div className="p-6 mb-0 text-center bg-white border-b-0 rounded-t-2xl">
+        <div className="w-full max-w-full px-3 mx-auto mt-[250px] md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
+          <div className="relative z-0 flex flex-col min-w-0 break-words border-0 rounded-2xl bg-clip-border items-center">
+            <div className="p-6 mb-0 border-b-0 rounded-t-2xl">
               <h5 className="font-bold text-[#484848] text-[20px]">직원 추가</h5>
             </div>
             <div className="flex-auto p-6 w-[600px]">

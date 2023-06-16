@@ -1,8 +1,7 @@
 import { startEndAtVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useGoToWorkMutation, useLeaveWorkMutation } from '@/types/generated/types';
-import { start } from 'repl';
 /* eslint-disable react/no-unknown-property */
 
 const AttendanceBtnGroup = () => {
@@ -13,9 +12,9 @@ const AttendanceBtnGroup = () => {
   const [leaveWorkMutation] = useLeaveWorkMutation();
 
   const basicAttendBtnClass =
-    'self-center mr-[15px] h-[35px] inline-block w-full px-4 mb-2 text-xs font-bold text-center text-white uppercase align-middle transition-all border border-transparent border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500';
+    'self-center mr-[15px] h-[35px] inline-block w-full px-4 mb-0 text-xs font-bold text-center text-white uppercase align-middle transition-all border border-transparent border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500';
   const basicFinishBtnClass =
-    'self-center mr-[15px] h-[35px] inline-block w-full px-4 mb-2 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 border-fuchsia-500 bg-none text-fuchsia-500 hover:border-fuchsia-500';
+    'self-center mr-[15px] h-[35px] inline-block w-full px-4 mb-0 text-xs font-bold text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 border-fuchsia-500 bg-none text-fuchsia-500 hover:border-fuchsia-500';
 
   const handleAttendanceBtn = () => {
     if (!startEndAt.startAt) {

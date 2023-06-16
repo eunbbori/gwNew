@@ -13,7 +13,7 @@ const Profile = ({ empName, photoUrl }: IProfileProps) => {
       <div className="">
         <div className="w-[144px] h-[144px]">
           <div className="w-[144px] h-[144px] relative rounded-[8px] overflow-hidden">
-            <Image src={'http://localhost:4000/employees/' + photoUrl} alt={empName || ''} width={144} height={144} />
+            <Image src={photoUrl ? process.env.NEXT_PUBLIC_BASE_PROFILE_API + '/' + photoUrl : blankProfile} alt={empName || ''} width={144} height={144} />
           </div>
           <p className="text-black font-bold text-[16px] mt-[14px] pt-[2px] text-center">{empName}</p>
         </div>

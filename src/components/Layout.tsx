@@ -1,27 +1,38 @@
 import React, { useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
 import dynamic from 'next/dynamic';
+import { Sidenav, initTE } from 'tw-elements';
+import SideMenu from '@/components/SideMenu';
+import Header from '@/components/Header';
 
 type LayoutProps = {
   children: React.ReactNode;
 };
 
-const DynamicSideMenu = dynamic(() => import('@/components/SideMenu'), {
-  ssr: false,
-});
+type IUserInfo = {
+  userName: string;
+  photoUrl: string;
+};
 
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
-      <DynamicSideMenu />
-      <div className="mr-[2rem] ml-[5rem] mt-[2rem] p-2 text-slate-500">
+      <header>
+        {/* Sidenav */}
+        <SideMenu />
+        {/* Sidenav */}
+
+        {/* Navbar */}
         <Header />
-        <div id="contentLayout" className="min-h-[82vh]">
+        {/* Navbar */}
+      </header>
+      {/* Main Navigation */}
+
+      {/*Main layout */}
+      <main style={{ marginTop: '58px' }}>
+        <div id="content" className="ml-4 min-h-screen w-full bg-gray-50 !pl-0 sm:!pl-60">
           {children}
         </div>
-        <Footer />
-      </div>
+      </main>
     </>
   );
 };

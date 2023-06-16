@@ -2,11 +2,6 @@
 import React, { useMemo } from 'react';
 import jwt_decode from 'jwt-decode';
 
-import jnFirstLogo from 'src/assets/img/jnfirst.png';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faGear, faBell, faRightToBracket, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import CompanyLogo from './CompanyLogo';
 import Link from 'next/link';
 import AttendanceBtnGroup from './Attendance/AttendanceBtnGroup';
 import AttendanceRecord from './Attendance/AttendanceRecord';
@@ -29,8 +24,6 @@ const Header = () => {
 
   const { push } = useRouter();
 
-  const attendanceDivClass = 'relative flex flex-wrap items-stretch w-full transition-all rounded-lg ease-soft';
-
   const useUserInfo: IUserInfo | null = useMemo(() => {
     if (tokens?.accessToken) {
       const decoded = jwt_decode<AuthData>(tokens.accessToken);
@@ -50,61 +43,58 @@ const Header = () => {
 
   return (
     <>
-      <div className="flex h-10 ">
-        <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
-        <div className={`${tokens?.accessToken ? 'justify-between ' + attendanceDivClass : 'justify-end ' + attendanceDivClass}`}>
-          {tokens?.accessToken && (
-            <div className="flex ml-[50px]">
-              <AttendanceBtnGroup />
-              <AttendanceRecord />
-            </div>
-          )}
-          <ul className="flex">
-            <li className="flex items-center">
-              {tokens?.accessToken ? (
-                <div
-                  onClick={handleLogout}
-                  className="self-center cursor-pointer block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500"
+      <nav
+        id="main-navbar"
+        className="fixed left-0 right-0 top-0 flex w-full flex-nowrap items-center justify-between bg-white py-[0.6rem] text-gray-500 shadow-lg hover:text-gray-700 focus:text-gray-700 dark:bg-zinc-700 lg:flex-wrap lg:justify-start xl:pl-60"
+        data-te-navbar-ref
+      >
+        {/* Container wrapper */}
+        <div className="flex w-full flex-wrap items-center justify-between px-4">
+          {/* Toggler */}
+
+          <div className="basis-1/2">
+            {tokens?.accessToken && (
+              <div className="flex">
+                <AttendanceBtnGroup />
+                <AttendanceRecord />
+              </div>
+            )}
+          </div>
+
+          {/*  Right links */}
+          <ul className="relative basis-1/2 flex justify-end items-center">
+            {/* Avatar */}
+            {tokens?.accessToken ? (
+              <li className="relative" onClick={handleLogout} data-te-dropdown-ref>
+                <a
+                  className="hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
+                  href="#"
+                  aria-expanded="false"
                 >
-                  <span className="sm:inline ml-5">
-                    <FontAwesomeIcon className="sm:mr-1" icon={faRightFromBracket} />
-                    {useUserInfo?.photoUrl ? (
-                      <Image
-                        className="inline rounded-5"
-                        src={'http://localhost:4000/employees/' + useUserInfo?.photoUrl}
-                        alt={useUserInfo?.userName || ''}
-                        width={40}
-                        height={40}
-                      />
-                    ) : (
-                      useUserInfo?.userName
-                    )}
-                  </span>
+                  {useUserInfo?.photoUrl ? (
+                    <Image
+                      className="inline rounded-5"
+                      src={process.env.NEXT_PUBLIC_BASE_PROFILE_API + '/' + useUserInfo?.photoUrl}
+                      alt={useUserInfo?.userName || ''}
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    useUserInfo?.userName
+                  )}
+                </a>
+              </li>
+            ) : (
+              <Link href="/auth/login">
+                <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
+                  <span className="sm:inline">로그인</span>
                 </div>
-              ) : (
-                <Link href="/auth/login">
-                  <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500">
-                    <FontAwesomeIcon className="sm:mr-1" icon={faUser} />
-                    <span className="sm:inline">로그인</span>
-                  </div>
-                </Link>
-              )}
-            </li>
-            <li className="flex items-center px-4">
-              <a href="javascript:;" className="p-0 transition-all text-sm ease-nav-brand text-slate-500">
-                <FontAwesomeIcon fixed-plugin-button-nav="true" className="cursor-pointer" icon={faGear} />
-              </a>
-            </li>
-            <li className="relative flex items-center pr-2">
-              <p className="hidden transform-dropdown-show" />
-              <a href="javascript:;" className="block p-0 transition-all text-sm ease-nav-brand text-slate-500" dropdown-trigger="true" aria-expanded="false">
-                <FontAwesomeIcon className="cursor-pointer" icon={faBell} />
-              </a>
-            </li>
+              </Link>
+            )}
           </ul>
         </div>
-      </div>
-      <hr className="h-px mt-3 bg-gray-200 border-0 dark:bg-gray-700" />
+        {/* Container wrapper */}
+      </nav>
     </>
   );
 };

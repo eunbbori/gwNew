@@ -1,6 +1,6 @@
 import React from 'react';
 import Profile from './Profile';
-import { IEmployee, useGetAllEmployeeQuery } from '@/types/generated/types';
+import { IEmployee } from '@/types/generated/types';
 
 export interface ITeamEmpProfileProps {
   deptId?: string | null;
@@ -8,8 +8,6 @@ export interface ITeamEmpProfileProps {
   employees?: Array<IEmployee | null> | null;
 }
 const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) => {
-  //const { data } = useGetAllEmployeeQuery();
-
   const deptEmployees = employees?.filter((dept) => dept?.department?.departmentId === deptId);
 
   return (
