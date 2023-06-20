@@ -1,11 +1,11 @@
 import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
-import { useGetEmployeeWorkingQuery, useAttendedSubscription } from '@/types/generated/types';
+import { useAttendedSubscription, useGetEmployeeWorkingLazyQuery } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import { format, isToday } from 'date-fns';
 import { useReactiveVar } from '@apollo/client';
-import { attendanceDateVar } from '@/stores/gqlReactVars';
-import { useCallback } from 'react';
+import { attendanceDateVar, jwtTokensVar } from '@/stores/gqlReactVars';
+import { useCallback, useEffect } from 'react';
 
 const useMyEmployeeWorking = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
@@ -16,7 +16,7 @@ const useMyEmployeeWorking = () => {
     });
   }, [selectedAttendanceDate]);
 
-  const { data, refetch } = useGetEmployeeWorkingQuery({
+  const [getEmployeeWorking, { data, refetch }] = useGetEmployeeWorkingLazyQuery({
     variables: {
       dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
     },
@@ -26,11 +26,18 @@ const useMyEmployeeWorking = () => {
     },
   });
 
-  return { selectedAttendanceDate, refetchEmployeeWorking, data };
+  return { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data };
 };
 
 const Attendance = () => {
-  const { selectedAttendanceDate, refetchEmployeeWorking, data } = useMyEmployeeWorking();
+  const jwtTokens = useReactiveVar(jwtTokensVar);
+  const { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data } = useMyEmployeeWorking();
+
+  useEffect(() => {
+    if (jwtTokens?.accessToken) {
+      getEmployeeWorking();
+    }
+  }, [jwtTokens]);
 
   useAttendedSubscription({
     onData: (options) => {

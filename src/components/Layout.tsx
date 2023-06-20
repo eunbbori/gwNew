@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { Sidenav, initTE } from 'tw-elements';
-import SideMenu from '@/components/SideMenu';
-import Header from '@/components/Header';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -13,16 +10,23 @@ type IUserInfo = {
   photoUrl: string;
 };
 
+const DynamicSideMenu = dynamic(() => import('@/components/SideMenu'), {
+  ssr: false,
+});
+const DynamicHeader = dynamic(() => import('@/components/Header'), {
+  ssr: false,
+});
+
 const Layout = ({ children }: LayoutProps) => {
   return (
     <>
       <header>
         {/* Sidenav */}
-        <SideMenu />
+        <DynamicSideMenu />
         {/* Sidenav */}
 
         {/* Navbar */}
-        <Header />
+        <DynamicHeader />
         {/* Navbar */}
       </header>
       {/* Main Navigation */}
