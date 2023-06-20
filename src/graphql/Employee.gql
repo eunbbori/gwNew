@@ -19,6 +19,13 @@ query getAllEmployee {
   }
 }
 
+query getAllDepartments {
+  departments {
+    departmentId
+    departmentName
+  }
+}
+
 query getEmployeeWorking($dt: String) {
   employeeWorking(dt: $dt) {
     employeeId

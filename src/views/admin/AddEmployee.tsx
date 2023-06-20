@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Select, { GroupBase } from 'react-select';
-import { Controller } from 'react-hook-form';
-import { useForm } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import Select from 'react-select';
+import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation, useGetAllEmployeeLazyQuery, useGetCodesLazyQuery } from '@/types/generated/types';
+import { IEmployeeInput, useAddEmployeeMutation, useGetAllDepartmentsLazyQuery, useGetCodesLazyQuery } from '@/types/generated/types';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
+import 'react-datepicker/dist/react-datepicker.css';
+import DatePickerInput from '@/components/Input/DatePickerInput';
 
 export interface EmployeeFormValues {
   userId: string;
@@ -18,7 +19,6 @@ export interface EmployeeFormValues {
   contractType: string;
   phone: string;
   startDate: string;
-  reactSelect: string;
 }
 
 interface IOption {
@@ -30,7 +30,7 @@ const AddEmployee: React.FC = () => {
   const router = useRouter();
   const jwtTokens = useReactiveVar(jwtTokensVar);
 
-  const [getAllEmployeeQuery, { data: deptData }] = useGetAllEmployeeLazyQuery();
+  const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
 
   const deptOptions =
     deptData?.departments?.map((dept) => ({
@@ -38,7 +38,7 @@ const AddEmployee: React.FC = () => {
       label: dept?.departmentName ?? '',
     })) ?? [];
 
-  const [getCodesQuery, { data }] = useGetCodesLazyQuery({
+  const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: {
       parents: ['contractType'],
     },
@@ -46,45 +46,43 @@ const AddEmployee: React.FC = () => {
       alert('err');
     },
   });
+
   const contractOptions =
-    (data?.codes &&
-      data?.codes[0]?.codes?.map((code) => ({
+    (codeData?.codes &&
+      codeData?.codes[0]?.codes?.map((code) => ({
         value: code?.code ?? '',
         label: code?.name ?? '',
       }))) ??
     [];
+
   useEffect(() => {
     if (jwtTokens?.accessToken) {
-      getAllEmployeeQuery();
+      getAllDepartmentsQuery();
       getCodesQuery();
     }
   }, [jwtTokens]);
+
   const schema = yup.object().shape({
     userId: yup.string().required('아이디는 필수 입력사항입니다.'),
     name: yup.string().required('이름은 필수 입력사항입니다.'),
-    phone: yup
-      .string()
-      .required('핸드폰 번호는 필수 입력사항입니다.')
-      .matches(/^(?:\+?([0-9]{1,3}))?[- (]*(\d{3,4})[- )]*(\d{3,4})$/, '올바른 핸드폰 번호 형식이 아닙니다.'),
-    email: yup
-      .string()
-      .required('이메일은 필수 입력사항입니다')
-      .matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/, '이메일 형식에 맞지 않습니다.'),
-    startDate: yup
-      .string()
-      .required('입사일은 필수 입력사항입니다')
-      .matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
+    phone: yup.string().required('핸드폰 번호는 필수 입력사항입니다.').max(11, '핸드폰 번호는 11자리까지 입력 가능합니다.'),
+    email: yup.string().required('이메일은 필수 입력사항입니다').email('이메일 형식에 맞지 않습니다.'),
+    startDate: yup.date().required('입사일은 필수 입력사항입니다'),
+    //.matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
     contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
     departmentId: yup.string().required('부서는 필수 선택사항입니다'),
   });
+
   const inputClassName =
     'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const errMsgClassName = 'text-[11px] text-red-400';
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm<EmployeeFormValues>({
     resolver: yupResolver(schema),
   });
@@ -119,6 +117,7 @@ const AddEmployee: React.FC = () => {
       },
     });
   };
+
   return (
     <div className="w-full mr-auto ml-auto px-6">
       <div className="flex flex-wrap -mx-3 -mt-48 md:-mt-56 lg:-mt-48">
@@ -234,18 +233,42 @@ const AddEmployee: React.FC = () => {
                 </div>
                 <div className="mb-4">
                   <p className="text-sm text-[#484848]">핸드폰번호</p>
-                  <input
-                    {...register('phone')}
-                    placeholder="핸드폰번호를 입력해주세요"
-                    className={inputClassName}
-                    aria-label="Name"
-                    aria-describedby="Name-addon"
+                  <Controller
+                    name="phone"
+                    control={control}
+                    defaultValue=""
+                    render={({ field: { value, onChange, ...field } }) => (
+                      <input
+                        {...field}
+                        onChange={({ target }) => {
+                          const phoneNo = target.value.trim().replace(/[^0-9]/g, '');
+                          onChange(phoneNo);
+
+                          const dashedPhoneNo =
+                            phoneNo.length < 4
+                              ? phoneNo
+                              : phoneNo.length < 7
+                              ? phoneNo.replace(/(\d{3})(\d{1})/, '$1-$2')
+                              : phoneNo.length < 11
+                              ? phoneNo.replace(/(\d{3})(\d{3})(\d{1})/, '$1-$2-$3')
+                              : phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+
+                          console.log('onChange: ' + phoneNo);
+                          target.value = dashedPhoneNo;
+                        }}
+                        placeholder="핸드폰번호를 입력해주세요"
+                        className={inputClassName}
+                        aria-label="Name"
+                        aria-describedby="Name-addon"
+                      />
+                    )}
                   />
                   <div className={errMsgClassName}>{errors.phone?.message}</div>
                 </div>
+
                 <div className="mb-4">
                   <p className="text-sm text-[#484848]">입사일(YYYY-MM-DD)</p>
-                  <input {...register('startDate')} placeholder="YYYY-MM-DD" className={inputClassName} aria-label="Name" aria-describedby="Name-addon" />
+                  <DatePickerInput name="startDate" control={control} />
                   <div className={errMsgClassName}>{errors.startDate?.message}</div>
                 </div>
                 <div className="mb-4"></div>
