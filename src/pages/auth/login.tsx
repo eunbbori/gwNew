@@ -113,4 +113,11 @@ const Login = () => {
     </div>
   );
 };
+
+export const getStaticProps = () => {
+  return {
+    props: { noLayout: true },
+  };
+};
+
 export default Login;

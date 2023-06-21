@@ -2,16 +2,19 @@ import '@/styles/globals.css';
 import '@/styles/datepicker.css';
 import type { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
-import { setLocalFromToken } from '@/stores/gqlReactVars';
+import { jwtTokensVar, setLocalFromToken } from '@/stores/gqlReactVars';
 import { useEffect } from 'react';
 import { useRefreshMutation } from '@/types/generated/types';
 import createApolloClient from '@/repository/ConfigApolloClient';
 import dynamic from 'next/dynamic';
+import { useReactiveVar } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const client = createApolloClient();
 
 const RefreshPreprocessor = () => {
   const [refreshMutation, { data, loading, error }] = useRefreshMutation();
+  const { push } = useRouter();
 
   async function refreshSync() {
     try {
@@ -20,6 +23,7 @@ const RefreshPreprocessor = () => {
       if (refresh.data) setLocalFromToken(refresh.data);
     } catch (err) {
       console.log(err); // NO REFRESH: first startup message, so just ignore it
+      push('/auth/login');
     }
   }
 
@@ -38,9 +42,13 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <ApolloProvider client={client}>
         <RefreshPreprocessor />
-        <DynamicLayout>
+        {pageProps.noLayout ? (
           <Component {...pageProps} />
-        </DynamicLayout>
+        ) : (
+          <DynamicLayout>
+            <Component {...pageProps} />
+          </DynamicLayout>
+        )}
       </ApolloProvider>
     </>
   );

@@ -36,7 +36,7 @@ const Header = () => {
     logoutMutation({
       onCompleted: () => {
         jwtTokensVar(undefined);
-        push('/');
+        push('/auth/login');
       },
     });
   };
