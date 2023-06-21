@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,6 +8,8 @@ import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
+import SelectInput from '@/components/Input/SelectInput';
+import TextInput from '@/components/Input/TextInput';
 
 export interface EmployeeFormValues {
   userId: string;
@@ -129,106 +130,45 @@ const AddEmployee: React.FC = () => {
             <div className="flex-auto p-6 w-[600px]">
               <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
                 <div className="mb-4 flex justify-between">
-                  <div>
-                    <p className="text-sm text-[#484848] w-[300px]">아이디</p>
-                    <input
-                      {...register('userId')}
-                      placeholder="아이디를 입력해주세요"
-                      type="text"
-                      className={inputClassName}
-                      aria-label="Id"
-                      aria-describedby="Id-addon"
-                    />
+                  <div className="w-[250px]">
+                    <TextInput name="userId" title="아이디" control={control} placeHolder="아이디를 입력해주세요" type="text" inputClassName={inputClassName} />
                     <div className={errMsgClassName}>{errors.userId?.message}</div>
                   </div>
-                  <div>
-                    <p className="text-sm text-[#484848] w-[200px]">이름</p>
-                    <input
-                      {...register('name')}
-                      placeholder="이름을 입력해주세요"
-                      type="text"
-                      className={inputClassName}
-                      aria-label="Name"
-                      aria-describedby="Name-addon"
-                    />
+                  <div className="w-[250px]">
+                    <TextInput name="name" title="이름" control={control} placeHolder="이름을 입력해주세요" type="text" inputClassName={inputClassName} />
                     <div className={errMsgClassName}>{errors.name?.message}</div>
                   </div>
                 </div>
                 <div className="mb-4">
-                  <p className="text-sm text-[#484848]">회사 이메일</p>
-                  <input
-                    {...register('email')}
-                    placeholder="회사 이메일을 입력해주세요"
+                  <TextInput
+                    name="email"
+                    title="회사 이메일"
+                    control={control}
+                    placeHolder="회사 이메일을 입력해주세요"
                     type="email"
-                    className={inputClassName}
-                    aria-label="Name"
-                    aria-describedby="Name-addon"
+                    inputClassName={inputClassName}
                   />
                   <div className={errMsgClassName}>{errors.email?.message}</div>
                 </div>
                 <div className="mb-4">
-                  <p className="text-sm text-[#484848]">임시 비밀번호</p>
-                  <input
-                    {...register('passwd')}
-                    placeholder="비밀번호를 입력해주세요"
+                  <TextInput
+                    name="passwd"
+                    title="임시 비밀번호"
+                    control={control}
+                    placeHolder="비밀번호를 입력해주세요"
                     type="password"
-                    className={inputClassName}
-                    aria-label="Name"
-                    aria-describedby="Name-addon"
+                    inputClassName={inputClassName}
                   />
                   <div className={errMsgClassName}>{errors.passwd?.message}</div>
                 </div>
                 <div className="mb-4 flex justify-between">
                   <div className="w-[250px]">
-                    <p className="text-sm text-[#484848]">부서</p>
-                    <Controller
-                      control={control}
-                      name="departmentId"
-                      render={({ field: { onChange, value } }) => (
-                        <Select
-                          options={deptOptions}
-                          placeholder="부서를 선택해주세요"
-                          onChange={(selectedOption: IOption | null) => onChange(selectedOption?.value)}
-                          value={deptOptions.find((c) => c.value === value)}
-                        />
-                      )}
-                    />
+                    <SelectInput name="departmentId" control={control} selectOptions={deptOptions} title="부서" placeHolder="부서를 선택해주세요" />
                     <div className={errMsgClassName}>{errors.departmentId?.message}</div>
-                    {/* <select className={inputClassName} {...register('departmentId')} placeholder="부서를 선택해주세요">
-                      {deptData?.departments?.map((dept, idx) => (
-                        <option key={idx} value={dept?.departmentId ?? ''}>
-                          {dept?.departmentName}
-                        </option>
-                      ))}
-                    </select> */}
                   </div>
                   <div className="w-[250px]">
-                    <p className="text-sm text-[#484848]">계약형태</p>
-                    <Controller
-                      control={control}
-                      name="contractType"
-                      render={({ field: { onChange, value } }) => (
-                        <Select
-                          className=""
-                          options={contractOptions}
-                          placeholder="계약형태를 선택해주세요"
-                          onChange={(selectedOption: IOption | null) => {
-                            const selectedValue = selectedOption ? selectedOption.value : contractOptions[0]?.value || null;
-                            onChange(selectedValue);
-                          }}
-                          value={contractOptions.find((c) => c.value === value)}
-                        />
-                      )}
-                    />
+                    <SelectInput name="contractType" control={control} selectOptions={contractOptions} title="계약형태" placeHolder="계약형태를 선택해주세요" />
                     <div className={errMsgClassName}>{errors.contractType?.message}</div>
-                    {/* <select className={inputClassName} {...register('contractType')} placeholder="계약형태를 선택해주세요">
-                      {data?.codes &&
-                        data?.codes[0]?.codes?.map((code, idx) => (
-                          <option key={idx} value={code?.code ?? ''}>
-                            {code?.name}
-                          </option>
-                        ))}
-                    </select> */}
                   </div>
                 </div>
                 <div className="mb-4">
@@ -236,7 +176,6 @@ const AddEmployee: React.FC = () => {
                   <Controller
                     name="phone"
                     control={control}
-                    defaultValue=""
                     render={({ field: { value, onChange, ...field } }) => (
                       <input
                         {...field}
@@ -267,8 +206,7 @@ const AddEmployee: React.FC = () => {
                 </div>
 
                 <div className="mb-4">
-                  <p className="text-sm text-[#484848]">입사일(YYYY-MM-DD)</p>
-                  <DatePickerInput name="startDate" control={control} />
+                  <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" />
                   <div className={errMsgClassName}>{errors.startDate?.message}</div>
                 </div>
                 <div className="mb-4"></div>
