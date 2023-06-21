@@ -10,6 +10,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
 import SelectInput from '@/components/Input/SelectInput';
 import TextInput from '@/components/Input/TextInput';
+import PhoneNoInput from '@/components/Input/PhoneNoInput';
 
 export interface EmployeeFormValues {
   userId: string;
@@ -172,36 +173,7 @@ const AddEmployee: React.FC = () => {
                   </div>
                 </div>
                 <div className="mb-4">
-                  <p className="text-sm text-[#484848]">핸드폰번호</p>
-                  <Controller
-                    name="phone"
-                    control={control}
-                    render={({ field: { value, onChange, ...field } }) => (
-                      <input
-                        {...field}
-                        onChange={({ target }) => {
-                          const phoneNo = target.value.trim().replace(/[^0-9]/g, '');
-                          onChange(phoneNo);
-
-                          const dashedPhoneNo =
-                            phoneNo.length < 4
-                              ? phoneNo
-                              : phoneNo.length < 7
-                              ? phoneNo.replace(/(\d{3})(\d{1})/, '$1-$2')
-                              : phoneNo.length < 11
-                              ? phoneNo.replace(/(\d{3})(\d{3})(\d{1})/, '$1-$2-$3')
-                              : phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-
-                          console.log('onChange: ' + phoneNo);
-                          target.value = dashedPhoneNo;
-                        }}
-                        placeholder="핸드폰번호를 입력해주세요"
-                        className={inputClassName}
-                        aria-label="Name"
-                        aria-describedby="Name-addon"
-                      />
-                    )}
-                  />
+                  <PhoneNoInput name="phone" title="핸드폰번호" control={control} placeHolder="핸드폰번호를 입력해주세요" inputClassName={inputClassName} />
                   <div className={errMsgClassName}>{errors.phone?.message}</div>
                 </div>
 
