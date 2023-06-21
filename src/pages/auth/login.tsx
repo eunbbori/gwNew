@@ -24,7 +24,7 @@ const Login = () => {
       .required('비밀번호를 입력해주세요.'),
   });
 
-  const { push } = useRouter();
+  const { push, refresh } = useRouter();
 
   const {
     register,
@@ -55,9 +55,9 @@ const Login = () => {
         push('/');
       },
       onError: (err) => {
-        alert(err.message);
+        // alert(err.message);
         alert('Check Your Id & Password!');
-        push('/');
+        refresh();
       },
     });
   };
