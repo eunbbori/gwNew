@@ -6,33 +6,22 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useReactiveVar } from '@apollo/client';
 import format from 'date-fns/format';
 import { ko } from 'date-fns/locale';
-import { attendanceDateVar, attendanceFilterVar } from '@/stores/gqlReactVars';
+import { attendanceDateVar, attendanceSortVar, SortColAttendance } from '@/stores/gqlReactVars';
 import { useGetAllEmployeeQuery } from '@/types/generated/types';
-import { SortColAttendance } from './Attendance';
 import AttendanceFilterGroup from '@/components/Attendance/AttendanceFilterGroup';
 
 export interface IDateMemberCntProps {
   cnt: number | undefined;
-  selectedDate?: Date;
-  setSortCol: Dispatch<SetStateAction<SortColAttendance>>;
-  sortCol: SortColAttendance;
 }
 
-const DateMemberCnt = ({ cnt, setSortCol, sortCol }: IDateMemberCntProps) => {
+const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
+  const selectedAttendanceSort = useReactiveVar(attendanceSortVar);
 
   const { data } = useGetAllEmployeeQuery();
 
   const dateChangeHandler = (date: Date) => {
     attendanceDateVar(date);
-  };
-
-  const onClickName = () => {
-    setSortCol('name');
-  };
-
-  const onClickStartAt = () => {
-    setSortCol('startAt');
   };
 
   return (
@@ -45,17 +34,21 @@ const DateMemberCnt = ({ cnt, setSortCol, sortCol }: IDateMemberCntProps) => {
           <div className="inline-flex rounded-md shadow-sm" role="group">
             <button
               type="button"
-              onClick={onClickName}
+              onClick={() => {
+                attendanceSortVar({ sort: 'name' });
+              }}
               className="inline-flex items-center px-4 py-2 text-xs font-medium text-gray-900 rounded-l-lg bg-transparent border border-gray-500 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-gray-500 dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
             >
-              <FontAwesomeIcon className={(sortCol === 'name' ? 'text-cyan-500' : 'text-zinc-400') + ' mr-1'} icon={faCheck} /> 이름순
+              <FontAwesomeIcon className={(selectedAttendanceSort.sort === 'name' ? 'text-cyan-500' : 'text-zinc-400') + ' mr-1'} icon={faCheck} /> 이름순
             </button>
             <button
               type="button"
-              onClick={onClickStartAt}
+              onClick={() => {
+                attendanceSortVar({ sort: 'startAt' });
+              }}
               className="inline-flex items-center px-4 py-2 text-xs font-medium text-gray-900 rounded-r-md bg-transparent border border-l-0 border-gray-500 hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-gray-500 dark:border-white dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:bg-gray-700"
             >
-              <FontAwesomeIcon className={(sortCol === 'startAt' ? 'text-cyan-500' : 'text-zinc-400') + ' mr-1'} icon={faCheck} />
+              <FontAwesomeIcon className={(selectedAttendanceSort.sort === 'startAt' ? 'text-cyan-500' : 'text-zinc-400') + ' mr-1'} icon={faCheck} />
               출근순
             </button>
           </div>

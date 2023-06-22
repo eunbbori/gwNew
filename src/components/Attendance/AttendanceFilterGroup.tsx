@@ -6,22 +6,22 @@ import { Input, Select, initTE } from 'tw-elements';
 
 const AttendanceFilterGroup = () => {
   const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
-  const filteredName = useReactiveVar(attendanceFilterVar).name;
-  const filteredDept = useReactiveVar(attendanceFilterVar).dept;
+  const selectedAttendanceFilter = useReactiveVar(attendanceFilterVar);
+
   useEffect(() => {
     initTE({ Input, Select });
     getAllDepartmentsQuery();
   }, []);
 
   return (
-    <div className="flex w-[30rem]">
-      <div className="relative mb-3 w-[10rem] mr-5" data-te-input-wrapper-init>
+    <div className="flex w-[30rem] text-xs">
+      <div className="relative mb-1 w-[10rem] mr-5" data-te-input-wrapper-init>
         <input
           type="text"
           className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
           id="nameFilter"
           placeholder="이름을 입력해주세요"
-          onChange={(e) => attendanceFilterVar({ name: e.target.value, dept: filteredDept, isDisplayed: true })}
+          onChange={(e) => attendanceFilterVar({ name: e.target.value, dept: selectedAttendanceFilter.dept, isDisplayed: true })}
         />
         <label
           htmlFor="nameFilter"
@@ -30,11 +30,11 @@ const AttendanceFilterGroup = () => {
           이름을 입력해주세요
         </label>
       </div>
-      <div className="w-[10rem]">
+      <div className="w-[10rem] text-xs">
         <select
           data-te-select-init
           data-te-select-filter="true"
-          onChange={(e) => attendanceFilterVar({ name: filteredName, dept: parseInt(e.target.value), isDisplayed: true })}
+          onChange={(e) => attendanceFilterVar({ name: selectedAttendanceFilter.name, dept: parseInt(e.target.value), isDisplayed: true })}
         >
           <option value={-1}>전체</option>
           {deptData?.departments?.map((dept, idx) => (

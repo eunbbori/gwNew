@@ -41,6 +41,12 @@ export const attendanceFilterVar = makeVar({
   isDisplayed: false,
 });
 
+export type SortColAttendance = 'name' | 'startAt';
+
+export const attendanceSortVar = makeVar({
+  sort: 'startAt',
+});
+
 // export const attendanceFilterNameVar = makeVar({
 //   name: '',
 // });
