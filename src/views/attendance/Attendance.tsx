@@ -50,9 +50,9 @@ const Attendance = () => {
     },
   });
 
-  //useEffect(() => {
-  //  refetchEmployeeWorking();
-  //}, [sortCol]);
+  useEffect(() => {
+    refetchEmployeeWorking();
+  }, [sortCol]);
 
   return (
     <>

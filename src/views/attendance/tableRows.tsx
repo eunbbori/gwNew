@@ -5,6 +5,8 @@ import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
 import { SortColAttendance } from './Attendance';
 import { useEffect, useState } from 'react';
+import { useReactiveVar } from '@apollo/client';
+import { attendanceFilterVar } from '@/stores/gqlReactVars';
 
 type TableRowsProps = {
   data: IGetEmployeeWorkingQuery | undefined;
@@ -12,6 +14,23 @@ type TableRowsProps = {
 };
 
 const TableRows = ({ data, sortCol }: TableRowsProps) => {
+  const isDisplayed = useReactiveVar(attendanceFilterVar).isDisplayed;
+  const filteredName = useReactiveVar(attendanceFilterVar).name;
+  const filteredDept = useReactiveVar(attendanceFilterVar).dept;
+  const filteredDeptToString = useReactiveVar(attendanceFilterVar).dept.toString();
+
+  const filteredCondition = isDisplayed && (filteredName?.length > 0 || filteredDeptToString);
+
+  const filteredData = filteredCondition
+    ? data?.employeeWorking?.filter((empData) => {
+        const isNameMatched = filteredName?.length === 0 || empData?.name === filteredName;
+        const isDeptMatched = filteredDept === -1 || empData?.department?.departmentId === filteredDeptToString;
+        return isNameMatched && isDeptMatched;
+      })
+    : data?.employeeWorking;
+
+  const searchedData = filteredData;
+
   useEffect(() => {
     if (data) {
       console.log('hhhhhhhh: ' + sortCol);
@@ -49,7 +68,7 @@ const TableRows = ({ data, sortCol }: TableRowsProps) => {
 
   return (
     <>
-      {data?.employeeWorking?.map((e, id) => {
+      {searchedData?.map((e, id) => {
         const startAt: Date = e && e.startAt && new Date(e.startAt);
         const endAt: Date = e && e.endAt && new Date(e.endAt);
 

@@ -6,7 +6,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useReactiveVar } from '@apollo/client';
 import format from 'date-fns/format';
 import { ko } from 'date-fns/locale';
-import { attendanceDateVar } from '@/stores/gqlReactVars';
+import { attendanceDateVar, attendanceFilterVar } from '@/stores/gqlReactVars';
 import { useGetAllEmployeeQuery } from '@/types/generated/types';
 import { SortColAttendance } from './Attendance';
 import AttendanceFilterGroup from '@/components/Attendance/AttendanceFilterGroup';

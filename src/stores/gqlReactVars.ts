@@ -38,6 +38,7 @@ export const setLocalFromToken = (data: IRefreshMutation) => {
 export const attendanceFilterVar = makeVar({
   name: '',
   dept: -1,
+  isDisplayed: false,
 });
 
 // export const attendanceFilterNameVar = makeVar({
