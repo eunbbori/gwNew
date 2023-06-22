@@ -1,11 +1,12 @@
 import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
-import { useAttendedSubscription, useGetEmployeeWorkingLazyQuery } from '@/types/generated/types';
+import { useAttendedSubscription, useGetAllDepartmentsLazyQuery, useGetCodesLazyQuery, useGetEmployeeWorkingLazyQuery } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import { format, isToday } from 'date-fns';
 import { useReactiveVar } from '@apollo/client';
 import { attendanceDateVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useCallback, useEffect } from 'react';
+import { Input, Select, initTE } from 'tw-elements';
 
 const useMyEmployeeWorking = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
@@ -30,6 +31,10 @@ const useMyEmployeeWorking = () => {
 };
 
 const Attendance = () => {
+  useEffect(() => {
+    initTE({ Input, Select });
+  }, []);
+
   const jwtTokens = useReactiveVar(jwtTokensVar);
   const { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data } = useMyEmployeeWorking();
 
@@ -48,7 +53,7 @@ const Attendance = () => {
   return (
     <>
       <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-3 pb-0 pr-5">
-        <div className="flex flex-wrap mt-0 -mx-3">
+        <div className="flex mt-0 -mx-3">
           <DateMemberCnt cnt={data?.employeeWorking?.length} selectedDate={selectedAttendanceDate} />
         </div>
       </div>

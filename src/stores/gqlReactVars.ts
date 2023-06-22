@@ -33,3 +33,17 @@ export const setLocalFromToken = (data: IRefreshMutation) => {
     });
   }
 };
+
+//Attendance Filter
+export const attendanceFilterVar = makeVar({
+  name: '',
+  dept: -1,
+});
+
+// export const attendanceFilterNameVar = makeVar({
+//   name: '',
+// });
+
+// export const attendanceFilterDeptVar = makeVar({
+//   dept: '',
+// });

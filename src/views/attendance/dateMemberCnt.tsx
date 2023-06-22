@@ -8,6 +8,7 @@ import format from 'date-fns/format';
 import { ko } from 'date-fns/locale';
 import { attendanceDateVar } from '@/stores/gqlReactVars';
 import { useGetAllEmployeeQuery } from '@/types/generated/types';
+import AttendanceFilterGroup from '@/components/Attendance/AttendanceFilterGroup';
 
 export interface IDateMemberCntProps {
   cnt: number | undefined;
@@ -31,6 +32,7 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
           <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체 <span className="ml-1 font-semibold">{cnt}</span> 명
         </p>
       </div>
+      <AttendanceFilterGroup />
 
       <div className="justify-end flex w-7/12 max-w-full px-3 mt-0 -right-0 lg:w-1/2">
         <div>
