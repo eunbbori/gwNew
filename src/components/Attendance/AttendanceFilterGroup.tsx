@@ -1,10 +1,12 @@
 import { attendanceFilterVar } from '@/stores/gqlReactVars';
 import { useGetAllDepartmentsLazyQuery } from '@/types/generated/types';
 import React, { useEffect } from 'react';
+import { Input, Select, initTE } from 'tw-elements';
 
 const AttendanceFilterGroup = () => {
   const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
   useEffect(() => {
+    initTE({ Input, Select });
     getAllDepartmentsQuery();
   });
 

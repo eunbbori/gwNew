@@ -6,7 +6,6 @@ import { format, isToday } from 'date-fns';
 import { useReactiveVar } from '@apollo/client';
 import { attendanceDateVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useCallback, useEffect } from 'react';
-import { Input, Select, initTE } from 'tw-elements';
 
 const useMyEmployeeWorking = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
@@ -31,10 +30,6 @@ const useMyEmployeeWorking = () => {
 };
 
 const Attendance = () => {
-  useEffect(() => {
-    initTE({ Input, Select });
-  }, []);
-
   const jwtTokens = useReactiveVar(jwtTokensVar);
   const { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data } = useMyEmployeeWorking();
 
