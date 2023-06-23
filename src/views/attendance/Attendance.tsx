@@ -4,7 +4,7 @@ import { useAttendedSubscription, useGetAllDepartmentsLazyQuery, useGetCodesLazy
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';
 import { format, isToday } from 'date-fns';
 import { useReactiveVar } from '@apollo/client';
-import { SortColAttendance, attendanceDateVar, jwtTokensVar } from '@/stores/gqlReactVars';
+import { SortColAttendance, attendanceDateVar, attendanceTotalCntVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useCallback, useEffect, useState } from 'react';
 
 const useMyEmployeeWorking = () => {
@@ -25,14 +25,16 @@ const useMyEmployeeWorking = () => {
       alert('Plz Login first!');
     },
   });
+  const totalCnt = useReactiveVar(attendanceTotalCntVar);
+  // attendanceTotalCntVar(data?.employeeWorking?.length);
 
-  return { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data };
+  return { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data, totalCnt };
 };
 
 const Attendance = () => {
   const jwtTokens = useReactiveVar(jwtTokensVar);
 
-  const { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data } = useMyEmployeeWorking();
+  const { selectedAttendanceDate, getEmployeeWorking, refetchEmployeeWorking, data, totalCnt } = useMyEmployeeWorking();
 
   useEffect(() => {
     if (jwtTokens?.accessToken) {
@@ -54,7 +56,7 @@ const Attendance = () => {
     <>
       <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-3 pb-0 pr-5">
         <div className="flex flex-wrap mt-0 -mx-3">
-          <DateMemberCnt cnt={data?.employeeWorking?.length} />
+          <DateMemberCnt cnt={totalCnt} />
         </div>
       </div>
       <div className="flex-auto p-6 px-0 pb-2">

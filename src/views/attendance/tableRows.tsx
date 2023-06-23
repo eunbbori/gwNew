@@ -3,7 +3,7 @@ import { IGetEmployeeWorkingQuery } from '@/types/generated/types';
 import { getWorkingTypeName } from '@/repository/Code';
 import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
-import { attendanceSortVar, attendanceFilterVar } from '@/stores/gqlReactVars';
+import { attendanceSortVar, attendanceFilterVar, attendanceTotalCntVar } from '@/stores/gqlReactVars';
 import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 
@@ -26,6 +26,8 @@ const TableRows = ({ data }: TableRowsProps) => {
         return isNameMatched && isDeptMatched;
       })
     : data?.employeeWorking;
+
+  attendanceTotalCntVar(filteredData?.length);
 
   return (
     <>
