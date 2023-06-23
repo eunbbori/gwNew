@@ -2,12 +2,17 @@ import React from 'react';
 import Image from 'next/image';
 
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
+import { usePositionCodes } from '@/repository/Code';
 export interface IProfileProps {
   empName?: string | null;
-  photoUrl?: string | undefined;
+  photoUrl?: string;
+  deptName?: string | null;
+  position?: string | null;
 }
 
-const Profile = ({ empName, photoUrl }: IProfileProps) => {
+const Profile = ({ empName, photoUrl, deptName, position }: IProfileProps) => {
+  const positionOptions = usePositionCodes();
+
   return (
     <div className="mr-[35px] mb-[75px] cursor-pointer">
       <div className="">
@@ -15,7 +20,8 @@ const Profile = ({ empName, photoUrl }: IProfileProps) => {
           <div className="w-[144px] h-[144px] relative rounded-[8px] overflow-hidden">
             <Image src={photoUrl ? process.env.NEXT_PUBLIC_BASE_PROFILE_API + '/' + photoUrl : blankProfile} alt={empName || ''} width={144} height={144} />
           </div>
-          <p className="text-black font-bold text-[16px] mt-[14px] pt-[2px] text-center">{empName}</p>
+          <p className="text-[#484848] text-xs text-[16px] mt-[10px] pt-[2px] text-center">{deptName + ' ' + (positionOptions.get(position || '') ?? '')}</p>
+          <p className="text-black font-bold text-[16px] pt-[2px] text-center">{empName}</p>
         </div>
       </div>
     </div>

@@ -221,6 +221,7 @@ export type IGetAllEmployeeQuery = {
     employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
+    position?: string | null;
     contractType?: string | null;
     phone?: string | null;
     email?: string | null;
@@ -248,6 +249,7 @@ export type IGetEmployeeWorkingQuery = {
     __typename?: 'EmployeeWorking';
     employeeId?: number | null;
     name?: string | null;
+    position?: string | null;
     userId?: string | null;
     workingDate?: any | null;
     workingType?: IWorkingType | null;
@@ -267,11 +269,11 @@ export type IAddEmployeeMutation = {
     __typename?: 'Employee';
     userId?: string | null;
     name?: string | null;
+    position?: string | null;
     email?: string | null;
     contractType?: string | null;
     phone?: string | null;
     startDate?: any | null;
-    position?: string | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
   } | null;
 };
@@ -529,6 +531,7 @@ export const GetAllEmployeeDocument = gql`
       employeeId
       userId
       name
+      position
       department {
         departmentId
         departmentName
@@ -612,6 +615,7 @@ export const GetEmployeeWorkingDocument = gql`
     employeeWorking(dt: $dt) {
       employeeId
       name
+      position
       department {
         departmentId
         departmentName
@@ -657,6 +661,7 @@ export const AddEmployeeDocument = gql`
     addEmployee(input: $input) {
       userId
       name
+      position
       email
       department {
         departmentId
@@ -665,7 +670,6 @@ export const AddEmployeeDocument = gql`
       contractType
       phone
       startDate
-      position
     }
   }
 `;

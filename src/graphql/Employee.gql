@@ -3,6 +3,7 @@ query getAllEmployee {
     employeeId
     userId
     name
+    position
     department {
       departmentId
       departmentName
@@ -30,6 +31,7 @@ query getEmployeeWorking($dt: String) {
   employeeWorking(dt: $dt) {
     employeeId
     name
+    position
     department {
       departmentId
       departmentName
@@ -46,6 +48,7 @@ mutation addEmployee($input: EmployeeInput!) {
   addEmployee(input: $input) {
     userId
     name
+    position
     email
     department {
       departmentId
@@ -54,7 +57,6 @@ mutation addEmployee($input: EmployeeInput!) {
     contractType
     phone
     startDate
-    position
   }
 }
 

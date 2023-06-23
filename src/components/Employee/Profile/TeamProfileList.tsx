@@ -20,7 +20,7 @@ const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) 
         </h2>
         <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
           {deptEmployees!.map((emp, idx) => (
-            <Profile key={idx} empName={emp?.name} photoUrl={emp?.photoUrl || ''} />
+            <Profile key={idx} empName={emp?.name} deptName={emp?.department?.departmentName} position={emp?.position} photoUrl={emp?.photoUrl || ''} />
           ))}
         </div>
       </li>
