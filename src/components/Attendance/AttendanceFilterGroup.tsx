@@ -15,7 +15,7 @@ const AttendanceFilterGroup = () => {
   }, []);
 
   return (
-    <div className="flex w-[30rem] text-xs">
+    <div className="flex w-[23rem] text-xs">
       <div className="relative mb-1 w-[10rem] mr-5" data-te-input-wrapper-init>
         <input
           type="text"
