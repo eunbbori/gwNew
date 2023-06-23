@@ -62,10 +62,12 @@ const AddEmployee: React.FC = () => {
 
   const positionOptions =
     (codeData?.codes &&
-      codeData?.codes[1]?.codes?.map((code) => ({
-        value: code?.code ?? '',
-        label: code?.name ?? '',
-      }))) ??
+      codeData?.codes[1]?.codes
+        ?.map((code) => ({
+          value: code?.code ?? '',
+          label: code?.name ?? '',
+        }))
+        .reverse()) ??
     [];
 
   useEffect(() => {
