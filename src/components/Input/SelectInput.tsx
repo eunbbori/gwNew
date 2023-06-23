@@ -17,7 +17,7 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
   props: UseControllerProps<TFieldValues, TName> & OtherOptions,
 ) => {
   const { field } = useController(props);
-  const SelectOptions = props.selectOptions as readonly (PathValue<TFieldValues, TName> | GroupBase<PathValue<TFieldValues, TName>>)[];
+  const SelectOptions = props.selectOptions as unknown as readonly (PathValue<TFieldValues, TName> | GroupBase<PathValue<TFieldValues, TName>>)[];
   const handleSelectChange = (selectedOption: IOption | null) => {
     const value = selectedOption ? selectedOption.value : '';
     field.onChange(value);
