@@ -17,17 +17,20 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
   props: UseControllerProps<TFieldValues, TName> & OtherOptions,
 ) => {
   const { field } = useController(props);
-  const convSelectOptions = props.selectOptions as readonly (PathValue<TFieldValues, TName> | GroupBase<PathValue<TFieldValues, TName>>)[];
-
+  const SelectOptions = props.selectOptions as readonly (PathValue<TFieldValues, TName> | GroupBase<PathValue<TFieldValues, TName>>)[];
+  const handleSelectChange = (selectedOption: IOption | null) => {
+    const value = selectedOption ? selectedOption.value : '';
+    field.onChange(value);
+  };
   return (
     <>
       <p className="text-sm text-[#484848]">{props.title}</p>
       <Select
         name={props.name}
-        options={convSelectOptions}
+        options={SelectOptions}
         placeholder={props.placeHolder}
-        onChange={field.onChange}
         value={props.selectOptions.find((c: IOption) => c.value === field.value)}
+        onChange={handleSelectChange}
       />
     </>
   );

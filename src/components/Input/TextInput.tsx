@@ -16,6 +16,7 @@ const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends
     <>
       <p className="text-sm text-[#484848] w-[300px]">{props.title}</p>
       <input
+        {...field}
         name={props.name}
         placeholder={props.placeHolder}
         type={props.type}
