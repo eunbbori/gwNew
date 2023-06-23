@@ -1,4 +1,4 @@
-import { attendanceFilterVar } from '@/stores/gqlReactVars';
+import { attendanceFilterVar, attendanceTotalCntVar } from '@/stores/gqlReactVars';
 import { useGetAllDepartmentsLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
 import React, { useEffect } from 'react';
@@ -11,6 +11,7 @@ const AttendanceFilterGroup = () => {
   useEffect(() => {
     initTE({ Input, Select });
     getAllDepartmentsQuery();
+    attendanceFilterVar({ name: '', dept: -1, isDisplayed: false });
   }, []);
 
   return (

@@ -29,22 +29,23 @@ const TableRows = ({ data }: TableRowsProps) => {
 
   attendanceTotalCntVar(filteredData?.length);
 
+  const sortedData = filteredData?.sort((a, b) => {
+    if (selectedAttendanceSort.sort === 'name') {
+      if (a?.name && b?.name) {
+        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
+      }
+    } else {
+      if (a?.startAt && b?.startAt) {
+        return a.startAt < b.startAt ? 1 : a.startAt > b.startAt ? -1 : 0;
+      }
+    }
+    return 0;
+  });
+
   return (
     <>
-      {filteredData
-        ?.sort((a, b) => {
-          if (selectedAttendanceSort.sort === 'name') {
-            if (a?.name && b?.name) {
-              return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-            }
-          } else {
-            if (a?.startAt && b?.startAt) {
-              return a.startAt < b.startAt ? 1 : a.startAt > b.startAt ? -1 : 0;
-            }
-          }
-          return 0;
-        })
-        .map((e, id) => {
+      {sortedData &&
+        sortedData.map((e, id) => {
           console.log('name=' + e?.name + ', startAt=' + e?.startAt);
 
           const startAt: Date = e && e.startAt && new Date(e.startAt);
@@ -67,5 +68,4 @@ const TableRows = ({ data }: TableRowsProps) => {
     </>
   );
 };
-
 export default TableRows;
