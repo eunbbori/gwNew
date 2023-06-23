@@ -54,6 +54,7 @@ mutation addEmployee($input: EmployeeInput!) {
     contractType
     phone
     startDate
+    position
   }
 }
 

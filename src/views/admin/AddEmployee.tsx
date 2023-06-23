@@ -23,6 +23,7 @@ export interface EmployeeFormValues {
   contractType: string;
   phone: string;
   startDate: string;
+  position: string;
 }
 
 interface IOption {
@@ -44,7 +45,7 @@ const AddEmployee: React.FC = () => {
 
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: {
-      parents: ['contractType'],
+      parents: ['contractType', 'position'],
     },
     onError: (err) => {
       alert('err');
@@ -54,6 +55,14 @@ const AddEmployee: React.FC = () => {
   const contractOptions =
     (codeData?.codes &&
       codeData?.codes[0]?.codes?.map((code) => ({
+        value: code?.code ?? '',
+        label: code?.name ?? '',
+      }))) ??
+    [];
+
+  const positionOptions =
+    (codeData?.codes &&
+      codeData?.codes[1]?.codes?.map((code) => ({
         value: code?.code ?? '',
         label: code?.name ?? '',
       }))) ??
@@ -75,6 +84,7 @@ const AddEmployee: React.FC = () => {
     //.matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
     contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
     departmentId: yup.string().required('부서는 필수 선택사항입니다'),
+    position: yup.string().required('직급은 필수 선택사항입니다'),
   });
 
   const inputClassName =
@@ -95,7 +105,7 @@ const AddEmployee: React.FC = () => {
 
   const onAddEmployee = (inputData: EmployeeFormValues) => {
     console.log(inputData);
-    const { userId, name, email, passwd, departmentId, contractType, phone, startDate } = inputData;
+    const { userId, name, email, passwd, departmentId, contractType, phone, startDate, position } = inputData;
     const input: IEmployeeInput = {
       userId,
       name,
@@ -105,6 +115,7 @@ const AddEmployee: React.FC = () => {
       contractType,
       phone,
       startDate,
+      position,
     };
     addEmployeeMutation({
       variables: {
@@ -193,9 +204,15 @@ const AddEmployee: React.FC = () => {
                     <div className={errMsgClassName}>{errors.phone?.message}</div>
                   </div>
 
-                  <div className="mb-4">
-                    <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" />
-                    <div className={errMsgClassName}>{errors.startDate?.message}</div>
+                  <div className="mb-4 flex justify-between">
+                    <div className="w-[250px]">
+                      <SelectInput name="position" control={control} selectOptions={positionOptions} title="직급" placeHolder="직급을 선택해주세요" />
+                      <div className={errMsgClassName}>{errors.position?.message}</div>
+                    </div>
+                    <div className="w-[250px]">
+                      <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" />
+                      <div className={errMsgClassName}>{errors.startDate?.message}</div>
+                    </div>
                   </div>
                   <div className="mb-4"></div>
                   <div className="text-center">

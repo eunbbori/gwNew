@@ -52,6 +52,7 @@ export type IEmployee = {
   name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   photoUrl?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
 };
@@ -63,6 +64,7 @@ export type IEmployeeInput = {
   name?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
+  position?: InputMaybe<Scalars['String']>;
   startDate?: InputMaybe<Scalars['Date']>;
   userId?: InputMaybe<Scalars['String']>;
 };
@@ -73,6 +75,7 @@ export type IEmployeeWorking = {
   employeeId?: Maybe<Scalars['Int']>;
   endAt?: Maybe<Scalars['Date']>;
   name?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['String']>;
   startAt?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
   workingDate?: Maybe<Scalars['Date']>;
@@ -268,6 +271,7 @@ export type IAddEmployeeMutation = {
     contractType?: string | null;
     phone?: string | null;
     startDate?: any | null;
+    position?: string | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
   } | null;
 };
@@ -661,6 +665,7 @@ export const AddEmployeeDocument = gql`
       contractType
       phone
       startDate
+      position
     }
   }
 `;
