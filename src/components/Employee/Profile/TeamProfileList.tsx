@@ -1,6 +1,7 @@
 import React from 'react';
 import Profile from './Profile';
 import { IEmployee } from '@/types/generated/types';
+import { memberDetailId } from '@/stores/gqlReactVars';
 
 export interface ITeamEmpProfileProps {
   deptId?: string | null;
@@ -9,6 +10,9 @@ export interface ITeamEmpProfileProps {
 }
 const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) => {
   const deptEmployees = employees?.filter((dept) => dept?.department?.departmentId === deptId);
+  const clickHandler = (empId: string) => {
+    memberDetailId(empId);
+  };
 
   return (
     <ul className="mb-60px">
@@ -20,7 +24,14 @@ const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) 
         </h2>
         <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
           {deptEmployees!.map((emp, idx) => (
-            <Profile key={idx} empName={emp?.name} deptName={emp?.department?.departmentName} position={emp?.position} photoUrl={emp?.photoUrl || ''} />
+            <Profile
+              key={idx}
+              empName={emp?.name}
+              deptName={emp?.department?.departmentName}
+              position={emp?.position}
+              photoUrl={emp?.photoUrl || ''}
+              onClick={() => clickHandler(emp?.userId || '')}
+            />
           ))}
         </div>
       </li>

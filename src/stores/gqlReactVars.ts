@@ -14,14 +14,11 @@ export type AuthData = {
   photoUrl?: string;
 };
 
-// Today startAt time of currently login user
+// Today ComeToWork / LeaveWork time of currently login user
 export const startEndAtVar = makeVar({
   startAt: '',
   endAt: '',
 });
-
-// Attendance Date
-export const attendanceDateVar = makeVar(new Date());
 
 export const setLocalFromToken = (data: IRefreshMutation) => {
   if (data?.refresh) {
@@ -33,6 +30,13 @@ export const setLocalFromToken = (data: IRefreshMutation) => {
     });
   }
 };
+
+////////////////
+// Attendance //
+////////////////
+
+// Attendance Search Date for Calendar
+export const attendanceDateVar = makeVar(new Date());
 
 //Attendance Filter
 export const attendanceFilterVar = makeVar({
@@ -50,3 +54,6 @@ export const attendanceSortVar = makeVar({
 
 //Attendance Total Count
 export const attendanceTotalCntVar = makeVar(0);
+
+//Member Detail userId
+export const memberDetailId = makeVar('');

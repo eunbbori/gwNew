@@ -20,6 +20,24 @@ query getAllEmployee {
   }
 }
 
+query getEmployee($userId: String) {
+  employee(userId: $userId) {
+    employeeId
+    userId
+    name
+    position
+    department {
+      departmentId
+      departmentName
+    }
+    contractType
+    phone
+    email
+    startDate
+    photoUrl
+  }
+}
+
 query getAllDepartments {
   departments {
     departmentId
