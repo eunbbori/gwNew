@@ -2,6 +2,8 @@ import { IGetAllEmployeeQuery } from '@/types/generated/types';
 import AllEmployeeProfile from './AllEmployeeProfile';
 import TeamEmployeeProfile from './TeamEmployeeProfile';
 import TabbedContent, { ITabbedContent } from '../common/TabbedContent';
+import DetailModal from '@/components/Modal/DetailModal';
+import MemberModalContent from '@/components/Employee/Detail/MemberModalContent';
 
 const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
   const attendanceTabList: ITabbedContent[] = [
@@ -12,12 +14,17 @@ const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
     },
     {
       title: '팀별',
-      id: 'abs-employees-team',
+      id: 'tabs-employees-team',
       content: <TeamEmployeeProfile list={list} />,
     },
   ];
 
-  return <TabbedContent tabs={attendanceTabList} />;
+  return (
+    <>
+      <TabbedContent tabs={attendanceTabList} />
+      <DetailModal title={'상세정보'} content={<MemberModalContent />} />
+    </>
+  );
 };
 
 export default EmployeeTab;

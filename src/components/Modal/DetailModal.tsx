@@ -1,4 +1,5 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
+import { Modal, Ripple, initTE } from 'tw-elements';
 
 export interface IModalProps {
   title?: string | null;
@@ -6,6 +7,10 @@ export interface IModalProps {
 }
 
 const DetailModal = ({ title, content }: IModalProps) => {
+  useEffect(() => {
+    initTE({ Modal, Ripple });
+  }, []);
+
   return (
     <>
       <div
