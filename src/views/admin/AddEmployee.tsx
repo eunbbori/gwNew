@@ -82,6 +82,7 @@ const AddEmployee: React.FC = () => {
     name: yup.string().required('이름은 필수 입력사항입니다.'),
     phone: yup.string().required('핸드폰 번호는 필수 입력사항입니다.').max(11, '핸드폰 번호는 11자리까지 입력 가능합니다.'),
     email: yup.string().required('이메일은 필수 입력사항입니다').email('이메일 형식에 맞지 않습니다.'),
+    passwd: yup.string().min(6, '6글자 이상 10글자 이하로 입력해주세요.').required('비밀번호는 필수 입력사항입니다'),
     startDate: yup.date().required('입사일은 필수 입력사항입니다'),
     //.matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
     contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
@@ -125,7 +126,8 @@ const AddEmployee: React.FC = () => {
       },
       onCompleted: (data) => {
         alert('등록됐습니다.');
-        router.reload();
+        router.push('/employee/listEmp');
+        // router.reload();
 
         console.log('data가 저장됐습니다', data.addEmployee?.userId);
       },
