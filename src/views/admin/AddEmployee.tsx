@@ -113,17 +113,11 @@ const AddEmployee: React.FC = () => {
 
   const onAddEmployee = (inputData: EmployeeFormValues) => {
     console.log(inputData);
-    const { userId, name, email, passwd, departmentId, contractType, phone, startDate, position } = inputData;
+    const { passwdConfirm: _, ...newInputData } = inputData;
+
     const input: IEmployeeInput = {
-      userId,
-      name,
-      email,
-      passwd,
-      departmentId: parseInt(departmentId),
-      contractType,
-      phone,
-      startDate,
-      position,
+      ...newInputData,
+      departmentId: parseInt(newInputData.departmentId),
     };
     addEmployeeMutation({
       variables: {
