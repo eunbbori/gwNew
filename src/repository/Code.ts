@@ -6,11 +6,11 @@ import { useEffect } from 'react';
 const WorkingType = new Map([
   ['WORK', '출근'],
   ['FULL_DAYOFF', '연차'],
-  ['HALF_DAYOFF', '반차'],
+  ['AM_DAYOFF', '오전반차'],
+  ['PM_DAYOFF', '오후반차'],
   ['SICK', '병가'],
   ['MILITARY', '훈련'],
 ]);
-
 export const getWorkingTypeName = (cd: string | undefined | null) => (cd ? WorkingType.get(cd) : '');
 
 export const usePositionCodes = (): Map<string, string> => {
