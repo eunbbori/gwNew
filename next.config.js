@@ -20,6 +20,11 @@ const nextConfig = {
         hostname: 'localhost',
         port: '4000',
       },
+      {
+        protocol: 'http',
+        hostname: '192.168.0.201',
+        pathname: '/employees/**',
+      },
     ],
   },
 };
