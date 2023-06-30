@@ -1,5 +1,6 @@
 import Attendance from './Attendance';
 import TabbedContent, { ITabbedContent } from '../common/TabbedContent';
+import ConditionalAttendance from './ConditionalAttendance';
 
 const attendanceTabList: ITabbedContent[] = [
   {
@@ -10,7 +11,7 @@ const attendanceTabList: ITabbedContent[] = [
   {
     title: '조건조회',
     id: 'tabs-attendance-condition',
-    content: <>Tab 2 content</>,
+    content: <ConditionalAttendance />,
   },
 ];
 

@@ -2,7 +2,7 @@
 
 module.exports = {
   mode: 'jit',
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './node_modules/tw-elements/dist/js/**/*.js'],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './node_modules/tw-elements/dist/js/**/*.js', './node_modules/react-tailwindcss-datepicker/dist/index.esm.js'],
   presets: [],
   darkMode: 'class',
   theme: {
