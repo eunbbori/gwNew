@@ -1,5 +1,5 @@
 import TableCell from './TableCell';
-import { IGetEmployeeWorkingQuery } from '@/types/generated/types';
+import { IEmployeeWorking, IGetEmployeeWorkingQuery } from '@/types/generated/types';
 import { getWorkingTypeName } from '@/repository/Code';
 import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
@@ -30,15 +30,27 @@ const TableRows = ({ data }: TableRowsProps) => {
   attendanceTotalCntVar(filteredData?.length);
 
   const sortedData = filteredData?.sort((a, b) => {
-    if (selectedAttendanceSort.sort === 'name') {
-      if (a?.name && b?.name) {
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0;
-      }
-    } else {
-      if (a?.startAt && b?.startAt) {
-        return a.startAt < b.startAt ? 1 : a.startAt > b.startAt ? -1 : 0;
+    type AttendanceSortVarKey = keyof IEmployeeWorking;
+    const currSort = selectedAttendanceSort.sort as AttendanceSortVarKey;
+
+    if (a && b) {
+      if (!a[currSort]) {
+        return selectedAttendanceSort.isAscending ? -1 : 1;
+      } else if (!b[currSort]) {
+        return selectedAttendanceSort.isAscending ? 1 : -1;
+      } else {
+        if (a[currSort] > b[currSort]) {
+          return selectedAttendanceSort.isAscending ? 1 : -1;
+        } else if (a[currSort] < b[currSort]) {
+          return selectedAttendanceSort.isAscending ? -1 : 1;
+        }
       }
     }
+    /*  } else if (a && !b) {
+      return selectedAttendanceSort.isAscending ? 1 : -1;
+    } else if (!a && b) {
+      return selectedAttendanceSort.isAscending ? -1 : 1;
+    } */
     return 0;
   });
 
@@ -60,8 +72,6 @@ const TableRows = ({ data }: TableRowsProps) => {
               <TableCell cellData={getWorkingTypeName(e?.workingType)} />
               <TableCell cellData={startAt ? format(startAt, 'MM-dd HH:mm') : '-'} />
               <TableCell cellData={endAt ? format(endAt, 'MM-dd HH:mm') : '-'} />
-              <TableCell cellData={'-'} />
-              <TableCell cellData={'-'} />
             </tr>
           );
         })}

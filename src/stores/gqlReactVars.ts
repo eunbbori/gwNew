@@ -50,6 +50,7 @@ export type SortColAttendance = 'name' | 'startAt';
 //Attendance Sort
 export const attendanceSortVar = makeVar({
   sort: 'startAt',
+  isAscending: true,
 });
 
 //Attendance Total Count
