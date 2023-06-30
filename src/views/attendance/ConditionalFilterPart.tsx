@@ -1,9 +1,6 @@
-import Datepicker from 'react-tailwindcss-datepicker';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useReactiveVar } from '@apollo/client';
-import format from 'date-fns/format';
-import { ko } from 'date-fns/locale';
 import { attendanceDateVar } from '@/stores/gqlReactVars';
 import { useState } from 'react';
 import DatePickerRangeInput from '@/components/Input/DatePickerRangeInput';
