@@ -23,16 +23,17 @@ const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) 
           <p className="text-[16px] mt-[4px] ml-[5px]">({deptEmployees?.length})</p>
         </h2>
         <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
-          {deptEmployees!.map((emp, idx) => (
-            <Profile
-              key={idx}
-              empName={emp?.name}
-              deptName={emp?.department?.departmentName}
-              position={emp?.position}
-              photoUrl={emp?.photoUrl || ''}
-              onClick={() => clickHandler(emp?.userId || '')}
-            />
-          ))}
+          {deptEmployees &&
+            deptEmployees!.map((emp, idx) => (
+              <Profile
+                key={idx}
+                empName={emp?.name}
+                deptName={emp?.department?.departmentName}
+                position={emp?.position}
+                photoUrl={emp?.photoUrl || ''}
+                onClick={() => clickHandler(emp?.userId || '')}
+              />
+            ))}
         </div>
       </li>
     </ul>
