@@ -4,8 +4,14 @@ import TeamEmployeeProfile from './TeamEmployeeProfile';
 import TabbedContent, { ITabbedContent } from '../common/TabbedContent';
 import DetailModal from '@/components/Modal/DetailModal';
 import MemberModalContent from '@/components/Employee/Detail/MemberModalContent';
+import { useEffect } from 'react';
+import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 
 const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
+  useEffect(() => {
+    breadCrumbPathVar(['/', 'employee', 'listEmp']);
+  }, []);
+
   const attendanceTabList: ITabbedContent[] = [
     {
       title: '전체',

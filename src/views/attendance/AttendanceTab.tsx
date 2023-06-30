@@ -1,5 +1,7 @@
 import Attendance from './Attendance';
 import TabbedContent, { ITabbedContent } from '../common/TabbedContent';
+import { useEffect } from 'react';
+import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 import ConditionalAttendance from './ConditionalAttendance';
 
 const attendanceTabList: ITabbedContent[] = [
@@ -16,6 +18,10 @@ const attendanceTabList: ITabbedContent[] = [
 ];
 
 const AttendanceTab = () => {
+  useEffect(() => {
+    breadCrumbPathVar(['/', 'attendance', 'listAttendance']);
+  }, []);
+
   return <TabbedContent tabs={attendanceTabList} />;
 };
 

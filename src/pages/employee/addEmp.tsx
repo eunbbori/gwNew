@@ -1,7 +1,12 @@
+import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 import AddEmployee from '@/views/admin/AddEmployee';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const AddEmp = () => {
+  useEffect(() => {
+    breadCrumbPathVar(['/', 'employee', 'addEmp']);
+  }, []);
+
   return <AddEmployee />;
 };
 

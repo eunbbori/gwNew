@@ -58,3 +58,8 @@ export const attendanceTotalCntVar = makeVar(0);
 
 //Member Detail userId
 export const memberDetailId = makeVar('');
+
+////////////////
+// BreadCrumb //
+////////////////
+export const breadCrumbPathVar = makeVar(['/']);
