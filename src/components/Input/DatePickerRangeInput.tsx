@@ -1,11 +1,7 @@
-import { useController, UseControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 import Datepicker from 'react-tailwindcss-datepicker';
 import { useState } from 'react';
 
-const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
-  props: UseControllerProps<TFieldValues, TName> & { title: string },
-) => {
-  // const { field, fieldState } = useController(props);
+const DatePickerRangeInput = (props: { name: string; title: string }) => {
   const [value, setValue] = useState({
     startDate: new Date(),
     endDate: new Date(),
@@ -17,8 +13,8 @@ const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TN
   };
 
   return (
-    <>
-      <p className="text-sm text-[#484848]">{props.title}</p>
+    <div className="flex">
+      <p className="text-sm font-bold text-[#484848] self-center mr-5">{props.title}</p>
       <Datepicker
         containerClassName="relative text-gray-700 w-[250px]"
         value={value}
@@ -29,7 +25,7 @@ const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TN
         primaryColor={'cyan'}
         showFooter={true}
       />
-    </>
+    </div>
   );
 };
 
