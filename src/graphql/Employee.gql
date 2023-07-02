@@ -62,6 +62,23 @@ query getEmployeeWorking($dt: String) {
   }
 }
 
+query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition) {
+  employeeWorkingConditional(searchCondition: $searchCondition) {
+    employeeId
+    name
+    position
+    department {
+      departmentId
+      departmentName
+    }
+    userId
+    workingDate
+    workingType
+    startAt
+    endAt
+  }
+}
+
 mutation addEmployee($input: EmployeeInput!) {
   addEmployee(input: $input) {
     userId
