@@ -27,11 +27,17 @@ const TableRows = ({ data }: TableRowsProps) => {
       })
     : data?.employeeWorking;
 
+  const fileteredDuraAddedData = filteredData?.map((e) => {
+    const startAt: Date = e && e.startAt && new Date(e.startAt);
+    const endAt: Date = e && e.endAt && new Date(e.endAt);
+    return { ...e, startAt, endAt, duration: calculateDateDiff(startAt, endAt) };
+  });
   attendanceTotalCntVar(filteredData?.length);
 
-  const sortedData = filteredData?.sort((a, b) => {
+  const sortedData = fileteredDuraAddedData?.sort((a, b) => {
     type AttendanceSortVarKey = keyof IEmployeeWorking;
     const currSort = selectedAttendanceSort.sort as AttendanceSortVarKey;
+    const isDepartment = selectedAttendanceSort.sort === 'department';
 
     if (a && b) {
       if (!a[currSort]) {
@@ -39,18 +45,17 @@ const TableRows = ({ data }: TableRowsProps) => {
       } else if (!b[currSort]) {
         return selectedAttendanceSort.isAscending ? 1 : -1;
       } else {
-        if (a[currSort] > b[currSort]) {
+        const prev = isDepartment ? a[currSort]['departmentName'] : a[currSort];
+        const next = isDepartment ? b[currSort]['departmentName'] : b[currSort];
+
+        if (prev > next) {
           return selectedAttendanceSort.isAscending ? 1 : -1;
-        } else if (a[currSort] < b[currSort]) {
+        } else if (prev < next) {
           return selectedAttendanceSort.isAscending ? -1 : 1;
         }
       }
     }
-    /*  } else if (a && !b) {
-      return selectedAttendanceSort.isAscending ? 1 : -1;
-    } else if (!a && b) {
-      return selectedAttendanceSort.isAscending ? -1 : 1;
-    } */
+
     return 0;
   });
 
@@ -60,18 +65,15 @@ const TableRows = ({ data }: TableRowsProps) => {
         sortedData.map((e, id) => {
           console.log('name=' + e?.name + ', startAt=' + e?.startAt);
 
-          const startAt: Date = e && e.startAt && new Date(e.startAt);
-          const endAt: Date = e && e.endAt && new Date(e.endAt);
-
           return (
             <tr key={e?.userId}>
               <TableCell cellData={e?.name} />
               <TableCell cellData={e?.userId} />
               <TableCell cellData={e?.department?.departmentName} />
-              <TableCell cellData={calculateDateDiff(startAt, endAt)} />
+              <TableCell cellData={e.duration} />
               <TableCell cellData={getWorkingTypeName(e?.workingType)} />
-              <TableCell cellData={startAt ? format(startAt, 'MM-dd HH:mm') : '-'} />
-              <TableCell cellData={endAt ? format(endAt, 'MM-dd HH:mm') : '-'} />
+              <TableCell cellData={e.startAt ? format(e.startAt, 'MM-dd HH:mm') : '-'} />
+              <TableCell cellData={e.endAt ? format(e.endAt, 'MM-dd HH:mm') : '-'} />
             </tr>
           );
         })}
