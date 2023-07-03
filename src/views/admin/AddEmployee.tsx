@@ -46,7 +46,7 @@ const AddEmployee: React.FC = () => {
 
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: {
-      parents: ['contractType', 'position'],
+      parents: ['CONTRACT_TYPE', 'POSITION'],
     },
     onError: (err) => {
       alert('err');
@@ -142,9 +142,6 @@ const AddEmployee: React.FC = () => {
         <div className="flex flex-wrap -mx-3 -mt-48 md:-mt-56 lg:-mt-48">
           <div className="w-full max-w-full px-3 mx-auto mt-[250px] md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
             <div className="relative z-0 flex flex-col min-w-0 break-words border-0 rounded-2xl bg-clip-border items-center">
-              <div className="p-6 mb-0 border-b-0 rounded-t-2xl">
-                <h5 className="font-bold text-[#484848] text-[20px]">직원 추가</h5>
-              </div>
               <div className="flex-auto p-6 w-[600px]">
                 <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
                   <div className="mb-4 flex justify-between">

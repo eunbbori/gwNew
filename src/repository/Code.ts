@@ -18,7 +18,7 @@ export const usePositionCodes = (): Map<string, string> => {
 
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: {
-      parents: ['position'],
+      parents: ['POSITION'],
     },
     onError: (err) => {
       alert('err');

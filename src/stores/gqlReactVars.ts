@@ -45,12 +45,18 @@ export const attendanceFilterVar = makeVar({
   isDisplayed: false,
 });
 
+//Attendance Conditional Filter
+export const attendanceConditionalFilterDateVar = makeVar({
+  startDate: new Date(),
+  endDate: new Date(),
+});
+
 export type SortColAttendance = 'name' | 'startAt';
 
 //Attendance Sort
 export const attendanceSortVar = makeVar({
   sort: 'startAt',
-  isAscending: true,
+  isAscending: false,
 });
 
 //Attendance Total Count

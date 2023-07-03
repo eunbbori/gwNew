@@ -27,7 +27,7 @@ const MemberModalContent = () => {
   const formattedStartDate = startDateString ? startDateString.slice(0, 10) : '';
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: {
-      parents: ['contractType', 'position'],
+      parents: ['CONTRACT_TYPE', 'POSITION'],
     },
     onError: (err) => {
       alert('err');

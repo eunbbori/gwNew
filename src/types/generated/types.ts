@@ -14,6 +14,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  Upload: any;
 };
 
 export type IAuthInfo = {
@@ -21,7 +22,7 @@ export type IAuthInfo = {
   accessToken?: Maybe<Scalars['String']>;
   endAt?: Maybe<Scalars['Date']>;
   startAt?: Maybe<Scalars['Date']>;
-  workingType?: Maybe<IWorkingType>;
+  workingType?: Maybe<Scalars['String']>;
 };
 
 export type ICode = {
@@ -79,7 +80,7 @@ export type IEmployeeWorking = {
   startAt?: Maybe<Scalars['Date']>;
   userId?: Maybe<Scalars['String']>;
   workingDate?: Maybe<Scalars['Date']>;
-  workingType?: Maybe<IWorkingType>;
+  workingType?: Maybe<Scalars['String']>;
 };
 
 export type IEmployeeWorkingCondition = {
@@ -88,7 +89,21 @@ export type IEmployeeWorkingCondition = {
   userId?: InputMaybe<Scalars['String']>;
   workingDateFrom?: InputMaybe<Scalars['String']>;
   workingDateTo?: InputMaybe<Scalars['String']>;
-  workingType?: InputMaybe<Array<InputMaybe<IWorkingType>>>;
+  workingType?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type IEmployeeWorkingPage = {
+  __typename?: 'EmployeeWorkingPage';
+  content?: Maybe<Array<Maybe<IEmployeeWorking>>>;
+  totalElements?: Maybe<Scalars['Int']>;
+  totalPages?: Maybe<Scalars['Int']>;
+};
+
+export type IFile = {
+  __typename?: 'File';
+  encoding: Scalars['String'];
+  filename: Scalars['String'];
+  mimetype: Scalars['String'];
 };
 
 export type IMutation = {
@@ -99,6 +114,7 @@ export type IMutation = {
   login?: Maybe<IAuthInfo>;
   logout?: Maybe<IEmployee>;
   refresh?: Maybe<IAuthInfo>;
+  singleUpload: IFile;
 };
 
 export type IMutationAddEmployeeArgs = {
@@ -110,13 +126,17 @@ export type IMutationLoginArgs = {
   passwd?: InputMaybe<Scalars['String']>;
 };
 
+export type IMutationSingleUploadArgs = {
+  file: Scalars['Upload'];
+};
+
 export type IQuery = {
   __typename?: 'Query';
   codes?: Maybe<Array<Maybe<ICodes>>>;
   departments?: Maybe<Array<Maybe<IDepartment>>>;
   employee?: Maybe<IEmployee>;
   employeeWorking?: Maybe<Array<Maybe<IEmployeeWorking>>>;
-  employeeWorkingConditional?: Maybe<Array<Maybe<IEmployeeWorking>>>;
+  employeeWorkingConditional?: Maybe<IEmployeeWorkingPage>;
   employees?: Maybe<Array<Maybe<IEmployee>>>;
 };
 
@@ -133,22 +153,15 @@ export type IQueryEmployeeWorkingArgs = {
 };
 
 export type IQueryEmployeeWorkingConditionalArgs = {
+  page?: InputMaybe<Scalars['Int']>;
   searchCondition?: InputMaybe<IEmployeeWorkingCondition>;
+  size?: InputMaybe<Scalars['Int']>;
 };
 
 export type ISubscription = {
   __typename?: 'Subscription';
   attended?: Maybe<IEmployeeWorking>;
 };
-
-export enum IWorkingType {
-  AmDayoff = 'AM_DAYOFF',
-  FullDayoff = 'FULL_DAYOFF',
-  Military = 'MILITARY',
-  PmDayoff = 'PM_DAYOFF',
-  Sick = 'SICK',
-  Work = 'WORK',
-}
 
 export type ILoginMutationVariables = Exact<{
   email?: InputMaybe<Scalars['String']>;
@@ -157,7 +170,7 @@ export type ILoginMutationVariables = Exact<{
 
 export type ILoginMutation = {
   __typename?: 'Mutation';
-  login?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
+  login?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: string | null } | null;
 };
 
 export type ILogoutMutationVariables = Exact<{ [key: string]: never }>;
@@ -178,7 +191,7 @@ export type IRefreshMutationVariables = Exact<{ [key: string]: never }>;
 
 export type IRefreshMutation = {
   __typename?: 'Mutation';
-  refresh?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: IWorkingType | null } | null;
+  refresh?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: string | null } | null;
 };
 
 export type IGoToWorkMutationVariables = Exact<{ [key: string]: never }>;
@@ -191,7 +204,7 @@ export type IGoToWorkMutation = {
     userId?: string | null;
     name?: string | null;
     workingDate?: any | null;
-    workingType?: IWorkingType | null;
+    workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
@@ -208,7 +221,7 @@ export type ILeaveWorkMutation = {
     userId?: string | null;
     name?: string | null;
     workingDate?: any | null;
-    workingType?: IWorkingType | null;
+    workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
@@ -225,7 +238,7 @@ export type IAttendedSubscription = {
     name?: string | null;
     userId?: string | null;
     workingDate?: any | null;
-    workingType?: IWorkingType | null;
+    workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
@@ -293,7 +306,7 @@ export type IGetEmployeeWorkingQuery = {
     position?: string | null;
     userId?: string | null;
     workingDate?: any | null;
-    workingType?: IWorkingType | null;
+    workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
     department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
@@ -302,22 +315,29 @@ export type IGetEmployeeWorkingQuery = {
 
 export type IGetEmployeeWorkingConditionalQueryVariables = Exact<{
   searchCondition?: InputMaybe<IEmployeeWorkingCondition>;
+  page?: InputMaybe<Scalars['Int']>;
+  size?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type IGetEmployeeWorkingConditionalQuery = {
   __typename?: 'Query';
-  employeeWorkingConditional?: Array<{
-    __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
-    name?: string | null;
-    position?: string | null;
-    userId?: string | null;
-    workingDate?: any | null;
-    workingType?: IWorkingType | null;
-    startAt?: any | null;
-    endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
-  } | null> | null;
+  employeeWorkingConditional?: {
+    __typename?: 'EmployeeWorkingPage';
+    totalElements?: number | null;
+    totalPages?: number | null;
+    content?: Array<{
+      __typename?: 'EmployeeWorking';
+      employeeId?: number | null;
+      name?: string | null;
+      position?: string | null;
+      userId?: string | null;
+      workingDate?: any | null;
+      workingType?: string | null;
+      startAt?: any | null;
+      endAt?: any | null;
+      department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    } | null> | null;
+  } | null;
 };
 
 export type IAddEmployeeMutationVariables = Exact<{
@@ -765,20 +785,24 @@ export type GetEmployeeWorkingQueryHookResult = ReturnType<typeof useGetEmployee
 export type GetEmployeeWorkingLazyQueryHookResult = ReturnType<typeof useGetEmployeeWorkingLazyQuery>;
 export type GetEmployeeWorkingQueryResult = Apollo.QueryResult<IGetEmployeeWorkingQuery, IGetEmployeeWorkingQueryVariables>;
 export const GetEmployeeWorkingConditionalDocument = gql`
-  query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition) {
-    employeeWorkingConditional(searchCondition: $searchCondition) {
-      employeeId
-      name
-      position
-      department {
-        departmentId
-        departmentName
+  query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, $page: Int = 0, $size: Int = 0) {
+    employeeWorkingConditional(searchCondition: $searchCondition, page: $page, size: $size) {
+      content {
+        employeeId
+        name
+        position
+        department {
+          departmentId
+          departmentName
+        }
+        userId
+        workingDate
+        workingType
+        startAt
+        endAt
       }
-      userId
-      workingDate
-      workingType
-      startAt
-      endAt
+      totalElements
+      totalPages
     }
   }
 `;
@@ -796,6 +820,8 @@ export const GetEmployeeWorkingConditionalDocument = gql`
  * const { data, loading, error } = useGetEmployeeWorkingConditionalQuery({
  *   variables: {
  *      searchCondition: // value for 'searchCondition'
+ *      page: // value for 'page'
+ *      size: // value for 'size'
  *   },
  * });
  */

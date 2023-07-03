@@ -62,20 +62,24 @@ query getEmployeeWorking($dt: String) {
   }
 }
 
-query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition) {
-  employeeWorkingConditional(searchCondition: $searchCondition) {
-    employeeId
-    name
-    position
-    department {
-      departmentId
-      departmentName
+query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, $page: Int = 0, $size: Int = 0) {
+  employeeWorkingConditional(searchCondition: $searchCondition, page: $page, size: $size) {
+    content {
+      employeeId
+      name
+      position
+      department {
+        departmentId
+        departmentName
+      }
+      userId
+      workingDate
+      workingType
+      startAt
+      endAt
     }
-    userId
-    workingDate
-    workingType
-    startAt
-    endAt
+    totalElements
+    totalPages
   }
 }
 
