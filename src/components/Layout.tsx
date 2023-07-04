@@ -34,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
 
       {/*Main layout */}
       <main style={{ marginTop: '58px' }}>
-        <div id="content" className="ml-4 pt-5 min-h-screen w-full bg-gray-50 !pl-0 sm:!pl-60">
+        <div id="content" className="px-3 xl:pl-64 pt-5 w-full" style={{ transition: 'all 0s ease 0s' }}>
           <BreadCrumb />
           {children}
         </div>

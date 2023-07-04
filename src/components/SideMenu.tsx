@@ -19,8 +19,8 @@ const SideMenu = () => {
         data-te-sidenav-init
         data-te-sidenav-hidden="false"
         data-te-sidenav-mode-breakpoint-over="0"
-        data-te-sidenav-mode-breakpoint-side="sm"
-        data-te-sidenav-content="#content"
+        data-te-sidenav-mode-breakpoint-side="xl"
+        //data-te-sidenav-content="#content"
         data-te-sidenav-accordion="true"
       >
         <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
