@@ -62,6 +62,9 @@ export const attendanceSortVar = makeVar({
 //Attendance Total Count
 export const attendanceTotalCntVar = makeVar(0);
 
+//Attendance Conditional Total Count
+export const attendanceConditionalTotalCntVar = makeVar(0);
+
 //Member Detail userId
 export const memberDetailId = makeVar('');
 
