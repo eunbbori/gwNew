@@ -98,6 +98,7 @@ const AddEmployee: React.FC = () => {
   const inputClassName =
     'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const errMsgClassName = 'text-[11px] text-red-400';
+  const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
 
   const {
     register,
@@ -153,11 +154,20 @@ const AddEmployee: React.FC = () => {
                         placeHolder="아이디를 입력해주세요"
                         type="text"
                         inputClassName={inputClassName}
+                        paragraphClassName={paragraphClassName}
                       />
                       <div className={errMsgClassName}>{errors.userId?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <TextInput name="name" title="이름" control={control} placeHolder="이름을 입력해주세요" type="text" inputClassName={inputClassName} />
+                      <TextInput
+                        name="name"
+                        title="이름"
+                        control={control}
+                        placeHolder="이름을 입력해주세요"
+                        type="text"
+                        inputClassName={inputClassName}
+                        paragraphClassName={paragraphClassName}
+                      />
                       <div className={errMsgClassName}>{errors.name?.message}</div>
                     </div>
                   </div>
@@ -169,6 +179,7 @@ const AddEmployee: React.FC = () => {
                       placeHolder="회사 이메일을 입력해주세요"
                       type="email"
                       inputClassName={inputClassName}
+                      paragraphClassName={paragraphClassName}
                     />
                     <div className={errMsgClassName}>{errors.email?.message}</div>
                   </div>
@@ -180,6 +191,7 @@ const AddEmployee: React.FC = () => {
                       placeHolder="비밀번호를 입력해주세요"
                       type="password"
                       inputClassName={inputClassName}
+                      paragraphClassName={paragraphClassName}
                     />
                     <div className={errMsgClassName}>{errors.passwd?.message}</div>
                   </div>
@@ -191,12 +203,20 @@ const AddEmployee: React.FC = () => {
                       placeHolder="비밀번호 한번 더 입력해주세요"
                       type="password"
                       inputClassName={inputClassName}
+                      paragraphClassName={paragraphClassName}
                     />
                     <div className={errMsgClassName}>{errors.passwdConfirm?.message}</div>
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <SelectInput name="departmentId" control={control} selectOptions={deptOptions} title="부서" placeHolder="부서를 선택해주세요" />
+                      <SelectInput
+                        name="departmentId"
+                        control={control}
+                        selectOptions={deptOptions}
+                        title="부서"
+                        placeHolder="부서를 선택해주세요"
+                        paragraphClassName={paragraphClassName}
+                      />
                       <div className={errMsgClassName}>{errors.departmentId?.message}</div>
                     </div>
                     <div className="w-[250px]">
@@ -206,6 +226,7 @@ const AddEmployee: React.FC = () => {
                         selectOptions={contractOptions}
                         title="계약형태"
                         placeHolder="계약형태를 선택해주세요"
+                        paragraphClassName={paragraphClassName}
                       />
                       <div className={errMsgClassName}>{errors.contractType?.message}</div>
                     </div>
@@ -214,10 +235,16 @@ const AddEmployee: React.FC = () => {
                     <PhoneNoInput name="phone" title="핸드폰번호" control={control} placeHolder="핸드폰번호를 입력해주세요" inputClassName={inputClassName} />
                     <div className={errMsgClassName}>{errors.phone?.message}</div>
                   </div>
-
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <SelectInput name="position" control={control} selectOptions={positionOptions} title="직급" placeHolder="직급을 선택해주세요" />
+                      <SelectInput
+                        name="position"
+                        control={control}
+                        selectOptions={positionOptions}
+                        title="직급"
+                        placeHolder="직급을 선택해주세요"
+                        paragraphClassName={paragraphClassName}
+                      />
                       <div className={errMsgClassName}>{errors.position?.message}</div>
                     </div>
                     <div className="w-[250px]">
