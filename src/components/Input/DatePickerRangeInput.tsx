@@ -1,25 +1,19 @@
 import Datepicker from 'react-tailwindcss-datepicker';
-import { useState } from 'react';
-import { attendanceConditionalFilterDateVar } from '@/stores/gqlReactVars';
+import { useController, UseControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
-const DatePickerRangeInput = (props: { name: string; title: string }) => {
-  const [selectedDate, setSelectedDate] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
-  });
-  attendanceConditionalFilterDateVar(selectedDate);
-
-  const handleValueChange = (newValue: any) => {
-    setSelectedDate(newValue);
-  };
+const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
+  props: UseControllerProps<TFieldValues, TName> & { title: string },
+) => {
+  const { field, fieldState } = useController(props);
 
   return (
     <div className="flex">
       <p className="text-sm font-bold text-[#484848] self-center mr-5">{props.title}</p>
       <Datepicker
+        inputName={props.name}
         containerClassName="relative text-gray-700 w-[250px]"
-        value={selectedDate}
-        onChange={handleValueChange}
+        value={field.value}
+        onChange={field.onChange}
         displayFormat={'YYYY-MM-DD'}
         showShortcuts={true}
         placeholder={'Select Date'}

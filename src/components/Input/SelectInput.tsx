@@ -11,6 +11,8 @@ interface OtherOptions {
   selectOptions: any;
   title: string;
   placeHolder: string;
+  paragraphClassName: string;
+  divClassName?: string;
 }
 
 const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
@@ -24,14 +26,17 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
   };
   return (
     <>
-      <p className="text-sm text-[#484848]">{props.title}</p>
-      <Select
-        name={props.name}
-        options={SelectOptions}
-        placeholder={props.placeHolder}
-        value={props.selectOptions.find((c: IOption) => c.value === field.value)}
-        onChange={handleSelectChange}
-      />
+      <div className={props.divClassName}>
+        <p className={props.paragraphClassName}>{props.title}</p>
+        <Select
+          name={props.name}
+          options={SelectOptions}
+          placeholder={props.placeHolder}
+          value={props.selectOptions.find((c: IOption) => c.value === field.value)}
+          onChange={handleSelectChange}
+          className="w-full mr-5"
+        />
+      </div>
     </>
   );
 };
