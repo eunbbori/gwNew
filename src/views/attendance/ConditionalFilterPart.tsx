@@ -20,6 +20,7 @@ import TableHeader from './TableHeader';
 import TableRows from './TableRows';
 import ConditionalTableHeader from './ConditionalTableHeader';
 import ConditionalTableRows from './ConditionalTableRows';
+import CheckBoxInput from '@/components/Input/CheckBoxInput';
 
 export interface DateRange {
   startDate: Date;
@@ -67,7 +68,7 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
   ];
 
   const positionOptions = [
-    { value: '-1', label: '전체' },
+    { value: '', label: '전체' },
     ...((codeData?.codes &&
       codeData?.codes[0]?.codes
         ?.map((code) => ({
@@ -98,9 +99,10 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
     const { dateRange, ...newInputData } = inputData;
     const input: IEmployeeWorkingCondition = {
       ...newInputData,
-      workingDateFrom: dateRange?.startDate ? format(new Date(selectedDate.startDate), 'yyyy-MM-dd') : null,
-      workingDateTo: dateRange?.endDate ? format(new Date(selectedDate.endDate), 'yyyy-MM-dd') : null,
+      workingDateFrom: dateRange?.startDate ? format(new Date(dateRange.startDate), 'yyyy-MM-dd') : null,
+      workingDateTo: dateRange?.endDate ? format(new Date(dateRange.endDate), 'yyyy-MM-dd') : null,
     };
+    console.log(input);
     try {
       const { data } = await getEmployeeWorkingConditionalQuery({
         variables: {
@@ -131,7 +133,9 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
 
   const [workingTypeChecked, setWorkingTypeChecked] = useState<string[]>([]);
 
-  const handleWorkingTypeChange = (value: string) => {
+  const handleWorkingTypeChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    console.log('vaaaaaaa=' + value);
     if (workingTypeChecked.includes(value)) {
       setWorkingTypeChecked(workingTypeChecked.filter((type) => type !== value));
     } else {
@@ -214,35 +218,19 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
             </div>
             {/* 근무형태 중복 체크박스 */}
             <div className="flex mt-5">
-              <p className="text-sm font-bold text-[#484848] self-center mr-5">근무 형태</p>
-              <div className="flex justify-center">
-                {workingTypeOptions.map((workType, idx) => (
-                  <div key={idx} className="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                    <input
-                      onChange={() => handleWorkingTypeChange(workType.value)}
-                      className="relative float-left -ml-[1.5rem] mr-[6px] mt-[0.15rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:-mt-px checked:after:ml-[0.25rem] checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-l-0 checked:after:border-t-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:-mt-px checked:focus:after:ml-[0.25rem] checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-l-0 checked:focus:after:border-t-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-                      type="checkbox"
-                      id={`workingType${idx}`}
-                      value={workType.value}
-                    />
-                    <label className="inline-block text-sm pl-[0.15rem] hover:cursor-pointer" htmlFor={`workingType${idx}`}>
-                      {workType.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
+              <CheckBoxInput control={control} name="workingType" title="근무 형태" onChange={handleWorkingTypeChange} options={workingTypeOptions} />
             </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
-              <ConditionalTableHeader />
-              <tbody>
-                <ConditionalTableRows data={data} />
-              </tbody>
-            </table>
           </div>
         </div>
       </form>
+      <div className="overflow-x-auto">
+        <table className="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
+          <ConditionalTableHeader />
+          <tbody>
+            <ConditionalTableRows data={data} />
+          </tbody>
+        </table>
+      </div>
     </>
   );
 };
