@@ -10,15 +10,16 @@ interface IAttendanceHeader {
 }
 
 const headers: IAttendanceHeader[] = [
+  { title: '날짜', field: 'workingDate', isSortable: false },
   { title: '이름', field: 'name', isSortable: false },
   { title: 'ID', field: 'userId', isSortable: false },
   { title: '부서', field: 'department', isSortable: false },
+  { title: '직급', field: 'positionName', isSortable: false },
   { title: '근무시간', field: 'duration', isSortable: false },
   { title: '근태', field: 'workingType', isSortable: false },
   { title: '출근시간', field: 'startAt', isSortable: false },
   { title: '퇴근시간', field: 'endAt', isSortable: false },
 ];
-
 const ConditionalTableHeader = () => {
   const selectedAttendanceSort = useReactiveVar(attendanceSortVar);
 
@@ -28,6 +29,7 @@ const ConditionalTableHeader = () => {
         {headers.map((e, id) => (
           <th
             key={e.field}
+            style={{ width: '10%' }}
             className={
               (e.isSortable ? 'cursor-pointer' : '') +
               ' px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70'

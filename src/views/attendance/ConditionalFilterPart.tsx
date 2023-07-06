@@ -1,9 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
-import { useReactiveVar } from '@apollo/client';
 import format from 'date-fns/format';
-import { attendanceConditionalFilterDateVar, attendanceDateVar } from '@/stores/gqlReactVars';
-import { useEffect, useState, useRef, use, MutableRefObject } from 'react';
+import { useEffect, useState } from 'react';
 import DatePickerRangeInput from '@/components/Input/DatePickerRangeInput';
 import { Input, Select, initTE } from 'tw-elements';
 import {
@@ -11,16 +9,16 @@ import {
   useGetAllDepartmentsLazyQuery,
   useGetCodesLazyQuery,
   useGetEmployeeWorkingConditionalLazyQuery,
-  useGetEmployeeWorkingConditionalQuery,
 } from '@/types/generated/types';
 import { useForm } from 'react-hook-form';
 import TextInput from '@/components/Input/TextInput';
 import SelectInput from '@/components/Input/SelectInput';
-import TableHeader from './TableHeader';
-import TableRows from './TableRows';
 import ConditionalTableHeader from './ConditionalTableHeader';
 import ConditionalTableRows from './ConditionalTableRows';
 import CheckBoxInput from '@/components/Input/CheckBoxInput';
+import Paging from '@/components/Paging';
+import { useReactiveVar } from '@apollo/client';
+import { attendanceConditionalActivePageVar } from '@/stores/gqlReactVars';
 
 export interface DateRange {
   startDate: Date;
@@ -36,11 +34,8 @@ export interface ConditionalFormValues {
   position: string;
   workingType: string[];
 }
-export interface IDateMemberCntProps {
-  cnt: number | undefined;
-}
 
-const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
+const ConditionalFilterPart = () => {
   useEffect(() => {
     initTE({ Input, Select });
     getAllDepartmentsQuery();
@@ -48,7 +43,7 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
   }, []);
 
   const inputClassName =
-    'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full mr-5 appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
+    'text-[14px] py-[0.32rem] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full mr-5 appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
   const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
@@ -86,50 +81,16 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
         label: code?.name ?? '',
       }))) ??
     [];
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue,
-  } = useForm<ConditionalFormValues>({});
-
-  const onSearchCondition = async (inputData: ConditionalFormValues) => {
-    console.log(inputData);
-    const { dateRange, ...newInputData } = inputData;
-    const input: IEmployeeWorkingCondition = {
-      ...newInputData,
-      workingDateFrom: dateRange?.startDate ? format(new Date(dateRange.startDate), 'yyyy-MM-dd') : null,
-      workingDateTo: dateRange?.endDate ? format(new Date(dateRange.endDate), 'yyyy-MM-dd') : null,
-    };
-    console.log(input);
-    try {
-      const { data } = await getEmployeeWorkingConditionalQuery({
-        variables: {
-          searchCondition: input,
-          page: 0,
-          size: 20,
-        },
-        fetchPolicy: 'no-cache',
-      });
-      console.log(data);
-    } catch (error) {
-      alert('err 조건조회');
-    }
-  };
+  const { handleSubmit, control } = useForm<ConditionalFormValues>({});
 
   const [getEmployeeWorkingConditionalQuery, { data }] = useGetEmployeeWorkingConditionalLazyQuery({
     onCompleted: () => {
-      console.log(data);
+      //console.log(data);
     },
     onError: (err) => {
       alert('err 조건조회');
     },
   });
-
-  const selectedDate = useReactiveVar(attendanceConditionalFilterDateVar);
-  const selectedFromDate = selectedDate?.startDate ? format(new Date(selectedDate.startDate), 'yyyy-MM-dd') : null;
-  const selectedToDate = selectedDate?.endDate ? format(new Date(selectedDate.endDate), 'yyyy-MM-dd') : null;
 
   const [workingTypeChecked, setWorkingTypeChecked] = useState<string[]>([]);
 
@@ -143,20 +104,57 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
     }
   };
 
+  const selectedAttendanceConditionalActivePage = useReactiveVar(attendanceConditionalActivePageVar);
+
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+    console.log('페이지네이션:' + page);
+    attendanceConditionalActivePageVar(page.valueOf() as number);
+    console.log('page', page.valueOf);
+    handleSubmit(onSearchCondition)();
+  };
+
+  const onSearchCondition = async (inputData: ConditionalFormValues) => {
+    try {
+      const { dateRange, ...newInputData } = inputData;
+      const input: IEmployeeWorkingCondition = {
+        ...newInputData,
+        workingDateFrom: dateRange?.startDate ? format(new Date(dateRange.startDate), 'yyyy-MM-dd') : null,
+        workingDateTo: dateRange?.endDate ? format(new Date(dateRange.endDate), 'yyyy-MM-dd') : null,
+        workingType: workingTypeChecked,
+      };
+
+      console.log('get page=' + attendanceConditionalActivePageVar());
+      const { data } = await getEmployeeWorkingConditionalQuery({
+        variables: {
+          searchCondition: input,
+          page: attendanceConditionalActivePageVar() - 1,
+          size: 10,
+        },
+        fetchPolicy: 'no-cache',
+      });
+
+      if (data?.employeeWorkingConditional?.totalPages && data.employeeWorkingConditional.totalPages < attendanceConditionalActivePageVar())
+        attendanceConditionalActivePageVar(data.employeeWorkingConditional.totalPages);
+    } catch (error) {
+      alert('err 조건조회');
+    }
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSearchCondition)} role="form text-left">
         <div className="relative flex w-full px-3 mt-0">
           <p className="basis-1/2 mb-0 mr-5 w-30 leading-8 text-sm">
-            <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체 <span className="ml-1 font-semibold">{cnt}</span> 명
+            <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체{' '}
+            <span className="ml-1 font-semibold">{data?.employeeWorkingConditional?.totalElements ?? 0}</span> 명
           </p>
           <div className="flex justify-end basis-1/2">
-            <button
+            {/* <button
               type="button"
               className="inline-block rounded bg-danger px-6 pb-2 pt-2.5 mr-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
             >
               초기화
-            </button>
+            </button> */}
             <button
               type="submit"
               className="mr-[30px] inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
@@ -231,6 +229,12 @@ const ConditionalFilterPart = ({ cnt }: IDateMemberCntProps) => {
           </tbody>
         </table>
       </div>
+      <Paging
+        perPage={10}
+        paging={selectedAttendanceConditionalActivePage}
+        onHandler={handlePageChange}
+        totalCount={data?.employeeWorkingConditional?.totalElements || undefined}
+      />
     </>
   );
 };

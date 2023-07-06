@@ -19,11 +19,11 @@ const Paging: React.FC<PageProps> = ({ totalCount = 0, paging = 1, perPage = 10,
         itemsCountPerPage={perPage}
         totalItemsCount={totalCount}
         pageRangeDisplayed={10}
-        prevPageText={'‹'}
-        nextPageText={'›'}
+        prevPageText={'<'}
+        nextPageText={'>'}
         onChange={onHandler}
-        itemClass="inline-block px-3 py-1 mx-1 rounded bg-blue-200 text-blue-600 cursor-pointer"
-        activeClass="font-bold bg-blue-500 text-white"
+        itemClass="inline-block px-3 py-1 mx-1 rounded border border-gray-400 bg-gray-100 text-slate-500 cursor-pointer"
+        activeClass="font-bold bg-blue-500 text-slate-900"
       />
     </div>
   );

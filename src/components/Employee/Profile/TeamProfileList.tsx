@@ -1,17 +1,18 @@
 import React from 'react';
 import Profile from './Profile';
 import { IEmployee } from '@/types/generated/types';
-import { memberDetailId } from '@/stores/gqlReactVars';
+import { memberDetailIdVar } from '@/stores/gqlReactVars';
 
 export interface ITeamEmpProfileProps {
   deptId?: string | null;
   deptName?: string | null;
   employees?: Array<IEmployee | null> | null;
+  positionOptions: Map<string, string>;
 }
-const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) => {
+const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeamEmpProfileProps) => {
   const deptEmployees = employees?.filter((dept) => dept?.department?.departmentId === deptId);
   const clickHandler = (empId: string) => {
-    memberDetailId(empId);
+    memberDetailIdVar(empId);
   };
 
   return (
@@ -31,6 +32,7 @@ const TeamProfileList = ({ deptId, deptName, employees }: ITeamEmpProfileProps) 
                 deptName={emp?.department?.departmentName}
                 position={emp?.position}
                 photoUrl={emp?.photoUrl || ''}
+                positionOptions={positionOptions}
                 onClick={() => clickHandler(emp?.userId || '')}
               />
             ))}

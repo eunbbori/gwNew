@@ -1,6 +1,6 @@
 import TableCell from './TableCell';
 import { IEmployeeWorking, IGetEmployeeWorkingQuery } from '@/types/generated/types';
-import { getWorkingTypeName } from '@/repository/Code';
+import { useCodes } from '@/repository/Code';
 import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
 import { attendanceSortVar, attendanceFilterVar, attendanceTotalCntVar } from '@/stores/gqlReactVars';
@@ -14,6 +14,9 @@ type TableRowsProps = {
 const TableRows = ({ data }: TableRowsProps) => {
   const selectedAttendanceSort = useReactiveVar(attendanceSortVar);
   const selectedAttendanceFilter = useReactiveVar(attendanceFilterVar);
+
+  const positionCodes = useCodes('POSITION');
+  const workingTypeCodes = useCodes('WORKING_TYPE');
 
   const filteredDeptToString = selectedAttendanceFilter.dept.toString();
 
@@ -30,7 +33,8 @@ const TableRows = ({ data }: TableRowsProps) => {
   const fileteredDuraAddedData = filteredData?.map((e) => {
     const startAt: Date = e && e.startAt && new Date(e.startAt);
     const endAt: Date = e && e.endAt && new Date(e.endAt);
-    return { ...e, startAt, endAt, duration: calculateDateDiff(startAt, endAt) };
+    const positionName = e && e.position && positionCodes.get(e.position);
+    return { ...e, startAt, endAt, positionName, duration: calculateDateDiff(startAt, endAt) };
   });
   attendanceTotalCntVar(filteredData?.length);
 
@@ -63,15 +67,14 @@ const TableRows = ({ data }: TableRowsProps) => {
     <>
       {sortedData &&
         sortedData.map((e, id) => {
-          console.log('name=' + e?.name + ', startAt=' + e?.startAt);
-
           return (
             <tr key={e?.userId}>
               <TableCell cellData={e?.name} />
               <TableCell cellData={e?.userId} />
               <TableCell cellData={e?.department?.departmentName} />
+              <TableCell cellData={e?.positionName} />
               <TableCell cellData={e.duration} />
-              <TableCell cellData={getWorkingTypeName(e?.workingType)} />
+              <TableCell cellData={workingTypeCodes.get(e?.workingType ?? '')} />
               <TableCell cellData={e.startAt ? format(e.startAt, 'MM-dd HH:mm') : '-'} />
               <TableCell cellData={e.endAt ? format(e.endAt, 'MM-dd HH:mm') : '-'} />
             </tr>

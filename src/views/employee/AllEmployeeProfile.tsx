@@ -1,11 +1,14 @@
 import Profile from '@/components/Employee/Profile/Profile';
-import { memberDetailId } from '@/stores/gqlReactVars';
+import { useCodes } from '@/repository/Code';
+import { memberDetailIdVar } from '@/stores/gqlReactVars';
 import { IGetAllEmployeeQuery } from '@/types/generated/types';
 import React from 'react';
 
 const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
+  const positionOptions = useCodes('POSITION');
+
   const clickHandler = (empId: string) => {
-    memberDetailId(empId);
+    memberDetailIdVar(empId);
   };
   return (
     <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
@@ -18,6 +21,7 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
               deptName={emp?.department?.departmentName}
               position={emp?.position}
               photoUrl={emp?.photoUrl || ''}
+              positionOptions={positionOptions}
             />
           ))
         : 'Not loaded Yet'}

@@ -23,6 +23,7 @@ const BreadCrumb = () => {
           <ol className="list-reset flex">
             {currBreadCrumbPath.map((e, idx) => {
               const curr = getRouteInfo(e);
+              console.log('curr', curr);
 
               return (
                 <>
