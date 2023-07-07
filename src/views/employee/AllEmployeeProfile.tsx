@@ -10,16 +10,20 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
   const clickHandler = (empId: string) => {
     memberDetailIdVar(empId);
   };
+
   return (
     <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
       {list?.employees
         ? list?.employees
             ?.sort((a, b) => {
-              return !a?.name ? 1 : !b?.name ? -1 : a?.name > b?.name ? 1 : a?.name < b?.name ? -1 : 0;
+              if (!a?.name) return 1;
+              else if (!b?.name) return -1;
+              else if (a?.name > b?.name) return 1;
+              else return a?.name < b?.name ? -1 : 0;
             })
             .map((emp, idx) => (
               <Profile
-                key={idx}
+                key={emp?.employeeId}
                 onClick={() => clickHandler(emp?.userId || '')}
                 empName={emp?.name}
                 deptName={emp?.department?.departmentName}

@@ -1,16 +1,16 @@
-import { attendanceFilterVar, attendanceTotalCntVar } from '@/stores/gqlReactVars';
-import { useGetAllDepartmentsLazyQuery } from '@/types/generated/types';
+import { useDepartments } from '@/repository/Code';
+import { attendanceFilterVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
 import React, { useEffect } from 'react';
 import { Input, Select, initTE } from 'tw-elements';
 
 const AttendanceFilterGroup = () => {
-  const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
+  const deptData = useDepartments();
+
   const selectedAttendanceFilter = useReactiveVar(attendanceFilterVar);
 
   useEffect(() => {
     initTE({ Input, Select });
-    getAllDepartmentsQuery();
     attendanceFilterVar({ name: '', dept: -1, isDisplayed: false });
   }, []);
 
@@ -39,7 +39,7 @@ const AttendanceFilterGroup = () => {
         >
           <option value={-1}>전체</option>
           {deptData?.departments?.map((dept, idx) => (
-            <option key={idx} value={dept?.departmentId ?? ''}>
+            <option key={dept?.departmentId} value={dept?.departmentId ?? ''}>
               {dept?.departmentName}
             </option>
           ))}

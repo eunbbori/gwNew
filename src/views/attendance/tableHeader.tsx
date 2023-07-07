@@ -19,31 +19,34 @@ const TableHeader = ({ headers }: ITableHeader) => {
   return (
     <thead className="align-bottom">
       <tr>
-        {headers.map((e, id) => (
-          <th
-            key={e.field}
-            style={{ width: '10%' }}
-            className={
-              (e.isSortable ? 'cursor-pointer' : '') +
-              ' px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70'
-            }
-            onClick={() => {
-              e.isSortable &&
-                attendanceSortVar({
-                  sort: e.field,
-                  isAscending: selectedAttendanceSort.sort !== e.field ? true : !selectedAttendanceSort.isAscending,
-                });
-            }}
-          >
-            {e.title}
-            {e.isSortable && (
-              <FontAwesomeIcon
-                className={'ml-5 ' + (selectedAttendanceSort.sort !== e.field ? 'text-cyan-500' : 'text-rose-500')}
-                icon={selectedAttendanceSort.sort !== e.field ? faSort : selectedAttendanceSort.isAscending ? faSortAsc : faSortDesc}
-              />
-            )}
-          </th>
-        ))}
+        {headers.map((e, id) => {
+          let sortIcon = faSort;
+          if (selectedAttendanceSort.sort === e.field) {
+            sortIcon = selectedAttendanceSort.isAscending ? faSortAsc : faSortDesc;
+          }
+          return (
+            <th
+              key={e.field}
+              style={{ width: '10%' }}
+              className={
+                (e.isSortable ? 'cursor-pointer' : '') +
+                ' px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70'
+              }
+              onClick={() => {
+                e.isSortable &&
+                  attendanceSortVar({
+                    sort: e.field,
+                    isAscending: selectedAttendanceSort.sort !== e.field || !selectedAttendanceSort.isAscending,
+                  });
+              }}
+            >
+              {e.title}
+              {e.isSortable && (
+                <FontAwesomeIcon className={'ml-5 ' + (selectedAttendanceSort.sort !== e.field ? 'text-cyan-500' : 'text-rose-500')} icon={sortIcon} />
+              )}
+            </th>
+          );
+        })}
       </tr>
     </thead>
   );

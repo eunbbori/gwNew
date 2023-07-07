@@ -2,18 +2,17 @@ import '@/styles/globals.css';
 import '@/styles/datepicker.css';
 import type { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
-import { jwtTokensVar, setLocalFromToken } from '@/stores/gqlReactVars';
+import { setLocalFromToken } from '@/stores/gqlReactVars';
 import { useEffect } from 'react';
 import { useRefreshMutation } from '@/types/generated/types';
 import createApolloClient from '@/repository/ConfigApolloClient';
 import dynamic from 'next/dynamic';
-import { useReactiveVar } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 const client = createApolloClient();
 
 const RefreshPreprocessor = () => {
-  const [refreshMutation, { data, loading, error }] = useRefreshMutation();
+  const [refreshMutation] = useRefreshMutation();
   const { push } = useRouter();
 
   async function refreshSync() {

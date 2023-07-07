@@ -6,7 +6,7 @@ import { ko } from 'date-fns/locale';
 const DatePickerInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
   props: UseControllerProps<TFieldValues, TName> & { title: string },
 ) => {
-  const { field, fieldState } = useController(props);
+  const { field } = useController(props);
 
   return (
     <>

@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect } from 'react';
 import { Modal, Ripple, initTE } from 'tw-elements';
-import { useParams } from 'next/navigation';
 
 export interface IModalProps {
   title?: string | null;
@@ -8,8 +7,6 @@ export interface IModalProps {
 }
 
 const DetailModal = ({ title, content }: IModalProps) => {
-  // const params = useParams();
-  // console.log(params);
   useEffect(() => {
     initTE({ Modal, Ripple });
   }, []);

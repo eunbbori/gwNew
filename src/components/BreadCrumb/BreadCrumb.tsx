@@ -1,6 +1,6 @@
 import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
-import { allRouteInfos, getRouteInfo } from '@/repository/RouteInfo';
+import { getRouteInfo } from '@/repository/RouteInfo';
 
 const Slash = () => {
   return (
@@ -23,7 +23,6 @@ const BreadCrumb = () => {
           <ol className="list-reset flex">
             {currBreadCrumbPath.map((e, idx) => {
               const curr = getRouteInfo(e);
-              console.log('curr', curr);
 
               return (
                 <>

@@ -4,7 +4,7 @@ import { useController, UseControllerProps, FieldPath, FieldValues } from 'react
 const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
   props: UseControllerProps<TFieldValues, TName> & { title: string },
 ) => {
-  const { field, fieldState } = useController(props);
+  const { field } = useController(props);
 
   return (
     <div className="flex">

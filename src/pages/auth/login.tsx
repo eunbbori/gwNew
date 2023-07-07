@@ -36,9 +36,6 @@ const Login = () => {
 
   const [loginMutation, { data, loading, error }] = useLoginMutation();
 
-  //if (loading) return <>`Submitting...`</>;
-  //if (error) return <>Submission error! {error.message}</>;
-
   const onLogin = (loginData: loginFormValues) => {
     loginMutation({
       variables: {
@@ -51,11 +48,9 @@ const Login = () => {
         jwtTokensVar({ accessToken: auth?.accessToken || '' });
         startEndAtVar({ startAt: auth?.startAt, endAt: auth?.endAt });
 
-        //auth?.accessToken && sessionStorage.setItem('accessToken', auth.accessToken);
         push('/');
       },
       onError: (err) => {
-        // alert(err.message);
         alert('Check Your Id & Password!');
         refresh();
       },

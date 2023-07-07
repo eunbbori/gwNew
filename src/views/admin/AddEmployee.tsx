@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation, useGetAllDepartmentsLazyQuery } from '@/types/generated/types';
+import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
@@ -62,11 +62,9 @@ const AddEmployee: React.FC = () => {
   const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
 
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
   } = useForm<EmployeeFormValues>({
     resolver: yupResolver(schema),
   });
@@ -88,7 +86,6 @@ const AddEmployee: React.FC = () => {
       onCompleted: (data) => {
         alert('등록됐습니다.');
         router.push('/employee/listEmp');
-        // router.reload();
 
         console.log('data가 저장됐습니다', data.addEmployee?.userId);
       },
@@ -97,6 +94,7 @@ const AddEmployee: React.FC = () => {
       },
     });
   };
+
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <div className="w-full mr-auto ml-auto px-6">

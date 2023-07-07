@@ -1,4 +1,3 @@
-import TableHeader from '@/views/attendance/TableHeader';
 import TableRows from '@/views/attendance/TableRows';
 import { useAttendedSubscription, useGetEmployeeWorkingLazyQuery } from '@/types/generated/types';
 import DateMemberCnt from '@/views/attendance/DateMemberCnt';

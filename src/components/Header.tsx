@@ -10,7 +10,6 @@ import Image from 'next/image';
 
 import { AuthData, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useLogoutMutation } from '@/types/generated/types';
-import { useRouter } from 'next/router';
 
 import { Dropdown, Ripple, initTE } from 'tw-elements';
 
@@ -28,8 +27,6 @@ const Header = () => {
 
   const [logoutMutation] = useLogoutMutation();
 
-  const { push } = useRouter();
-
   const useUserInfo: IUserInfo | null = useMemo(() => {
     if (tokens?.accessToken) {
       const decoded = jwt_decode<AuthData>(tokens.accessToken);
@@ -43,7 +40,6 @@ const Header = () => {
       onCompleted: () => {
         jwtTokensVar(undefined);
         window.location.href = '/auth/login';
-        //push('/auth/login');
       },
     });
   };

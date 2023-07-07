@@ -4,7 +4,7 @@ import format from 'date-fns/format';
 import { useEffect, useState } from 'react';
 import DatePickerRangeInput from '@/components/Input/DatePickerRangeInput';
 import { Input, Select, initTE } from 'tw-elements';
-import { IEmployeeWorkingCondition, useGetAllDepartmentsLazyQuery, useGetEmployeeWorkingConditionalLazyQuery } from '@/types/generated/types';
+import { IEmployeeWorkingCondition, useGetEmployeeWorkingConditionalLazyQuery } from '@/types/generated/types';
 import { useForm } from 'react-hook-form';
 import TextInput from '@/components/Input/TextInput';
 import SelectInput from '@/components/Input/SelectInput';
@@ -12,7 +12,6 @@ import ConditionalTableHeader from './ConditionalTableHeader';
 import ConditionalTableRows from './ConditionalTableRows';
 import CheckBoxInput from '@/components/Input/CheckBoxInput';
 import Paging from '@/components/Paging';
-import { useReactiveVar } from '@apollo/client';
 import { attendanceConditionalActivePageVar } from '@/stores/gqlReactVars';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
 
@@ -47,9 +46,6 @@ const ConditionalFilterPart = () => {
   const { handleSubmit, control } = useForm<ConditionalFormValues>({});
 
   const [getEmployeeWorkingConditionalQuery, { data }] = useGetEmployeeWorkingConditionalLazyQuery({
-    onCompleted: () => {
-      //console.log(data);
-    },
     onError: (err) => {
       alert('err 조건조회');
     },
@@ -99,6 +95,7 @@ const ConditionalFilterPart = () => {
       alert('err 조건조회');
     }
   };
+
   return (
     <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-3 pb-0 pr-5">
       <form onSubmit={handleSubmit(onSearchCondition)} role="form text-left">

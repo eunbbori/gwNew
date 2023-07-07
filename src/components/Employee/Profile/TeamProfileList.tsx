@@ -12,7 +12,11 @@ export interface ITeamEmpProfileProps {
 const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeamEmpProfileProps) => {
   const deptEmployees = employees
     ?.sort((a, b) => {
-      return !a?.name ? 1 : !b?.name ? -1 : a?.name > b?.name ? 1 : a?.name < b?.name ? -1 : 0;
+      if (!a?.name) return 1;
+      else if (!b?.name) return -1;
+      else if (a?.name > b?.name) return 1;
+
+      return a?.name < b?.name ? -1 : 0;
     })
     .filter((dept) => dept?.department?.departmentId === deptId);
   const clickHandler = (empId: string) => {
@@ -29,9 +33,9 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
         </h2>
         <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
           {deptEmployees &&
-            deptEmployees!.map((emp, idx) => (
+            deptEmployees.map((emp, idx) => (
               <Profile
-                key={idx}
+                key={emp?.employeeId}
                 empName={emp?.name}
                 deptName={emp?.department?.departmentName}
                 position={emp?.position}

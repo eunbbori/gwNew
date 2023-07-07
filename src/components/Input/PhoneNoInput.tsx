@@ -19,20 +19,14 @@ const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName exte
           <input
             {...field}
             onChange={({ target }) => {
-              const phoneNo = target.value.trim().replace(/[^0-9]/g, '');
+              const phoneNo = target.value.trim().replace(/\D/g, '');
               onChange(phoneNo);
 
-              const dashedPhoneNo =
-                phoneNo.length < 4
-                  ? phoneNo
-                  : phoneNo.length < 7
-                  ? phoneNo.replace(/(\d{3})(\d{1})/, '$1-$2')
-                  : phoneNo.length < 11
-                  ? phoneNo.replace(/(\d{3})(\d{3})(\d{1})/, '$1-$2-$3')
-                  : phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-
-              console.log('onChange: ' + phoneNo);
-              target.value = dashedPhoneNo;
+              const phoneLength = phoneNo.length;
+              if (phoneLength < 4) target.value = phoneNo;
+              else if (phoneLength < 7) target.value = phoneNo.replace(/(\d{3})(\d{1})/, '$1-$2');
+              else if (phoneLength < 11) target.value = phoneNo.replace(/(\d{3})(\d{3})(\d{1})/, '$1-$2-$3');
+              else target.value = phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
             }}
             type="text"
             placeholder={props.placeHolder}
