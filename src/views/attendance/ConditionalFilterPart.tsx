@@ -4,12 +4,7 @@ import format from 'date-fns/format';
 import { useEffect, useState } from 'react';
 import DatePickerRangeInput from '@/components/Input/DatePickerRangeInput';
 import { Input, Select, initTE } from 'tw-elements';
-import {
-  IEmployeeWorkingCondition,
-  useGetAllDepartmentsLazyQuery,
-  useGetCodesLazyQuery,
-  useGetEmployeeWorkingConditionalLazyQuery,
-} from '@/types/generated/types';
+import { IEmployeeWorkingCondition, useGetAllDepartmentsLazyQuery, useGetEmployeeWorkingConditionalLazyQuery } from '@/types/generated/types';
 import { useForm } from 'react-hook-form';
 import TextInput from '@/components/Input/TextInput';
 import SelectInput from '@/components/Input/SelectInput';
@@ -19,6 +14,7 @@ import CheckBoxInput from '@/components/Input/CheckBoxInput';
 import Paging from '@/components/Paging';
 import { useReactiveVar } from '@apollo/client';
 import { attendanceConditionalActivePageVar } from '@/stores/gqlReactVars';
+import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
 
 export interface DateRange {
   startDate: Date;
@@ -38,49 +34,17 @@ export interface ConditionalFormValues {
 const ConditionalFilterPart = () => {
   useEffect(() => {
     initTE({ Input, Select });
-    getAllDepartmentsQuery();
-    getCodesQuery();
   }, []);
 
   const inputClassName =
     'text-[14px] py-[0.32rem] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full mr-5 appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
-  const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
-  const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
-    variables: {
-      parents: ['POSITION', 'WORKING_TYPE'],
-    },
-    onError: (err) => {
-      alert('err');
-    },
-  });
-  const deptOptions = [
-    { value: '-1', label: '전체' },
-    ...(deptData?.departments?.map((dept) => ({
-      value: dept?.departmentId ?? '',
-      label: dept?.departmentName ?? '',
-    })) ?? []),
-  ];
 
-  const positionOptions = [
-    { value: '', label: '전체' },
-    ...((codeData?.codes &&
-      codeData?.codes[0]?.codes
-        ?.map((code) => ({
-          value: code?.code ?? '',
-          label: code?.name ?? '',
-        }))
-        .reverse()) ??
-      []),
-  ];
+  const deptOptions = [{ value: '-1', label: '전체' }, ...useDepartmentsOption()];
 
-  const workingTypeOptions =
-    (codeData?.codes &&
-      codeData?.codes[1]?.codes?.map((code) => ({
-        value: code?.code ?? '',
-        label: code?.name ?? '',
-      }))) ??
-    [];
+  const positionOptions = [{ value: '', label: '전체' }, ...useCodesOption('POSITION').reverse()];
+  const workingTypeOptions = useCodesOption('WORKING_TYPE');
+
   const { handleSubmit, control } = useForm<ConditionalFormValues>({});
 
   const [getEmployeeWorkingConditionalQuery, { data }] = useGetEmployeeWorkingConditionalLazyQuery({
@@ -109,7 +73,6 @@ const ConditionalFilterPart = () => {
   const handlePageChange = (page: React.SetStateAction<number>) => {
     console.log('페이지네이션:' + page);
     attendanceConditionalActivePageVar(page.valueOf() as number);
-    console.log('page', page.valueOf);
     handleSubmit(onSearchCondition)();
   };
 
@@ -139,30 +102,9 @@ const ConditionalFilterPart = () => {
       alert('err 조건조회');
     }
   };
-
   return (
-    <>
+    <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-3 pb-0 pr-5">
       <form onSubmit={handleSubmit(onSearchCondition)} role="form text-left">
-        <div className="relative flex w-full px-3 mt-0">
-          <p className="basis-1/2 mb-0 mr-5 w-30 leading-8 text-sm">
-            <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체{' '}
-            <span className="ml-1 font-semibold">{data?.employeeWorkingConditional?.totalElements ?? 0}</span> 명
-          </p>
-          <div className="flex justify-end basis-1/2">
-            {/* <button
-              type="button"
-              className="inline-block rounded bg-danger px-6 pb-2 pt-2.5 mr-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
-            >
-              초기화
-            </button> */}
-            <button
-              type="submit"
-              className="mr-[30px] inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-            >
-              조회
-            </button>
-          </div>
-        </div>
         <div className="relative flex flex-wrap px-3 mt-0">
           <div className="mt-[10px] -ml-3 py-3 rounded-lg bg-gray-100 p-6 w-full">
             <DatePickerRangeInput name="dateRange" control={control} title="기간" defaultValue={{ startDate: new Date(), endDate: new Date() }} />
@@ -220,7 +162,29 @@ const ConditionalFilterPart = () => {
             </div>
           </div>
         </div>
+
+        <div className="relative flex w-full px-3 my-3">
+          <p className="basis-1/2 mb-0 mr-5 w-30 leading-8 text-sm">
+            <FontAwesomeIcon className="text-cyan-500" icon={faCheck} /> 전체{' '}
+            <span className="ml-1 font-semibold">{data?.employeeWorkingConditional?.totalElements ?? 0}</span> 명
+          </p>
+          <div className="flex justify-end basis-1/2">
+            {/* <button
+              type="button"
+              className="inline-block rounded bg-danger px-6 pb-2 pt-2.5 mr-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
+            >
+              초기화
+            </button> */}
+            <button
+              type="submit"
+              className="mr-[30px] inline-block rounded bg-primary px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+            >
+              조회
+            </button>
+          </div>
+        </div>
       </form>
+
       <div className="overflow-x-auto">
         <table className="items-center w-full mb-0 align-top border-gray-200 text-slate-500">
           <ConditionalTableHeader />
@@ -229,13 +193,14 @@ const ConditionalFilterPart = () => {
           </tbody>
         </table>
       </div>
+
       <Paging
         perPage={10}
         paging={selectedAttendanceConditionalActivePage}
         onHandler={handlePageChange}
         totalCount={data?.employeeWorkingConditional?.totalElements || undefined}
       />
-    </>
+    </div>
   );
 };
 

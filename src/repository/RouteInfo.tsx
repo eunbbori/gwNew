@@ -22,7 +22,8 @@ export const allRouteInfos: RouteInfo[] = [
   { id: 'test1', title: 'test1', linkable: false },
   { id: 'test2', title: 'test2', linkable: false },
   { id: 'attendance', title: '근태관리', img: alarmIcon, linkable: false },
-  { id: 'listAttendance', title: '출퇴근', linkable: true },
+  { id: 'dailyAttendance', title: '일별조회', linkable: true },
+  { id: 'conditionalAttendance', title: '조건조회', linkable: true },
   { id: 'test4', title: 'test4', linkable: false },
   { id: 'dashboard', title: '대시보드', img: laptopIcon, linkable: false },
   { id: 'test5', title: 'test5', linkable: false },
@@ -41,7 +42,7 @@ export const getRouteInfo = (id: string): RouteInfo | undefined => {
 
 export const allMenuInfos: MenuInfo[] = [
   { firstMenu: 'approval', secondMenu: ['test1', 'test2'] },
-  { firstMenu: 'attendance', secondMenu: ['listAttendance', 'test4'] },
+  { firstMenu: 'attendance', secondMenu: ['dailyAttendance', 'conditionalAttendance', 'test4'] },
   { firstMenu: 'dashboard', secondMenu: ['test5', 'test6'] },
   { firstMenu: 'dayoff', secondMenu: ['test7', 'test8'] },
   { firstMenu: 'employee', secondMenu: ['listEmp', 'addEmp'] },

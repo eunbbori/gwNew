@@ -1,10 +1,9 @@
 import TableCell from './TableCell';
 import { IEmployeeWorking, IGetEmployeeWorkingQuery } from '@/types/generated/types';
-import { useCodes } from '@/repository/Code';
+import { useCodesMap } from '@/repository/Code';
 import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
 import { attendanceSortVar, attendanceFilterVar, attendanceTotalCntVar } from '@/stores/gqlReactVars';
-import { useEffect, useState } from 'react';
 import { useReactiveVar } from '@apollo/client';
 
 type TableRowsProps = {
@@ -15,8 +14,8 @@ const TableRows = ({ data }: TableRowsProps) => {
   const selectedAttendanceSort = useReactiveVar(attendanceSortVar);
   const selectedAttendanceFilter = useReactiveVar(attendanceFilterVar);
 
-  const positionCodes = useCodes('POSITION');
-  const workingTypeCodes = useCodes('WORKING_TYPE');
+  const positionCodes = useCodesMap('POSITION');
+  const workingTypeCodes = useCodesMap('WORKING_TYPE');
 
   const filteredDeptToString = selectedAttendanceFilter.dept.toString();
 

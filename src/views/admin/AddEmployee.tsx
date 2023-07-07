@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation, useGetAllDepartmentsLazyQuery, useGetCodesLazyQuery } from '@/types/generated/types';
-import { jwtTokensVar } from '@/stores/gqlReactVars';
-import { useReactiveVar } from '@apollo/client';
+import { IEmployeeInput, useAddEmployeeMutation, useGetAllDepartmentsLazyQuery } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
@@ -13,6 +11,7 @@ import TextInput from '@/components/Input/TextInput';
 import PhoneNoInput from '@/components/Input/PhoneNoInput';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
+import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
 
 export interface EmployeeFormValues {
   userId: string;
@@ -34,49 +33,11 @@ interface IOption {
 
 const AddEmployee: React.FC = () => {
   const router = useRouter();
-  const jwtTokens = useReactiveVar(jwtTokensVar);
 
-  const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery();
+  const deptOptions = useDepartmentsOption();
 
-  const deptOptions =
-    deptData?.departments?.map((dept) => ({
-      value: dept?.departmentId ?? '',
-      label: dept?.departmentName ?? '',
-    })) ?? [];
-
-  const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
-    variables: {
-      parents: ['CONTRACT_TYPE', 'POSITION'],
-    },
-    onError: (err) => {
-      alert('err');
-    },
-  });
-
-  const contractOptions =
-    (codeData?.codes &&
-      codeData?.codes[0]?.codes?.map((code) => ({
-        value: code?.code ?? '',
-        label: code?.name ?? '',
-      }))) ??
-    [];
-
-  const positionOptions =
-    (codeData?.codes &&
-      codeData?.codes[1]?.codes
-        ?.map((code) => ({
-          value: code?.code ?? '',
-          label: code?.name ?? '',
-        }))
-        .reverse()) ??
-    [];
-
-  useEffect(() => {
-    if (jwtTokens?.accessToken) {
-      getAllDepartmentsQuery();
-      getCodesQuery();
-    }
-  }, [jwtTokens]);
+  const contractOptions = useCodesOption('CONTRACT_TYPE');
+  const positionOptions = useCodesOption('POSITION');
 
   const schema = yup.object().shape({
     userId: yup.string().required('아이디는 필수 입력사항입니다.'),
@@ -136,7 +97,6 @@ const AddEmployee: React.FC = () => {
       },
     });
   };
-
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <div className="w-full mr-auto ml-auto px-6">

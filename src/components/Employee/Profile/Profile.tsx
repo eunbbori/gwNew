@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import { useCodes } from '@/repository/Code';
 import { useReactiveVar } from '@apollo/client';
 import { memberDetailIdVar } from '@/stores/gqlReactVars';
 

@@ -1,6 +1,6 @@
 import TableCell from './TableCell';
 import { IGetEmployeeWorkingConditionalQuery } from '@/types/generated/types';
-import { useCodes } from '@/repository/Code';
+import { useCodesMap } from '@/repository/Code';
 import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
 
@@ -18,8 +18,8 @@ const ConditionalTableRows = ({ data }: TableRowsProps) => {
     return { ...e, workingDate, startAt, endAt, duration: calculateDateDiff(startAt, endAt) };
   });
 
-  const positionCodes = useCodes('POSITION');
-  const workingTypeCodes = useCodes('WORKING_TYPE');
+  const positionCodes = useCodesMap('POSITION');
+  const workingTypeCodes = useCodesMap('WORKING_TYPE');
 
   return (
     <>

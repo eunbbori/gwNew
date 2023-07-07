@@ -19,6 +19,7 @@ const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TN
         placeholder={'Select Date'}
         primaryColor={'cyan'}
         showFooter={true}
+        popoverDirection="down"
       />
     </div>
   );

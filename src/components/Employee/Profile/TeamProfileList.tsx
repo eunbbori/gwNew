@@ -10,7 +10,11 @@ export interface ITeamEmpProfileProps {
   positionOptions: Map<string, string>;
 }
 const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeamEmpProfileProps) => {
-  const deptEmployees = employees?.filter((dept) => dept?.department?.departmentId === deptId);
+  const deptEmployees = employees
+    ?.sort((a, b) => {
+      return !a?.name ? 1 : !b?.name ? -1 : a?.name > b?.name ? 1 : a?.name < b?.name ? -1 : 0;
+    })
+    .filter((dept) => dept?.department?.departmentId === deptId);
   const clickHandler = (empId: string) => {
     memberDetailIdVar(empId);
   };

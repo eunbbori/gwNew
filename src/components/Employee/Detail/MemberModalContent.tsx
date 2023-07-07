@@ -4,7 +4,7 @@ import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
 import { useReactiveVar } from '@apollo/client';
 import { memberDetailIdVar } from '@/stores/gqlReactVars';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
-import { useCodes } from '@/repository/Code';
+import { useCodesMap } from '@/repository/Code';
 import { formatPhoneNumber } from '@/components/Util/CommonUtil';
 
 const useEmpDetail = () => {
@@ -42,8 +42,8 @@ const MemberModalContent = () => {
     if (detailUserId) getEmployee();
   }, [detailUserId]);
 
-  const matchedContractType = useCodes('CONTRACT_TYPE').get(data?.employee?.contractType ?? '');
-  const matchedPosition = useCodes('POSITION').get(data?.employee?.position ?? '');
+  const matchedContractType = useCodesMap('CONTRACT_TYPE').get(data?.employee?.contractType ?? '');
+  const matchedPosition = useCodesMap('POSITION').get(data?.employee?.position ?? '');
 
   const formattedPhoneNumber = formatPhoneNumber(data?.employee?.phone ?? '');
 
