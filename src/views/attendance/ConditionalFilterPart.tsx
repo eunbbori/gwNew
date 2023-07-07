@@ -41,7 +41,6 @@ const ConditionalFilterPart = () => {
   const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
 
   const deptOptions = [{ value: '-1', label: '전체' }, ...useDepartmentsOption()];
-
   const positionOptions = [{ value: '', label: '전체' }, ...useCodesOption('POSITION').reverse()];
   const workingTypeOptions = useCodesOption('WORKING_TYPE');
 
@@ -67,8 +66,6 @@ const ConditionalFilterPart = () => {
       setWorkingTypeChecked([...workingTypeChecked, value]);
     }
   };
-
-  const selectedAttendanceConditionalActivePage = useReactiveVar(attendanceConditionalActivePageVar);
 
   const handlePageChange = (page: React.SetStateAction<number>) => {
     console.log('페이지네이션:' + page);
@@ -96,8 +93,8 @@ const ConditionalFilterPart = () => {
         fetchPolicy: 'no-cache',
       });
 
-      if (data?.employeeWorkingConditional?.totalPages && data.employeeWorkingConditional.totalPages < attendanceConditionalActivePageVar())
-        attendanceConditionalActivePageVar(data.employeeWorkingConditional.totalPages);
+      const newPage = data?.employeeWorkingConditional?.page ?? 1;
+      attendanceConditionalActivePageVar(newPage);
     } catch (error) {
       alert('err 조건조회');
     }
@@ -196,7 +193,7 @@ const ConditionalFilterPart = () => {
 
       <Paging
         perPage={10}
-        paging={selectedAttendanceConditionalActivePage}
+        paging={attendanceConditionalActivePageVar()}
         onHandler={handlePageChange}
         totalCount={data?.employeeWorkingConditional?.totalElements || undefined}
       />

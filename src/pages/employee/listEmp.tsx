@@ -8,7 +8,7 @@ const DynamicEmployeeTab = dynamic(() => import('@/views/employee/EmployeeTab'),
   ssr: false,
 });
 
-const listEmp = () => {
+const ListEmp = () => {
   const jwtTokens = useReactiveVar(jwtTokensVar);
 
   const [getAllEmployeeQuery, { data }] = useGetAllEmployeeLazyQuery({
@@ -28,4 +28,4 @@ const listEmp = () => {
   return <DynamicEmployeeTab list={data} />;
 };
 
-export default listEmp;
+export default ListEmp;

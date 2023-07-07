@@ -62,7 +62,7 @@ query getEmployeeWorking($dt: String) {
   }
 }
 
-query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, $page: Int = 0, $size: Int = 0) {
+query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, $page: Int = 0, $size: Int = 10) {
   employeeWorkingConditional(searchCondition: $searchCondition, page: $page, size: $size) {
     content {
       employeeId
@@ -80,6 +80,8 @@ query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, 
     }
     totalElements
     totalPages
+    page
+    size
   }
 }
 
