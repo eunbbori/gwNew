@@ -31,14 +31,21 @@ export interface ConditionalFormValues {
 }
 
 const ConditionalFilterPart = () => {
+  const [pageCount, setPageCount] = useState<number>(10);
+  const handlePageCountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    setPageCount(Number(selectedValue));
+  };
+
   useEffect(() => {
     initTE({ Input, Select });
-  }, []);
+    handleSubmit(onSearchCondition)();
+  }, [pageCount]);
 
   const inputClassName =
     'text-[14px] py-[0.32rem] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full mr-5 appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
-
+  // const paragraphClassName2 = 'w-[5%] text-sm text-[#484848] self-center';
   const deptOptions = [{ value: '-1', label: '전체' }, ...useDepartmentsOption()];
   const positionOptions = [{ value: '', label: '전체' }, ...useCodesOption('POSITION').reverse()];
   const workingTypeOptions = useCodesOption('WORKING_TYPE');
@@ -83,8 +90,8 @@ const ConditionalFilterPart = () => {
       const { data } = await getEmployeeWorkingConditionalQuery({
         variables: {
           searchCondition: input,
-          page: attendanceConditionalActivePageVar() - 1,
-          size: 10,
+          page: attendanceConditionalActivePageVar(),
+          size: pageCount,
         },
         fetchPolicy: 'no-cache',
       });
@@ -187,13 +194,29 @@ const ConditionalFilterPart = () => {
           </tbody>
         </table>
       </div>
-
-      <Paging
-        perPage={10}
-        paging={attendanceConditionalActivePageVar()}
-        onHandler={handlePageChange}
-        totalCount={data?.employeeWorkingConditional?.totalElements || undefined}
-      />
+      <div className="flex mt-4">
+        <div className="w-[10%] mr-auto" />
+        <div className="flex mt-4">
+          <Paging
+            perPage={pageCount}
+            paging={attendanceConditionalActivePageVar()}
+            onHandler={handlePageChange}
+            totalCount={data?.employeeWorkingConditional?.totalElements || undefined}
+          />
+        </div>
+        <div className="w-[10%] ml-auto self-center">
+          <select data-te-select-init data-te-select-size="sm" onChange={handlePageCountChange}>
+            <option value="5">5개씩 보기</option>
+            <option value="10" selected>
+              10개씩 보기
+            </option>
+            <option value="20">20개씩 보기</option>
+            <option value="30">30개씩 보기</option>
+            <option value="50">50개씩 보기</option>
+          </select>
+          <label data-te-select-label-ref>페이지</label>
+        </div>
+      </div>
     </div>
   );
 };
