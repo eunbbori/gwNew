@@ -42,24 +42,27 @@ const TableRows = ({ data }: TableRowsProps) => {
     const currSort = selectedAttendanceSort.sort as AttendanceSortVarKey;
     const isDepartment = selectedAttendanceSort.sort === 'department';
 
-    if (a && b) {
-      if (!a[currSort]) {
-        return selectedAttendanceSort.isAscending ? -1 : 1;
-      } else if (!b[currSort]) {
-        return selectedAttendanceSort.isAscending ? 1 : -1;
-      } else {
-        const prev = isDepartment ? a[currSort]['departmentName'] : a[currSort];
-        const next = isDepartment ? b[currSort]['departmentName'] : b[currSort];
+    if (!a || !b) {
+      return 0;
+    }
 
-        if (prev > next) {
-          return selectedAttendanceSort.isAscending ? 1 : -1;
-        } else if (prev < next) {
-          return selectedAttendanceSort.isAscending ? -1 : 1;
-        }
+    let sortVal = 0;
+    if (!a[currSort]) {
+      sortVal = -1;
+    } else if (!b[currSort]) {
+      sortVal = 1;
+    } else {
+      const prev = isDepartment ? a[currSort]['departmentName'] : a[currSort];
+      const next = isDepartment ? b[currSort]['departmentName'] : b[currSort];
+
+      if (prev > next) {
+        sortVal = 1;
+      } else if (prev < next) {
+        sortVal = -1;
       }
     }
 
-    return 0;
+    return selectedAttendanceSort.isAscending ? sortVal : sortVal * -1;
   });
 
   return (

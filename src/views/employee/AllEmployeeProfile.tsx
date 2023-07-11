@@ -11,27 +11,27 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
     memberDetailIdVar(empId);
   };
 
+  list?.employees?.sort((a, b) => {
+    if (!a?.name) return 1;
+    else if (!b?.name) return -1;
+    else if (a?.name > b?.name) return 1;
+    else return a?.name < b?.name ? -1 : 0;
+  });
+
   return (
     <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
       {list?.employees
-        ? list?.employees
-            ?.sort((a, b) => {
-              if (!a?.name) return 1;
-              else if (!b?.name) return -1;
-              else if (a?.name > b?.name) return 1;
-              else return a?.name < b?.name ? -1 : 0;
-            })
-            .map((emp, idx) => (
-              <Profile
-                key={emp?.employeeId}
-                onClick={() => clickHandler(emp?.userId || '')}
-                empName={emp?.name}
-                deptName={emp?.department?.departmentName}
-                position={emp?.position}
-                photoUrl={emp?.photoUrl || ''}
-                positionOptions={positionOptions}
-              />
-            ))
+        ? list?.employees?.map((emp, idx) => (
+            <Profile
+              key={emp?.employeeId}
+              onClick={() => clickHandler(emp?.userId || '')}
+              empName={emp?.name}
+              deptName={emp?.department?.departmentName}
+              position={emp?.position}
+              photoUrl={emp?.photoUrl || ''}
+              positionOptions={positionOptions}
+            />
+          ))
         : 'Not loaded Yet'}
     </div>
   );

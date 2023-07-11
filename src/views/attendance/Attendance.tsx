@@ -12,13 +12,13 @@ const useMyEmployeeWorking = () => {
 
   const refetchEmployeeWorking = useCallback(() => {
     refetch({
-      dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
+      dt: format(selectedAttendanceDate, 'yyyy-MM-dd'),
     });
   }, [selectedAttendanceDate]);
 
   const [getEmployeeWorking, { data, refetch }] = useGetEmployeeWorkingLazyQuery({
     variables: {
-      dt: format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)'),
+      dt: format(selectedAttendanceDate, 'yyyy-MM-dd'),
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {

@@ -32,6 +32,8 @@ const AttendanceBtnGroup = () => {
     }
   };
 
+  //const btnClass = startEndAt.startAt ? `${basicAttendBtnClass}`
+
   return (
     <ul className="flex mr-8 mt-[-10px]">
       <>
@@ -39,7 +41,7 @@ const AttendanceBtnGroup = () => {
           <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
             {tokens.accessToken && (
               <div className="flex mt-[5px]">
-                <button className={`${startEndAt.startAt ? `${basicAttendBtnClass}` : `${basicFinishBtnClass}`}`} onClick={handleAttendanceBtn}>
+                <button className={`${startEndAt.startAt ? basicAttendBtnClass : basicFinishBtnClass}`} onClick={handleAttendanceBtn}>
                   {!startEndAt.startAt ? '출근' : '퇴근'}
                 </button>
               </div>

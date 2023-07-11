@@ -6,7 +6,7 @@ import { useLoginMutation } from '@/types/generated/types';
 import { useRouter } from 'next/navigation';
 import { jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
 
-export interface loginFormValues {
+export interface ILoginFormValues {
   empEmail: string;
   empPassword: string;
 }
@@ -30,13 +30,13 @@ const Login = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<loginFormValues>({
+  } = useForm<ILoginFormValues>({
     resolver: yupResolver(loginSchema),
   });
 
-  const [loginMutation, { data, loading, error }] = useLoginMutation();
+  const [loginMutation] = useLoginMutation();
 
-  const onLogin = (loginData: loginFormValues) => {
+  const onLogin = (loginData: ILoginFormValues) => {
     loginMutation({
       variables: {
         email: loginData.empEmail,

@@ -24,8 +24,8 @@ const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName exte
 
               const phoneLength = phoneNo.length;
               if (phoneLength < 4) target.value = phoneNo;
-              else if (phoneLength < 7) target.value = phoneNo.replace(/(\d{3})(\d{1})/, '$1-$2');
-              else if (phoneLength < 11) target.value = phoneNo.replace(/(\d{3})(\d{3})(\d{1})/, '$1-$2-$3');
+              else if (phoneLength < 7) target.value = phoneNo.replace(/(\d{3})(\d)/, '$1-$2');
+              else if (phoneLength < 11) target.value = phoneNo.replace(/(\d{3})(\d{3})(\d)/, '$1-$2-$3');
               else target.value = phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
             }}
             type="text"
