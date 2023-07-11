@@ -1,21 +1,20 @@
-import { ApolloClient, InMemoryCache, createHttpLink, split } from '@apollo/client';
+import { ApolloClient, InMemoryCache, split } from '@apollo/client';
 import { GraphQLWsLink } from '@Apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { setContext } from '@apollo/client/link/context';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { createUploadLink } from 'apollo-upload-client';
 
 import { jwtTokensVar } from '@/stores/gqlReactVars';
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_BASE_API,
   credentials: 'include',
-  // uri: 'http://localhost:4000',
-  // uri: 'http://localhost:8080/graphql',
 });
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: `ws://${process.env.NEXT_PUBLIC_BASE_WS}`,
+    url: 'ws://localhost:4000/subscription',
   }),
 );
 
@@ -27,6 +26,7 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       authorization: token ? `Bearer ${token}` : '',
+      'Apollo-Require-Preflight': 'true',
     },
   };
 });

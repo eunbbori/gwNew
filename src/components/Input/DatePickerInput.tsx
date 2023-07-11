@@ -21,7 +21,7 @@ const DatePickerInput = <TFieldValues extends FieldValues = FieldValues, TName e
         onChange={field.onChange}
         customInput={
           <button>
-            <span className="pl-9">{field.value && format(field.value, 'yyyy-MM-dd (cccccc)', { locale: ko })}</span>
+            <span className="pl-[4.25rem]">{field.value && format(field.value, 'yyyy-MM-dd (cccccc)', { locale: ko })}</span>
           </button>
         }
         showIcon

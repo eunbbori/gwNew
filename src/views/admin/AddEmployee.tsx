@@ -3,7 +3,14 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
+import {
+  IEmployeeInput,
+  ISingleUploadMutationVariables,
+  useAddEmployeeMutation,
+  useGetAllEmployeeQuery,
+  useGetEmployeeQuery,
+  useSingleUploadMutation,
+} from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
@@ -30,12 +37,14 @@ export interface EmployeeFormValues {
   startDate: string;
   position: string;
 }
-
 interface IOption {
   value: string;
   label: string;
 }
-
+// interface ISingleUploadMutationVariables {
+//   employeeId?: number | undefined;
+//   file: any;
+// }
 const AddEmployee: React.FC = () => {
   const router = useRouter();
 
@@ -65,8 +74,6 @@ const AddEmployee: React.FC = () => {
     'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const errMsgClassName = 'text-[11px] text-red-400';
   const paragraphClassName = 'text-sm text-[#484848] self-center';
-  const inputImgClassName = '';
-  const paragraphImgClassName = '';
 
   const {
     handleSubmit,
@@ -77,12 +84,15 @@ const AddEmployee: React.FC = () => {
   });
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
-
+  const [singleUploadMutation] = useSingleUploadMutation();
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile]: any = useState(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
+      console.log('file', file);
+      setUploadedFile(file);
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
@@ -92,9 +102,9 @@ const AddEmployee: React.FC = () => {
       };
     }
   };
+  console.log('uploadedFile', uploadedFile);
   const imgDeleteHandler = () => {
     setImgFile(null);
-    console.log('지우기');
   };
 
   const onAddEmployee = (inputData: EmployeeFormValues) => {
@@ -110,7 +120,22 @@ const AddEmployee: React.FC = () => {
         input,
       },
       onCompleted: (data) => {
-        alert('등록됐습니다.');
+        const inputFile: ISingleUploadMutationVariables = {
+          employeeId: data.addEmployee?.employeeId ?? undefined,
+          file: uploadedFile,
+        };
+        singleUploadMutation({
+          variables: {
+            ...inputFile,
+          },
+          onCompleted: (data) => {
+            console.log('이미지 등록');
+          },
+          onError: (err) => {
+            console.log('이미지 등록 실패', err);
+          },
+        }),
+          alert('등록됐습니다.');
         router.push('/employee/listEmp');
 
         console.log('data가 저장됐습니다', data.addEmployee?.userId);
@@ -129,7 +154,7 @@ const AddEmployee: React.FC = () => {
             <div className="relative z-0 flex flex-col min-w-0 break-words border-0 rounded-2xl bg-clip-border items-center">
               <div className="flex-auto p-6 w-[600px]">
                 <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
-                  <div className="mb-4">
+                  <div className="mb-4 w-[250px]">
                     <label htmlFor="inputFile">
                       <ImageInput
                         id="inputFile"

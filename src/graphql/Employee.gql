@@ -87,6 +87,7 @@ query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, 
 
 mutation addEmployee($input: EmployeeInput!) {
   addEmployee(input: $input) {
+    employeeId
     userId
     name
     position
@@ -109,5 +110,11 @@ query getCodes($parents: [String]) {
       code
       name
     }
+  }
+}
+
+mutation singleUpload($employeeId: Int, $file: Upload!) {
+  singleUpload(employeeId: $employeeId, file: $file) {
+    filename
   }
 }

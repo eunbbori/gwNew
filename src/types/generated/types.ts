@@ -49,7 +49,7 @@ export type IEmployee = {
   contractType?: Maybe<Scalars['String']>;
   department?: Maybe<IDepartment>;
   email?: Maybe<Scalars['String']>;
-  employeeId?: Maybe<Scalars['ID']>;
+  employeeId?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   photoUrl?: Maybe<Scalars['String']>;
@@ -130,6 +130,7 @@ export type IMutationLoginArgs = {
 };
 
 export type IMutationSingleUploadArgs = {
+  employeeId?: InputMaybe<Scalars['Int']>;
   file: Scalars['Upload'];
 };
 
@@ -182,7 +183,7 @@ export type ILogoutMutation = {
   __typename?: 'Mutation';
   logout?: {
     __typename?: 'Employee';
-    employeeId?: string | null;
+    employeeId?: number | null;
     userId?: string | null;
     name?: string | null;
     email?: string | null;
@@ -254,7 +255,7 @@ export type IGetAllEmployeeQuery = {
   __typename?: 'Query';
   employees?: Array<{
     __typename?: 'Employee';
-    employeeId?: string | null;
+    employeeId?: number | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -276,7 +277,7 @@ export type IGetEmployeeQuery = {
   __typename?: 'Query';
   employee?: {
     __typename?: 'Employee';
-    employeeId?: string | null;
+    employeeId?: number | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -353,6 +354,7 @@ export type IAddEmployeeMutation = {
   __typename?: 'Mutation';
   addEmployee?: {
     __typename?: 'Employee';
+    employeeId?: number | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -377,6 +379,13 @@ export type IGetCodesQuery = {
     codes?: Array<{ __typename?: 'Code'; code?: string | null; name?: string | null } | null> | null;
   } | null> | null;
 };
+
+export type ISingleUploadMutationVariables = Exact<{
+  employeeId?: InputMaybe<Scalars['Int']>;
+  file: Scalars['Upload'];
+}>;
+
+export type ISingleUploadMutation = { __typename?: 'Mutation'; singleUpload: { __typename?: 'File'; filename: string } };
 
 export const LoginDocument = gql`
   mutation login($email: String, $passwd: String) {
@@ -850,6 +859,7 @@ export type GetEmployeeWorkingConditionalQueryResult = Apollo.QueryResult<IGetEm
 export const AddEmployeeDocument = gql`
   mutation addEmployee($input: EmployeeInput!) {
     addEmployee(input: $input) {
+      employeeId
       userId
       name
       position
@@ -930,3 +940,37 @@ export function useGetCodesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<I
 export type GetCodesQueryHookResult = ReturnType<typeof useGetCodesQuery>;
 export type GetCodesLazyQueryHookResult = ReturnType<typeof useGetCodesLazyQuery>;
 export type GetCodesQueryResult = Apollo.QueryResult<IGetCodesQuery, IGetCodesQueryVariables>;
+export const SingleUploadDocument = gql`
+  mutation singleUpload($employeeId: Int, $file: Upload!) {
+    singleUpload(employeeId: $employeeId, file: $file) {
+      filename
+    }
+  }
+`;
+export type ISingleUploadMutationFn = Apollo.MutationFunction<ISingleUploadMutation, ISingleUploadMutationVariables>;
+
+/**
+ * __useSingleUploadMutation__
+ *
+ * To run a mutation, you first call `useSingleUploadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSingleUploadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [singleUploadMutation, { data, loading, error }] = useSingleUploadMutation({
+ *   variables: {
+ *      employeeId: // value for 'employeeId'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useSingleUploadMutation(baseOptions?: Apollo.MutationHookOptions<ISingleUploadMutation, ISingleUploadMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ISingleUploadMutation, ISingleUploadMutationVariables>(SingleUploadDocument, options);
+}
+export type SingleUploadMutationHookResult = ReturnType<typeof useSingleUploadMutation>;
+export type SingleUploadMutationResult = Apollo.MutationResult<ISingleUploadMutation>;
+export type SingleUploadMutationOptions = Apollo.BaseMutationOptions<ISingleUploadMutation, ISingleUploadMutationVariables>;

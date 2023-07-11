@@ -38,7 +38,7 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
             onChange={dateChangeHandler}
             customInput={
               <button>
-                <span className="pl-9">{format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)', { locale: ko })}</span>
+                <span className="pl-[4.25rem]">{format(selectedAttendanceDate, 'yyyy-MM-dd (cccccc)', { locale: ko })}</span>
               </button>
             }
             showIcon
