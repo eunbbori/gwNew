@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,8 +13,12 @@ import PhoneNoInput from '@/components/Input/PhoneNoInput';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
+import ImageInput from '@/components/Input/ImageInput';
+import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
+import { IoIosClose } from 'react-icons/io';
 
 export interface EmployeeFormValues {
+  img: string;
   userId: string;
   name: string;
   email: string;
@@ -59,7 +64,9 @@ const AddEmployee: React.FC = () => {
   const inputClassName =
     'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
   const errMsgClassName = 'text-[11px] text-red-400';
-  const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
+  const paragraphClassName = 'text-sm text-[#484848] self-center';
+  const inputImgClassName = '';
+  const paragraphImgClassName = '';
 
   const {
     handleSubmit,
@@ -70,6 +77,25 @@ const AddEmployee: React.FC = () => {
   });
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
+
+  const imgRef = useRef<HTMLInputElement>(null);
+  const [imgFile, setImgFile]: any = useState(null);
+  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        if (typeof reader.result === 'string') {
+          setImgFile(reader.result);
+        }
+      };
+    }
+  };
+  const imgDeleteHandler = () => {
+    setImgFile(null);
+    console.log('지우기');
+  };
 
   const onAddEmployee = (inputData: EmployeeFormValues) => {
     console.log(inputData);
@@ -103,6 +129,34 @@ const AddEmployee: React.FC = () => {
             <div className="relative z-0 flex flex-col min-w-0 break-words border-0 rounded-2xl bg-clip-border items-center">
               <div className="flex-auto p-6 w-[600px]">
                 <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
+                  <div className="mb-4">
+                    <label htmlFor="inputFile">
+                      <ImageInput
+                        id="inputFile"
+                        name="img"
+                        title="프로필 이미지"
+                        control={control}
+                        ref={imgRef}
+                        type="file"
+                        onChange={handleAddImage}
+                        accept=".jpg,.png,.jpeg"
+                        inputClassName={inputClassName}
+                        paragraphClassName={paragraphClassName}
+                      />
+                      <div className="relative cursor-pointer w-[250px] h-[250px]">
+                        <div className="group">
+                          <Image src={imgFile ? imgFile : blankProfile} alt="프로필 이미지" width={250} height={250} className="cursor-pointer" />
+                          <div className="absolute top-0 left-0 w-[250px] h-[250px] bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                          <div className="absolute top-1/2 left-[48%] transform -translate-x-1/2 -translate-y-1/2 text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <span className="text-lg font-bold">ADD YOUR PHOTO</span>
+                          </div>
+                          <button type="button" className="absolute top-0 right-[10px] text-gray-500" onClick={imgDeleteHandler}>
+                            <IoIosClose className="text-4xl" />
+                          </button>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
                       <TextInput
