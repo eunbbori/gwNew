@@ -15,7 +15,7 @@ const httpLink = createHttpLink({
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: 'ws://localhost:4000/subscription',
+    url: `ws://${process.env.NEXT_PUBLIC_BASE_WS}`,
   }),
 );
 
