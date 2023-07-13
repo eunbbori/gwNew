@@ -1,16 +1,8 @@
 import React, { useRef, useState } from 'react';
-import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import {
-  IEmployeeInput,
-  ISingleUploadMutationVariables,
-  useAddEmployeeMutation,
-  useGetAllEmployeeQuery,
-  useGetEmployeeQuery,
-  useSingleUploadMutation,
-} from '@/types/generated/types';
+import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
@@ -20,9 +12,7 @@ import PhoneNoInput from '@/components/Input/PhoneNoInput';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
-import ImageInput from '@/components/Input/ImageInput';
-import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import { IoIosClose } from 'react-icons/io';
+import EmployeeProfile from './EmployeeProfile';
 
 export interface EmployeeFormValues {
   img: string;
@@ -41,10 +31,7 @@ interface IOption {
   value: string;
   label: string;
 }
-// interface ISingleUploadMutationVariables {
-//   employeeId?: number | undefined;
-//   file: any;
-// }
+
 const AddEmployee: React.FC = () => {
   const router = useRouter();
 
@@ -84,10 +71,10 @@ const AddEmployee: React.FC = () => {
   });
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
-  const [singleUploadMutation] = useSingleUploadMutation();
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile]: any = useState(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
   const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
@@ -102,6 +89,7 @@ const AddEmployee: React.FC = () => {
       };
     }
   };
+
   console.log('uploadedFile', uploadedFile);
   const imgDeleteHandler = () => {
     setImgFile(null);
@@ -118,24 +106,10 @@ const AddEmployee: React.FC = () => {
     addEmployeeMutation({
       variables: {
         input,
+        file: uploadedFile,
       },
       onCompleted: (data) => {
-        const inputFile: ISingleUploadMutationVariables = {
-          employeeId: data.addEmployee?.employeeId ?? undefined,
-          file: uploadedFile,
-        };
-        singleUploadMutation({
-          variables: {
-            ...inputFile,
-          },
-          onCompleted: (data) => {
-            console.log('이미지 등록');
-          },
-          onError: (err) => {
-            console.log('이미지 등록 실패', err);
-          },
-        }),
-          alert('등록됐습니다.');
+        alert('등록됐습니다.');
         router.push('/employee/listEmp');
 
         console.log('data가 저장됐습니다', data.addEmployee?.userId);
@@ -144,6 +118,13 @@ const AddEmployee: React.FC = () => {
         alert(err.message);
       },
     });
+  };
+
+  const defaultInputAttributes = {
+    control,
+    type: 'text',
+    inputClassName,
+    paragraphClassName,
   };
 
   return (
@@ -155,92 +136,41 @@ const AddEmployee: React.FC = () => {
               <div className="flex-auto p-6 w-[600px]">
                 <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
                   <div className="mb-4 w-[250px]">
-                    <label htmlFor="inputFile">
-                      <ImageInput
-                        id="inputFile"
-                        name="img"
-                        title="프로필 이미지"
-                        control={control}
-                        ref={imgRef}
-                        type="file"
-                        onChange={handleAddImage}
-                        accept=".jpg,.png,.jpeg"
-                        inputClassName={inputClassName}
-                        paragraphClassName={paragraphClassName}
-                      />
-                      <div className="relative cursor-pointer w-[250px] h-[250px]">
-                        <div className="group">
-                          <Image src={imgFile ? imgFile : blankProfile} alt="프로필 이미지" width={250} height={250} className="cursor-pointer" />
-                          <div className="absolute top-0 left-0 w-[250px] h-[250px] bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
-                          <div className="absolute top-1/2 left-[48%] transform -translate-x-1/2 -translate-y-1/2 text-white text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <span className="text-lg font-bold">ADD YOUR PHOTO</span>
-                          </div>
-                          <button type="button" className="absolute top-0 right-[10px] text-gray-500" onClick={imgDeleteHandler}>
-                            <IoIosClose className="text-4xl" />
-                          </button>
-                        </div>
-                      </div>
-                    </label>
+                    <EmployeeProfile
+                      {...defaultInputAttributes}
+                      title="프로필 이미지"
+                      info="사진을 저장하세요"
+                      imgRef={imgRef}
+                      handleAddImage={handleAddImage}
+                      imgDeleteHandler={imgDeleteHandler}
+                      imgFile={imgFile}
+                    />
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <TextInput
-                        name="userId"
-                        title="아이디"
-                        control={control}
-                        placeHolder="아이디를 입력해주세요"
-                        type="text"
-                        inputClassName={inputClassName}
-                        paragraphClassName={paragraphClassName}
-                      />
+                      <TextInput {...defaultInputAttributes} name="userId" title="아이디" placeHolder="아이디를 입력해주세요" />
                       <div className={errMsgClassName}>{errors.userId?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <TextInput
-                        name="name"
-                        title="이름"
-                        control={control}
-                        placeHolder="이름을 입력해주세요"
-                        type="text"
-                        inputClassName={inputClassName}
-                        paragraphClassName={paragraphClassName}
-                      />
+                      <TextInput {...defaultInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
                       <div className={errMsgClassName}>{errors.name?.message}</div>
                     </div>
                   </div>
                   <div className="mb-4">
-                    <TextInput
-                      name="email"
-                      title="회사 이메일"
-                      control={control}
-                      placeHolder="회사 이메일을 입력해주세요"
-                      type="email"
-                      inputClassName={inputClassName}
-                      paragraphClassName={paragraphClassName}
-                    />
+                    <TextInput {...defaultInputAttributes} name="email" title="회사 이메일" placeHolder="회사 이메일을 입력해주세요" type="email" />
                     <div className={errMsgClassName}>{errors.email?.message}</div>
                   </div>
                   <div className="mb-4">
-                    <TextInput
-                      name="passwd"
-                      title="임시 비밀번호"
-                      control={control}
-                      placeHolder="비밀번호를 입력해주세요"
-                      type="password"
-                      inputClassName={inputClassName}
-                      paragraphClassName={paragraphClassName}
-                    />
+                    <TextInput {...defaultInputAttributes} name="passwd" title="임시 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
                     <div className={errMsgClassName}>{errors.passwd?.message}</div>
                   </div>
                   <div className="mb-4">
                     <TextInput
+                      {...defaultInputAttributes}
                       name="passwdConfirm"
                       title="임시 비밀번호 확인"
-                      control={control}
                       placeHolder="비밀번호 한번 더 입력해주세요"
                       type="password"
-                      inputClassName={inputClassName}
-                      paragraphClassName={paragraphClassName}
                     />
                     <div className={errMsgClassName}>{errors.passwdConfirm?.message}</div>
                   </div>

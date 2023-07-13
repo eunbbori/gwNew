@@ -85,8 +85,8 @@ query getEmployeeWorkingConditional($searchCondition: EmployeeWorkingCondition, 
   }
 }
 
-mutation addEmployee($input: EmployeeInput!) {
-  addEmployee(input: $input) {
+mutation addEmployee($input: EmployeeInput!, $file: Upload) {
+  addEmployee(input: $input, file: $file) {
     employeeId
     userId
     name
