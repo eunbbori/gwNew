@@ -36,7 +36,7 @@ const splitLink = split(
     const definition = getMainDefinition(query);
     return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
   },
-  wsLink,
+  authLink.concat(wsLink),
   authLink.concat(httpLink),
 );
 

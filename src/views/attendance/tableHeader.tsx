@@ -1,7 +1,6 @@
 import { attendanceSortVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
-import { faSort, faSortAsc, faSortDesc } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import SortIcon from '../common/SortIcon';
 
 export interface IAttendanceHeader {
   title: string;
@@ -20,10 +19,6 @@ const TableHeader = ({ headers }: ITableHeader) => {
     <thead className="align-bottom">
       <tr>
         {headers.map((e, id) => {
-          let sortIcon = faSort;
-          if (selectedAttendanceSort.sort === e.field) {
-            sortIcon = selectedAttendanceSort.isAscending ? faSortAsc : faSortDesc;
-          }
           return (
             <th
               key={e.field}
@@ -41,9 +36,7 @@ const TableHeader = ({ headers }: ITableHeader) => {
               }}
             >
               {e.title}
-              {e.isSortable && (
-                <FontAwesomeIcon className={'ml-5 ' + (selectedAttendanceSort.sort !== e.field ? 'text-cyan-500' : 'text-rose-500')} icon={sortIcon} />
-              )}
+              {e.isSortable && <SortIcon selectedSort={selectedAttendanceSort} field={e.field} />}
             </th>
           );
         })}

@@ -75,7 +75,7 @@ const MemberModalContent = () => {
       <div className="mt-[35px]">
         <div className="text-[15px] font-bold text-gray-800 mb-[10px]">기본정보</div>
         <div className="text-[14px]">
-          <MemberInfoField title="사원번호" value={data?.employee?.employeeId ?? ''} />
+          <MemberInfoField title="사원번호" value={String(data?.employee?.employeeId) ?? ''} />
           <MemberInfoField title="아이디" value={data?.employee?.userId ?? ''} />
           <MemberInfoField title="이메일" value={data?.employee?.email ?? ''} />
           <MemberInfoField title="핸드폰번호" value={formattedPhoneNumber} />
