@@ -1,6 +1,4 @@
 import { FieldPath, FieldValues, UseControllerProps, useController } from 'react-hook-form';
-import { BsCamera } from 'react-icons/bs';
-
 interface OtherOptions {
   id: string;
   title: string;

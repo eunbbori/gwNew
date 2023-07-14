@@ -9,7 +9,7 @@ export interface IModalProps {
 const DetailModal = ({ title, content }: IModalProps) => {
   useEffect(() => {
     initTE({ Modal, Ripple });
-  }, []);
+  });
   return (
     <>
       <div

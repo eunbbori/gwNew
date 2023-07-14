@@ -2,8 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import { useReactiveVar } from '@apollo/client';
-import { memberDetailIdVar } from '@/stores/gqlReactVars';
 
 export interface IProfileProps {
   empName?: string | null;
@@ -11,18 +9,12 @@ export interface IProfileProps {
   deptName?: string | null;
   position?: string | null;
   positionOptions: Map<string, string>;
-  onClick?: (empId: string) => void;
+  onClick?: () => void;
 }
 
 const Profile = ({ empName, photoUrl, deptName, position, positionOptions, onClick }: IProfileProps) => {
-  const detailUserId = useReactiveVar(memberDetailIdVar);
-  const handleClick = () => {
-    if (onClick) {
-      onClick(detailUserId);
-    }
-  };
   return (
-    <div className="mr-[35px] mb-[75px] cursor-pointer" onClick={handleClick}>
+    <div className="mr-[35px] mb-[75px] cursor-pointer" onClick={onClick}>
       <div className="">
         <div className="w-[144px] h-[144px]">
           <div
