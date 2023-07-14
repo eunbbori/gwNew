@@ -26,6 +26,7 @@ const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends
           className={props.inputClassName}
           aria-label={props.name}
           aria-describedby={props.name + '-addon'}
+          value={field.value}
         />
       </div>
     </>

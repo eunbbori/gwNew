@@ -29,7 +29,7 @@ const DateMemberCnt = ({ cnt }: IDateMemberCntProps) => {
 
       <div className="justify-end flex w-7/12 max-w-full px-3 mt-0 -right-0 lg:w-1/2">
         <AttendanceFilterGroup />
-        <div>
+        <div className="px-5">
           <DatePicker
             minDate={new Date('2000-01-01')}
             maxDate={new Date()}

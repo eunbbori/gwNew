@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
 import { useReactiveVar } from '@apollo/client';
-import { memberDetailIdVar } from '@/stores/gqlReactVars';
+import { memberDetailVar } from '@/stores/gqlReactVars';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useCodesMap } from '@/repository/Code';
 import { formatPhoneNumber } from '@/components/Util/CommonUtil';
@@ -10,7 +10,7 @@ import { formatPhoneNumber } from '@/components/Util/CommonUtil';
 const useEmpDetail = () => {
   const [getEmployee, { data }] = useGetEmployeeLazyQuery({
     variables: {
-      userId: memberDetailIdVar(),
+      userId: memberDetailVar().userId,
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
@@ -33,7 +33,7 @@ const MemberInfoField = ({ title, value }: { title: string; value: string }) => 
 };
 
 const MemberModalContent = () => {
-  const detailUserId = useReactiveVar(memberDetailIdVar);
+  const detailUserId = useReactiveVar(memberDetailVar).userId;
   const { data, getEmployee } = useEmpDetail();
   const startDateString = data?.employee?.startDate;
   const formattedStartDate = startDateString ? startDateString.slice(0, 10) : '';

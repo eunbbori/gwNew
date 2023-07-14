@@ -33,6 +33,7 @@ export const allRouteInfos: RouteInfo[] = [
   { id: 'test8', title: 'test8', linkable: false },
   { id: 'employee', title: '직원관리', img: userGroupIcon, linkable: false },
   { id: 'listEmp', title: '구성원', linkable: true },
+  { id: 'editEmp', title: '직원수정', linkable: false },
   { id: 'addEmp', title: '직원등록', linkable: true },
 ];
 

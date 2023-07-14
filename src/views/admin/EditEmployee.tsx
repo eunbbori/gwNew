@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
+import { IEmployeeInput, useAddEmployeeMutation, useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
@@ -12,7 +12,9 @@ import PhoneNoInput from '@/components/Input/PhoneNoInput';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
+import { useReactiveVar } from '@apollo/client';
 import EmployeeProfile from './EmployeeProfile';
+import { memberDetailVar } from '@/stores/gqlReactVars';
 
 export interface IEmployeeFormValues {
   img: string;
@@ -31,12 +33,27 @@ interface IOption {
   value: string;
   label: string;
 }
-interface IAddEmployeeProps {
-  deptId: string;
+interface IEditEmployee {
+  detailEmpId: number;
+  detailUserData: any;
 }
 
-const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
-  console.log(deptId);
+const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) => {
+  // const [getEmployee, { data: detailUserData }] = useGetEmployeeLazyQuery({
+  //   variables: {
+  //     userId: detailUserId,
+  //   },
+  //   fetchPolicy: 'no-cache',
+  //   onError: (err) => {
+  //     alert('Plz Login first!');
+  //   },
+  // });
+  // const { getEmployee, data: detailUserData } = useEmpDetail();
+
+  // useEffect(() => {
+  //   if (detailUserId) getEmployee();
+  // }, [detailUserId]);
+
   const router = useRouter();
 
   const deptOptions = useDepartmentsOption();
@@ -72,7 +89,6 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
     formState: { errors },
   } = useForm<IEmployeeFormValues>({
     resolver: yupResolver(schema),
-    defaultValues: { departmentId: deptId },
   });
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
@@ -154,16 +170,35 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <TextInput {...defaultInputAttributes} name="userId" title="아이디" placeHolder="아이디를 입력해주세요" />
+                      <TextInput
+                        {...defaultInputAttributes}
+                        name="userId"
+                        title="아이디"
+                        placeHolder="아이디를 입력해주세요"
+                        defaultValue={detailUserData?.employee?.userId ?? ''}
+                      />
                       <div className={errMsgClassName}>{errors.userId?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <TextInput {...defaultInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
+                      <TextInput
+                        {...defaultInputAttributes}
+                        name="name"
+                        title="이름"
+                        placeHolder="이름을 입력해주세요"
+                        defaultValue={detailUserData?.employee?.name ?? ''}
+                      />
                       <div className={errMsgClassName}>{errors.name?.message}</div>
                     </div>
                   </div>
                   <div className="mb-4">
-                    <TextInput {...defaultInputAttributes} name="email" title="회사 이메일" placeHolder="회사 이메일을 입력해주세요" type="email" />
+                    <TextInput
+                      {...defaultInputAttributes}
+                      name="email"
+                      title="회사 이메일"
+                      placeHolder="회사 이메일을 입력해주세요"
+                      type="email"
+                      defaultValue={detailUserData?.employee?.email ?? ''}
+                    />
                     <div className={errMsgClassName}>{errors.email?.message}</div>
                   </div>
                   <div className="mb-4">
@@ -225,13 +260,14 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                       <div className={errMsgClassName}>{errors.startDate?.message}</div>
                     </div>
                   </div>
+
                   <div className="mb-4"></div>
                   <div className="text-center">
                     <button
                       type="submit"
                       className="inline-block w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
                     >
-                      등록하기
+                      수정하기
                     </button>
                   </div>
                 </form>
@@ -244,4 +280,4 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   );
 };
 
-export default AddEmployee;
+export default EditEmployee;

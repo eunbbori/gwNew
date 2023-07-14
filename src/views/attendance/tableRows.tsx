@@ -5,6 +5,7 @@ import format from 'date-fns/format';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
 import { attendanceSortVar, attendanceFilterVar, attendanceTotalCntVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
+import TableCellMod from './TableCellMod';
 
 type TableRowsProps = {
   data: IGetEmployeeWorkingQuery | undefined;
@@ -79,6 +80,7 @@ const TableRows = ({ data }: TableRowsProps) => {
               <TableCell cellData={workingTypeCodes.get(e?.workingType ?? '')} />
               <TableCell cellData={e.startAt ? format(e.startAt, 'MM-dd HH:mm') : '-'} />
               <TableCell cellData={e.endAt ? format(e.endAt, 'MM-dd HH:mm') : '-'} />
+              <TableCellMod cellData={e} />
             </tr>
           );
         })}

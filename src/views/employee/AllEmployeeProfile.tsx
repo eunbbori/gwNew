@@ -1,14 +1,17 @@
 import Profile from '@/components/Employee/Profile/Profile';
 import { useCodesMap } from '@/repository/Code';
-import { memberDetailIdVar } from '@/stores/gqlReactVars';
+import { memberDetailVar } from '@/stores/gqlReactVars';
 import { IGetAllEmployeeQuery } from '@/types/generated/types';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Link from 'next/link';
 import React from 'react';
 
 const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
   const positionOptions = useCodesMap('POSITION');
 
-  const clickHandler = (empId: string) => {
-    memberDetailIdVar(empId);
+  const clickHandler = (userId: string, empId: number) => {
+    memberDetailVar({ userId: userId, empId: empId });
   };
 
   list?.employees?.sort((a, b) => {
@@ -20,19 +23,25 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
 
   return (
     <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
-      {list?.employees
-        ? list?.employees?.map((emp, idx) => (
-            <Profile
-              key={emp?.employeeId}
-              onClick={() => clickHandler(emp?.userId || '')}
-              empName={emp?.name}
-              deptName={emp?.department?.departmentName}
-              position={emp?.position}
-              photoUrl={emp?.photoUrl || ''}
-              positionOptions={positionOptions}
-            />
-          ))
-        : 'Not loaded Yet'}
+      {list?.employees &&
+        list?.employees?.map((emp, idx) => (
+          <Profile
+            key={emp?.employeeId}
+            onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
+            empName={emp?.name}
+            deptName={emp?.department?.departmentName}
+            position={emp?.position}
+            photoUrl={emp?.photoUrl || ''}
+            positionOptions={positionOptions}
+          />
+        ))}
+      <Link href={{ pathname: '/employee/addEmp' }}>
+        <div className="mr-[35px] mb-[75px] cursor-pointer text-center">
+          <div className="w-[144px] h-[144px]">
+            <FontAwesomeIcon className="text-[#3366FF] text-10xl" icon={faPlus} />
+          </div>
+        </div>
+      </Link>
     </div>
   );
 };

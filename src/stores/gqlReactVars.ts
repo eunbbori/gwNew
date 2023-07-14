@@ -65,8 +65,11 @@ export const attendanceTotalCntVar = makeVar(0);
 //Attendance Conditional Active Page
 export const attendanceConditionalActivePageVar = makeVar(1);
 
-//Member Detail userId
-export const memberDetailIdVar = makeVar('');
+//Member Detail Info
+export const memberDetailVar = makeVar({
+  userId: '',
+  empId: 0,
+});
 
 ////////////////
 // BreadCrumb //

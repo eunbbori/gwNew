@@ -40,6 +40,15 @@ const TableHeader = ({ headers }: ITableHeader) => {
             </th>
           );
         })}
+        <th
+          key="__modify_attendance__"
+          style={{ width: '10%' }}
+          className={
+            'px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70'
+          }
+        >
+          수정
+        </th>
       </tr>
     </thead>
   );

@@ -1,7 +1,11 @@
 import React from 'react';
 import Profile from './Profile';
 import { IEmployee } from '@/types/generated/types';
-import { memberDetailIdVar } from '@/stores/gqlReactVars';
+import { memberDetailVar } from '@/stores/gqlReactVars';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export interface ITeamEmpProfileProps {
   deptId?: string | null;
@@ -10,6 +14,8 @@ export interface ITeamEmpProfileProps {
   positionOptions: Map<string, string>;
 }
 const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeamEmpProfileProps) => {
+  const { push } = useRouter();
+
   const deptEmployees = employees
     ?.sort((a, b) => {
       if (!a?.name) return 1;
@@ -19,8 +25,8 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
       return a?.name < b?.name ? -1 : 0;
     })
     .filter((dept) => dept?.department?.departmentId === deptId);
-  const clickHandler = (empId: string) => {
-    memberDetailIdVar(empId);
+  const clickHandler = (userId: string, empId: number) => {
+    memberDetailVar({ userId: userId, empId: empId });
   };
 
   return (
@@ -30,6 +36,11 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
           <span className="w-[4px] h-[32px] rounded-[2px] bg-[#3366FF] mr-[16px]"></span>
           {deptName}
           <p className="text-[16px] mt-[4px] ml-[5px]">({deptEmployees?.length})</p>
+          <p className="ml-3 leading-8 text-xl cursor-pointer">
+            <Link href={{ pathname: '/employee/addEmp', query: { deptId } }}>
+              <FontAwesomeIcon className="text-[#3366FF]" icon={faPlus} />
+            </Link>
+          </p>
         </h2>
         <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
           {deptEmployees &&
@@ -41,7 +52,7 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
                 position={emp?.position}
                 photoUrl={emp?.photoUrl || ''}
                 positionOptions={positionOptions}
-                onClick={() => clickHandler(emp?.userId || '')}
+                onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
               />
             ))}
         </div>
