@@ -85,6 +85,7 @@ const AddEmployee: React.FC = () => {
       reader.onloadend = () => {
         if (typeof reader.result === 'string') {
           setImgFile(reader.result);
+          event.target.value = '';
         }
       };
     }
