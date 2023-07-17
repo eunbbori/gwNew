@@ -1,7 +1,10 @@
-import { Controller, FieldPath, FieldValues, UseControllerProps } from 'react-hook-form';
+import { IEmployeeFormValues } from '@/views/admin/AddEmployee';
+import { useEffect } from 'react';
+import { Controller, FieldPath, FieldValues, UseControllerProps, UseFormSetValue, useController } from 'react-hook-form';
 
 interface OtherOptions {
   title: string;
+  value?: string;
   placeHolder: string;
   inputClassName: string;
 }
@@ -9,6 +12,14 @@ interface OtherOptions {
 const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
   props: UseControllerProps<TFieldValues, TName> & OtherOptions,
 ) => {
+  const formatPhoneNo = (phoneNo: string) => {
+    const phoneLength = phoneNo.length ?? 0;
+    if (phoneLength < 4) return phoneNo;
+    else if (phoneLength < 7) return phoneNo.replace(/(\d{3})(\d)/, '$1-$2');
+    else if (phoneLength < 11) return phoneNo.replace(/(\d{3})(\d{3})(\d)/, '$1-$2-$3');
+    else return phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  };
+
   return (
     <>
       <p className="text-sm text-[#484848]">{props.title}</p>
@@ -19,16 +30,14 @@ const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName exte
           <input
             {...field}
             onChange={({ target }) => {
+              console.log('onChangeeeeeeeeeeee');
               const phoneNo = target.value.trim().replace(/\D/g, '');
               onChange(phoneNo);
 
-              const phoneLength = phoneNo.length;
-              if (phoneLength < 4) target.value = phoneNo;
-              else if (phoneLength < 7) target.value = phoneNo.replace(/(\d{3})(\d)/, '$1-$2');
-              else if (phoneLength < 11) target.value = phoneNo.replace(/(\d{3})(\d{3})(\d)/, '$1-$2-$3');
-              else target.value = phoneNo.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+              target.value = formatPhoneNo(phoneNo);
             }}
             type="text"
+            defaultValue={formatPhoneNo(props.defaultValue ?? '')}
             placeholder={props.placeHolder}
             className={props.inputClassName}
             aria-label={props.name}

@@ -20,8 +20,8 @@ query getAllEmployee {
   }
 }
 
-query getEmployee($userId: String) {
-  employee(userId: $userId) {
+query getEmployee($employeeId: Int, $userId: String) {
+  employee(employeeId: $employeeId, userId: $userId) {
     employeeId
     userId
     name

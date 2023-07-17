@@ -150,6 +150,7 @@ export type IQueryCodesArgs = {
 };
 
 export type IQueryEmployeeArgs = {
+  employeeId?: InputMaybe<Scalars['Int']>;
   userId?: InputMaybe<Scalars['String']>;
 };
 
@@ -271,6 +272,7 @@ export type IGetAllEmployeeQuery = {
 };
 
 export type IGetEmployeeQueryVariables = Exact<{
+  employeeId?: InputMaybe<Scalars['Int']>;
   userId?: InputMaybe<Scalars['String']>;
 }>;
 
@@ -673,8 +675,8 @@ export type GetAllEmployeeQueryHookResult = ReturnType<typeof useGetAllEmployeeQ
 export type GetAllEmployeeLazyQueryHookResult = ReturnType<typeof useGetAllEmployeeLazyQuery>;
 export type GetAllEmployeeQueryResult = Apollo.QueryResult<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>;
 export const GetEmployeeDocument = gql`
-  query getEmployee($userId: String) {
-    employee(userId: $userId) {
+  query getEmployee($employeeId: Int, $userId: String) {
+    employee(employeeId: $employeeId, userId: $userId) {
       employeeId
       userId
       name
@@ -704,6 +706,7 @@ export const GetEmployeeDocument = gql`
  * @example
  * const { data, loading, error } = useGetEmployeeQuery({
  *   variables: {
+ *      employeeId: // value for 'employeeId'
  *      userId: // value for 'userId'
  *   },
  * });

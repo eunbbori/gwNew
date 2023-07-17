@@ -15,7 +15,8 @@ import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
 import { useReactiveVar } from '@apollo/client';
 import EmployeeProfile from './EmployeeProfile';
 import { memberDetailVar } from '@/stores/gqlReactVars';
-
+import { format, parseISO } from 'date-fns';
+import { ko } from 'date-fns/locale';
 export interface IEmployeeFormValues {
   img: string;
   userId: string;
@@ -39,23 +40,7 @@ interface IEditEmployee {
 }
 
 const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) => {
-  // const [getEmployee, { data: detailUserData }] = useGetEmployeeLazyQuery({
-  //   variables: {
-  //     userId: detailUserId,
-  //   },
-  //   fetchPolicy: 'no-cache',
-  //   onError: (err) => {
-  //     alert('Plz Login first!');
-  //   },
-  // });
-  // const { getEmployee, data: detailUserData } = useEmpDetail();
-
-  // useEffect(() => {
-  //   if (detailUserId) getEmployee();
-  // }, [detailUserId]);
-
   const router = useRouter();
-
   const deptOptions = useDepartmentsOption();
 
   const contractOptions = useCodesOption('CONTRACT_TYPE');
@@ -83,13 +68,18 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
   const errMsgClassName = 'text-[11px] text-red-400';
   const paragraphClassName = 'text-sm text-[#484848] self-center';
 
+  const startDateISO = detailUserData?.employee?.startDate;
+  const startDateFormatted = startDateISO ? format(parseISO(startDateISO), 'yyyy-MM-dd') : null;
+
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<IEmployeeFormValues>({
     resolver: yupResolver(schema),
+    // defaultValues: defaultValues,
   });
+  console.log('detailUserData?.employee?.startDate', startDateFormatted);
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
   const imgRef = useRef<HTMLInputElement>(null);
@@ -222,6 +212,7 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                         control={control}
                         selectOptions={deptOptions}
                         title="부서"
+                        defaultValue={detailUserData?.employee?.department?.departmentId}
                         placeHolder="부서를 선택해주세요"
                         paragraphClassName={paragraphClassName}
                       />
@@ -233,6 +224,7 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                         control={control}
                         selectOptions={contractOptions}
                         title="계약형태"
+                        defaultValue={detailUserData?.employee?.contractType}
                         placeHolder="계약형태를 선택해주세요"
                         paragraphClassName={paragraphClassName}
                       />
@@ -240,7 +232,14 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                     </div>
                   </div>
                   <div className="mb-4">
-                    <PhoneNoInput name="phone" title="핸드폰번호" control={control} placeHolder="핸드폰번호를 입력해주세요" inputClassName={inputClassName} />
+                    <PhoneNoInput
+                      name="phone"
+                      title="핸드폰번호"
+                      defaultValue={detailUserData?.employee?.phone}
+                      control={control}
+                      placeHolder="핸드폰번호를 입력해주세요"
+                      inputClassName={inputClassName}
+                    />
                     <div className={errMsgClassName}>{errors.phone?.message}</div>
                   </div>
                   <div className="mb-4 flex justify-between">
@@ -250,13 +249,14 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                         control={control}
                         selectOptions={positionOptions}
                         title="직급"
+                        defaultValue={detailUserData?.employee?.position}
                         placeHolder="직급을 선택해주세요"
                         paragraphClassName={paragraphClassName}
                       />
                       <div className={errMsgClassName}>{errors.position?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" />
+                      <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" defaultValue={startDateFormatted ?? ''} />
                       <div className={errMsgClassName}>{errors.startDate?.message}</div>
                     </div>
                   </div>

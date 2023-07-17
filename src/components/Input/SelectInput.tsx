@@ -24,6 +24,13 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
     const value = selectedOption ? selectedOption.value : '';
     field.onChange(value);
   };
+
+  const defaultValueOption = field.value
+    ? props.selectOptions.find((c: IOption) => c.value === field.value)
+    : props.defaultValue
+    ? props.selectOptions.find((c: IOption) => c.value === props.defaultValue)
+    : null;
+
   return (
     <>
       <div className={props.divClassName}>
@@ -32,7 +39,7 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
           name={props.name}
           options={SelectOptions}
           placeholder={props.placeHolder}
-          value={props.selectOptions.find((c: IOption) => c.value === field.value)}
+          value={defaultValueOption}
           onChange={handleSelectChange}
           className="w-full mr-5"
         />

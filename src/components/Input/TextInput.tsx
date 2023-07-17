@@ -14,6 +14,8 @@ const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends
 ) => {
   const { field } = useController(props);
 
+  const defaultValueOption = field.value ? field.value : props.defaultValue;
+
   return (
     <>
       <div className={props.divClassName}>
@@ -26,7 +28,7 @@ const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends
           className={props.inputClassName}
           aria-label={props.name}
           aria-describedby={props.name + '-addon'}
-          value={field.value}
+          value={defaultValueOption}
         />
       </div>
     </>
