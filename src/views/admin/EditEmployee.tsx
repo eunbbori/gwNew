@@ -1,29 +1,26 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useAddEmployeeMutation, useGetEmployeeLazyQuery } from '@/types/generated/types';
+import { IEmployeeInput, IEmployeeModInput, useModEmployeeMutation } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
 import SelectInput from '@/components/Input/SelectInput';
 import TextInput from '@/components/Input/TextInput';
+import Text from '@/components/Input/Text';
 import PhoneNoInput from '@/components/Input/PhoneNoInput';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
-import { useReactiveVar } from '@apollo/client';
 import EmployeeProfile from './EmployeeProfile';
-import { memberDetailVar } from '@/stores/gqlReactVars';
 import { format, parseISO } from 'date-fns';
-import { ko } from 'date-fns/locale';
-export interface IEmployeeFormValues {
+
+export interface IEmployeeEditFormValues {
   img: string;
   userId: string;
   name: string;
   email: string;
-  passwd: string;
-  passwdConfirm: string;
   departmentId: string;
   contractType: string;
   phone: string;
@@ -40,7 +37,9 @@ interface IEditEmployee {
 }
 
 const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) => {
+  console.log(detailUserData);
   const router = useRouter();
+
   const deptOptions = useDepartmentsOption();
 
   const contractOptions = useCodesOption('CONTRACT_TYPE');
@@ -51,11 +50,6 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
     name: yup.string().required('이름은 필수 입력사항입니다.'),
     phone: yup.string().required('핸드폰 번호는 필수 입력사항입니다.').max(11, '핸드폰 번호는 11자리까지 입력 가능합니다.'),
     email: yup.string().required('이메일은 필수 입력사항입니다').email('이메일 형식에 맞지 않습니다.'),
-    passwd: yup.string().min(6, '6글자 이상 10글자 이하로 입력해주세요.').required('비밀번호는 필수 입력사항입니다'),
-    passwdConfirm: yup
-      .string()
-      .oneOf([yup.ref('passwd')], '비밀번호가 일치하지 않습니다.')
-      .required('비밀번호는 필수 입력사항입니다'),
     startDate: yup.date().required('입사일은 필수 입력사항입니다'),
     //.matches(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/, '올바른 날짜 형식이 아닙니다.'),
     contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
@@ -65,6 +59,9 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
 
   const inputClassName =
     'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
+  const textClassName =
+    'text-[18px] text-[#e8e8e8] bg-[#5a5a5a] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] bg-clip-padding py-2 px-3 font-normal transition-all';
+  const imgClassName = 'w-[250px] h-[250px]';
   const errMsgClassName = 'text-[11px] text-red-400';
   const paragraphClassName = 'text-sm text-[#484848] self-center';
 
@@ -74,19 +71,35 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
   const {
     handleSubmit,
     control,
-    formState: { errors },
-  } = useForm<IEmployeeFormValues>({
+    getFieldState,
+    formState: { errors, isDirty, dirtyFields },
+  } = useForm<IEmployeeEditFormValues>({
     resolver: yupResolver(schema),
-    // defaultValues: defaultValues,
+    mode: 'onChange',
+    defaultValues: {
+      userId: detailUserData?.employee?.userId,
+      name: detailUserData?.employee?.name,
+      email: detailUserData?.employee?.email,
+      departmentId: detailUserData?.employee?.department?.departmentId,
+      contractType: detailUserData?.employee?.contractType,
+      phone: detailUserData?.employee?.phone,
+      position: detailUserData?.employee?.position,
+    },
   });
-  console.log('detailUserData?.employee?.startDate', startDateFormatted);
+  const imgFieldState = getFieldState('img');
 
-  const [addEmployeeMutation] = useAddEmployeeMutation();
+  const [modEmployeeMutation] = useModEmployeeMutation();
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile]: any = useState(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-  const handleAddImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    if (detailUserData?.employee?.photoUrl) {
+      setImgFile(`http://localhost:4000/${detailUserData.employee.photoUrl}`);
+    }
+  }, [detailUserData]);
+
+  const handleModImage = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
     if (file) {
       console.log('file', file);
@@ -102,36 +115,36 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
     }
   };
 
-  console.log('uploadedFile', uploadedFile);
+  console.log('imgFile', imgFile);
   const imgDeleteHandler = () => {
     setImgFile(null);
   };
 
-  const onAddEmployee = (inputData: IEmployeeFormValues) => {
-    console.log(inputData);
-    const { passwdConfirm: _, ...newInputData } = inputData;
+  const onModEmployee = (inputData: IEmployeeEditFormValues) => {
+    console.log('inputData', inputData);
 
-    const input: IEmployeeInput = {
-      ...newInputData,
-      departmentId: parseInt(newInputData.departmentId),
+    const input: IEmployeeModInput = {
+      ...inputData,
+      departmentId: parseInt(inputData.departmentId),
     };
-    addEmployeeMutation({
+    modEmployeeMutation({
       variables: {
+        employeeId: detailUserData?.employee?.employeeId,
         input,
         file: uploadedFile,
       },
       onCompleted: (data) => {
-        alert('등록됐습니다.');
+        alert('수정됐습니다.');
+        console.log('inputData', inputData);
         router.push('/employee/listEmp');
 
-        console.log('data가 저장됐습니다', data.addEmployee?.userId);
+        console.log('data가 수정됐습니다', data.modEmployee?.userId);
       },
       onError: (err) => {
         alert(err.message);
       },
     });
   };
-
   const defaultInputAttributes = {
     control,
     type: 'text',
@@ -146,64 +159,38 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
           <div className="w-full max-w-full px-3 mx-auto mt-[250px] md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
             <div className="relative z-0 flex flex-col min-w-0 break-words border-0 rounded-2xl bg-clip-border items-center">
               <div className="flex-auto p-6 w-[600px]">
-                <form onSubmit={handleSubmit(onAddEmployee)} role="form text-left">
-                  <div className="mb-4 w-[250px]">
-                    <EmployeeProfile
-                      {...defaultInputAttributes}
-                      title="프로필 이미지"
-                      info="사진을 저장하세요"
-                      imgRef={imgRef}
-                      handleAddImage={handleAddImage}
-                      imgDeleteHandler={imgDeleteHandler}
-                      imgFile={imgFile}
-                    />
+                <form onSubmit={handleSubmit(onModEmployee)} role="form text-left">
+                  <div className="mb-4 flex justify-between">
+                    <div className="w-[250px]">
+                      <EmployeeProfile
+                        {...defaultInputAttributes}
+                        title="프로필 이미지"
+                        name="img"
+                        info="사진을 수정하세요"
+                        imgRef={imgRef}
+                        handleAddImage={handleModImage}
+                        imgDeleteHandler={imgDeleteHandler}
+                        imgFile={imgFile}
+                        inputClassName={imgClassName}
+                      />
+                    </div>
+                    <div className="w-[250px] self-end">
+                      <Text inputClassName={textClassName} paragraphClassName={paragraphClassName} title="사번" value={detailUserData?.employee?.employeeId} />
+                    </div>
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <TextInput
-                        {...defaultInputAttributes}
-                        name="userId"
-                        title="아이디"
-                        placeHolder="아이디를 입력해주세요"
-                        defaultValue={detailUserData?.employee?.userId ?? ''}
-                      />
+                      <TextInput {...defaultInputAttributes} name="userId" title="아이디" placeHolder="아이디를 입력해주세요" />
                       <div className={errMsgClassName}>{errors.userId?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <TextInput
-                        {...defaultInputAttributes}
-                        name="name"
-                        title="이름"
-                        placeHolder="이름을 입력해주세요"
-                        defaultValue={detailUserData?.employee?.name ?? ''}
-                      />
+                      <TextInput {...defaultInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
                       <div className={errMsgClassName}>{errors.name?.message}</div>
                     </div>
                   </div>
                   <div className="mb-4">
-                    <TextInput
-                      {...defaultInputAttributes}
-                      name="email"
-                      title="회사 이메일"
-                      placeHolder="회사 이메일을 입력해주세요"
-                      type="email"
-                      defaultValue={detailUserData?.employee?.email ?? ''}
-                    />
+                    <TextInput {...defaultInputAttributes} name="email" title="회사 이메일" placeHolder="회사 이메일을 입력해주세요" type="email" />
                     <div className={errMsgClassName}>{errors.email?.message}</div>
-                  </div>
-                  <div className="mb-4">
-                    <TextInput {...defaultInputAttributes} name="passwd" title="임시 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
-                    <div className={errMsgClassName}>{errors.passwd?.message}</div>
-                  </div>
-                  <div className="mb-4">
-                    <TextInput
-                      {...defaultInputAttributes}
-                      name="passwdConfirm"
-                      title="임시 비밀번호 확인"
-                      placeHolder="비밀번호 한번 더 입력해주세요"
-                      type="password"
-                    />
-                    <div className={errMsgClassName}>{errors.passwdConfirm?.message}</div>
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
@@ -212,7 +199,6 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                         control={control}
                         selectOptions={deptOptions}
                         title="부서"
-                        defaultValue={detailUserData?.employee?.department?.departmentId}
                         placeHolder="부서를 선택해주세요"
                         paragraphClassName={paragraphClassName}
                       />
@@ -224,7 +210,6 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                         control={control}
                         selectOptions={contractOptions}
                         title="계약형태"
-                        defaultValue={detailUserData?.employee?.contractType}
                         placeHolder="계약형태를 선택해주세요"
                         paragraphClassName={paragraphClassName}
                       />
@@ -232,14 +217,7 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                     </div>
                   </div>
                   <div className="mb-4">
-                    <PhoneNoInput
-                      name="phone"
-                      title="핸드폰번호"
-                      defaultValue={detailUserData?.employee?.phone}
-                      control={control}
-                      placeHolder="핸드폰번호를 입력해주세요"
-                      inputClassName={inputClassName}
-                    />
+                    <PhoneNoInput name="phone" title="핸드폰번호" control={control} placeHolder="핸드폰번호를 입력해주세요" inputClassName={inputClassName} />
                     <div className={errMsgClassName}>{errors.phone?.message}</div>
                   </div>
                   <div className="mb-4 flex justify-between">
@@ -249,7 +227,6 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                         control={control}
                         selectOptions={positionOptions}
                         title="직급"
-                        defaultValue={detailUserData?.employee?.position}
                         placeHolder="직급을 선택해주세요"
                         paragraphClassName={paragraphClassName}
                       />
@@ -261,7 +238,6 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
                     </div>
                   </div>
 
-                  <div className="mb-4"></div>
                   <div className="text-center">
                     <button
                       type="submit"

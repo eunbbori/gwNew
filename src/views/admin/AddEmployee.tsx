@@ -13,6 +13,7 @@ import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
 import EmployeeProfile from './EmployeeProfile';
+import { format } from 'date-fns';
 
 export interface IEmployeeFormValues {
   img: string;
@@ -144,6 +145,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                   <div className="mb-4 w-[250px]">
                     <EmployeeProfile
                       {...defaultInputAttributes}
+                      name="img"
                       title="프로필 이미지"
                       info="사진을 저장하세요"
                       imgRef={imgRef}
@@ -221,7 +223,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                       <div className={errMsgClassName}>{errors.position?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" />
+                      <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" defaultValue={format(new Date(), 'yyyy-MM-dd') ?? ''} />
                       <div className={errMsgClassName}>{errors.startDate?.message}</div>
                     </div>
                   </div>

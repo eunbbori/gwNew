@@ -49,4 +49,13 @@ export const allMenuInfos: MenuInfo[] = [
   { firstMenu: 'employee', secondMenu: ['listEmp', 'addEmp'] },
 ];
 
+export const allUris = new Map<string, string>();
+
+allMenuInfos.forEach((e) => {
+  const first = e.firstMenu;
+  e.secondMenu.forEach((s) => {
+    allUris.set(s, '/' + first + '/' + s);
+  });
+});
+
 export const defaultRouteInfo: MenuInfo = allMenuInfos[1];

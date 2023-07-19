@@ -2,7 +2,6 @@ import { FieldPath, FieldValues, UseControllerProps, useController } from 'react
 interface OtherOptions {
   id: string;
   title: string;
-  type: string;
   accept?: string;
   inputClassName: string;
   paragraphClassName: string;
@@ -24,7 +23,7 @@ const ImageInput = <TFieldValues extends FieldValues = FieldValues, TName extend
           {...field}
           name={props.name}
           id={props.id}
-          type={props.type}
+          type="file"
           accept={props.accept}
           ref={props.ref}
           onChange={props.onChange}

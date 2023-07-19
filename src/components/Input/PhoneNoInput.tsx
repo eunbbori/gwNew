@@ -1,5 +1,3 @@
-import { IEmployeeFormValues } from '@/views/admin/AddEmployee';
-import { useEffect } from 'react';
 import { Controller, FieldPath, FieldValues, UseControllerProps, UseFormSetValue, useController } from 'react-hook-form';
 
 interface OtherOptions {
@@ -37,7 +35,7 @@ const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName exte
               target.value = formatPhoneNo(phoneNo);
             }}
             type="text"
-            defaultValue={formatPhoneNo(props.defaultValue ?? '')}
+            value={value ? formatPhoneNo(value) : formatPhoneNo(props.defaultValue ?? '')}
             placeholder={props.placeHolder}
             className={props.inputClassName}
             aria-label={props.name}

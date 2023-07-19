@@ -1,6 +1,6 @@
 import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
-import { getRouteInfo } from '@/repository/RouteInfo';
+import { getRouteInfo, allUris } from '@/repository/RouteInfo';
 
 const Slash = () => {
   return (
@@ -32,7 +32,7 @@ const BreadCrumb = () => {
                   ) : (
                     <li>
                       <a
-                        href={idx == 0 ? '/' : `'/'+curr?.id`}
+                        href={idx == 0 ? '/' : allUris.get(curr?.id)}
                         className="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                       >
                         {curr?.title}

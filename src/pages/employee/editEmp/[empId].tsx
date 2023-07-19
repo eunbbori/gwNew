@@ -33,7 +33,7 @@ const EditEmp = () => {
   }, [jwtTokens]);
 
   console.log('detailUserData', detailUserData);
-  return <EditEmployee detailEmpId={detailEmpId} detailUserData={detailUserData} />;
+  return <>{detailUserData && <EditEmployee detailEmpId={detailEmpId} detailUserData={detailUserData} />}</>;
 };
 
 export default EditEmp;

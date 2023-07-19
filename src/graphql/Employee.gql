@@ -102,6 +102,23 @@ mutation addEmployee($input: EmployeeInput!, $file: Upload) {
   }
 }
 
+mutation modEmployee($employeeId: Int, $input: EmployeeModInput!, $file: Upload) {
+  modEmployee(employeeId: $employeeId, input: $input, file: $file) {
+    employeeId
+    userId
+    name
+    position
+    email
+    department {
+      departmentId
+      departmentName
+    }
+    contractType
+    phone
+    startDate
+  }
+}
+
 query getCodes($parents: [String]) {
   codes(parents: $parents) {
     parentCode

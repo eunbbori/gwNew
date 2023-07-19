@@ -25,6 +25,11 @@ const nextConfig = {
         hostname: '192.168.0.201',
         pathname: '/employees/**',
       },
+      {
+        protocol: 'https',
+        hostname: '192.168.0.203',
+        pathname: '/employees/**',
+      },
     ],
   },
 };

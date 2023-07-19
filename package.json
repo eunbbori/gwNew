@@ -6,7 +6,7 @@
     "dev": "env-cmd -f env/.env.local next dev",
     "mock": "env-cmd -f env/.env.test next dev",
     "build:dev": "env-cmd -f env/.env.dev next build",
-    "build:prod": "next build",
+    "build:prod": "env-cmd -f env/.env.prod next build",
     "start:dev": "env-cmd -f env/.env.dev next start -p 3001",
     "start:prod": "env-cmd -f env/.env.prod next start -p 3001",
     "lint": "next lint",

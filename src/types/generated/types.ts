@@ -70,6 +70,17 @@ export type IEmployeeInput = {
   userId?: InputMaybe<Scalars['String']>;
 };
 
+export type IEmployeeModInput = {
+  contractType?: InputMaybe<Scalars['String']>;
+  departmentId?: InputMaybe<Scalars['Int']>;
+  email?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  position?: InputMaybe<Scalars['String']>;
+  startDate?: InputMaybe<Scalars['Date']>;
+  userId?: InputMaybe<Scalars['String']>;
+};
+
 export type IEmployeeWorking = {
   __typename?: 'EmployeeWorking';
   department?: Maybe<IDepartment>;
@@ -116,6 +127,7 @@ export type IMutation = {
   leaveWork?: Maybe<IEmployeeWorking>;
   login?: Maybe<IAuthInfo>;
   logout?: Maybe<IEmployee>;
+  modEmployee?: Maybe<IEmployee>;
   refresh?: Maybe<IAuthInfo>;
   singleUpload: IFile;
 };
@@ -128,6 +140,12 @@ export type IMutationAddEmployeeArgs = {
 export type IMutationLoginArgs = {
   email?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
+};
+
+export type IMutationModEmployeeArgs = {
+  employeeId?: InputMaybe<Scalars['Int']>;
+  file?: InputMaybe<Scalars['Upload']>;
+  input?: InputMaybe<IEmployeeModInput>;
 };
 
 export type IMutationSingleUploadArgs = {
@@ -359,6 +377,27 @@ export type IAddEmployeeMutation = {
   addEmployee?: {
     __typename?: 'Employee';
     employeeId?: number | null;
+    userId?: string | null;
+    name?: string | null;
+    position?: string | null;
+    email?: string | null;
+    contractType?: string | null;
+    phone?: string | null;
+    startDate?: any | null;
+    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+  } | null;
+};
+
+export type IModEmployeeMutationVariables = Exact<{
+  employeeId?: InputMaybe<Scalars['Int']>;
+  input: IEmployeeModInput;
+  file?: InputMaybe<Scalars['Upload']>;
+}>;
+
+export type IModEmployeeMutation = {
+  __typename?: 'Mutation';
+  modEmployee?: {
+    __typename?: 'Employee';
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -906,6 +945,51 @@ export function useAddEmployeeMutation(baseOptions?: Apollo.MutationHookOptions<
 export type AddEmployeeMutationHookResult = ReturnType<typeof useAddEmployeeMutation>;
 export type AddEmployeeMutationResult = Apollo.MutationResult<IAddEmployeeMutation>;
 export type AddEmployeeMutationOptions = Apollo.BaseMutationOptions<IAddEmployeeMutation, IAddEmployeeMutationVariables>;
+export const ModEmployeeDocument = gql`
+  mutation modEmployee($employeeId: Int, $input: EmployeeModInput!, $file: Upload) {
+    modEmployee(employeeId: $employeeId, input: $input, file: $file) {
+      userId
+      name
+      position
+      email
+      department {
+        departmentId
+        departmentName
+      }
+      contractType
+      phone
+      startDate
+    }
+  }
+`;
+export type IModEmployeeMutationFn = Apollo.MutationFunction<IModEmployeeMutation, IModEmployeeMutationVariables>;
+
+/**
+ * __useModEmployeeMutation__
+ *
+ * To run a mutation, you first call `useModEmployeeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useModEmployeeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [modEmployeeMutation, { data, loading, error }] = useModEmployeeMutation({
+ *   variables: {
+ *      employeeId: // value for 'employeeId'
+ *      input: // value for 'input'
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useModEmployeeMutation(baseOptions?: Apollo.MutationHookOptions<IModEmployeeMutation, IModEmployeeMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IModEmployeeMutation, IModEmployeeMutationVariables>(ModEmployeeDocument, options);
+}
+export type ModEmployeeMutationHookResult = ReturnType<typeof useModEmployeeMutation>;
+export type ModEmployeeMutationResult = Apollo.MutationResult<IModEmployeeMutation>;
+export type ModEmployeeMutationOptions = Apollo.BaseMutationOptions<IModEmployeeMutation, IModEmployeeMutationVariables>;
 export const GetCodesDocument = gql`
   query getCodes($parents: [String]) {
     codes(parents: $parents) {
