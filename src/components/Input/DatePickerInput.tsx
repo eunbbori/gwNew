@@ -14,6 +14,7 @@ const DatePickerInput = <TFieldValues extends FieldValues = FieldValues, TName e
     field.onChange(formattedDate);
   };
 
+  console.log('aaaaaaaaaaa=' + field.value ? field.value : props.defaultValue ? props.defaultValue : new Date().toISOString());
   return (
     <>
       <p className="text-sm text-[#484848]">{props.title}</p>
@@ -26,7 +27,7 @@ const DatePickerInput = <TFieldValues extends FieldValues = FieldValues, TName e
         selected={field.value ? new Date(field.value) : props.defaultValue ? new Date(props.defaultValue) : new Date()}
         onChange={handleDatePickerChange}
         customInput={
-          <button>
+          <button type="button">
             <span className="pl-[4.25rem]">
               {format(field.value ? new Date(field.value) : props.defaultValue ? new Date(props.defaultValue) : new Date(), 'yyyy-MM-dd (cccccc)', {
                 locale: ko,

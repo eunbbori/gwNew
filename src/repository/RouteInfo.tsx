@@ -18,7 +18,7 @@ export type MenuInfo = {
 
 export const allRouteInfos: RouteInfo[] = [
   { id: '/', title: '홈', linkable: true },
-  { id: 'approval', title: '결제', img: editIcon, linkable: false },
+  { id: 'approval', title: '결재', img: editIcon, linkable: false },
   { id: 'test1', title: 'test1', linkable: false },
   { id: 'test2', title: 'test2', linkable: false },
   { id: 'attendance', title: '근태관리', img: alarmIcon, linkable: false },
@@ -34,6 +34,7 @@ export const allRouteInfos: RouteInfo[] = [
   { id: 'employee', title: '직원관리', img: userGroupIcon, linkable: false },
   { id: 'listEmp', title: '구성원', linkable: true },
   { id: 'editEmp', title: '직원수정', linkable: false },
+  { id: 'changePwd', title: '비밀번호변경', linkable: false },
   { id: 'addEmp', title: '직원등록', linkable: true },
 ];
 

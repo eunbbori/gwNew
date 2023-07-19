@@ -1,12 +1,10 @@
 import ImageInput from '@/components/Input/ImageInput';
-import { Control } from 'react-hook-form';
-import { EmployeeFormValues } from './AddEmployee';
+import { FieldPath, FieldValues, UseControllerProps } from 'react-hook-form';
 import { IoIosClose } from 'react-icons/io';
 import Image from 'next/image';
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
 
 interface IEmployeeProfileProps {
-  control: Control<EmployeeFormValues, any>;
   title: string;
   info: string;
   imgRef: React.RefObject<HTMLInputElement>;
@@ -17,22 +15,23 @@ interface IEmployeeProfileProps {
   imgFile: any;
 }
 
-const EmployeeProfile = (props: IEmployeeProfileProps) => {
+const EmployeeProfile = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
+  props: UseControllerProps<TFieldValues, TName> & IEmployeeProfileProps,
+) => {
   return (
     <label htmlFor="inputFile">
       <ImageInput
         id="inputFile"
-        name="img"
+        name={props.name}
         title={props.title}
         control={props.control}
         ref={props.imgRef}
-        type="file"
         onChange={props.handleAddImage}
         accept=".jpg,.png,.jpeg"
         inputClassName={props.inputClassName}
         paragraphClassName={props.paragraphClassName}
       />
-      <div className="relative cursor-pointer w-[250px] h-[250px]">
+      <div className="relative cursor-pointer w-[250px] h-[250px] overflow-hidden">
         <div className="group">
           <Image src={props.imgFile ? props.imgFile : blankProfile} alt="프로필 이미지" width={250} height={250} className="cursor-pointer" />
           <div className="absolute top-0 left-0 w-[250px] h-[250px] bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>

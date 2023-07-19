@@ -135,3 +135,20 @@ mutation singleUpload($employeeId: Int, $file: Upload!) {
     filename
   }
 }
+
+mutation changePwd($employeeId: Int, $pwd: String) {
+  changePwd(employeeId: $employeeId, pwd: $pwd) {
+    employeeId
+    userId
+    name
+    position
+    email
+    department {
+      departmentId
+      departmentName
+    }
+    contractType
+    phone
+    startDate
+  }
+}
