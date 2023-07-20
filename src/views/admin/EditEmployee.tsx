@@ -92,10 +92,10 @@ const EditEmployee: React.FC<IEditEmployee> = ({ detailEmpId, detailUserData }) 
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgFile, setImgFile]: any = useState(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
+  const profileLink = process.env.NEXT_PUBLIC_BASE_PROFILE_API;
   useEffect(() => {
     if (detailUserData?.employee?.photoUrl) {
-      setImgFile(`http://localhost:4000/${detailUserData.employee.photoUrl}`);
+      setImgFile(`${profileLink}/${detailUserData.employee.photoUrl}`);
     }
   }, [detailUserData]);
 
