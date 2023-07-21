@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLoginMutation } from '@/types/generated/types';
 import { useRouter } from 'next/navigation';
 import { jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
+import Swal from 'sweetalert';
+import Spinner from '@/components/Spinner';
 
 export interface ILoginFormValues {
   empEmail: string;
@@ -34,7 +36,18 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const [loginMutation] = useLoginMutation();
+  const [isLoading, setLoading] = useState(true);
+  console.log('isLoading', isLoading);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, 2000);
+  // }, []);
+
+  const [loginMutation, { loading }] = useLoginMutation();
+
+  if (loading) return <Spinner />;
 
   const onLogin = (loginData: ILoginFormValues) => {
     loginMutation({
@@ -51,8 +64,9 @@ const Login = () => {
         push('/');
       },
       onError: (err) => {
-        alert('Check Your Id & Password!');
-        refresh();
+        Swal('아이디와 비밀번호를 확인해주세요', '', 'error').then((result) => {
+          refresh();
+        });
       },
     });
   };

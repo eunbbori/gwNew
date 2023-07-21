@@ -11,7 +11,7 @@ import Paging from '@/components/Paging';
 import { attendanceConditionalActivePageVar } from '@/stores/gqlReactVars';
 import ConditionalInputs from './ConditionalInputs';
 import SelectPageCount from './SelectPageCount';
-
+import Swal from 'sweetalert';
 export interface DateRange {
   startDate: Date;
   endDate: Date;
@@ -46,7 +46,7 @@ const AttendanceConditional = () => {
 
   const [getEmployeeWorkingConditionalQuery, { data }] = useGetEmployeeWorkingConditionalLazyQuery({
     onError: (err) => {
-      alert('err 조건조회');
+      Swal('ERROR', '', 'error');
     },
   });
 
@@ -91,7 +91,7 @@ const AttendanceConditional = () => {
       const newPage = data?.employeeWorkingConditional?.page ?? 1;
       attendanceConditionalActivePageVar(newPage);
     } catch (error) {
-      alert('err 조건조회');
+      Swal('ERROR', '', 'error');
     }
   };
 

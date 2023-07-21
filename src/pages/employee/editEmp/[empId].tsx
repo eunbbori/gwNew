@@ -4,7 +4,7 @@ import { breadCrumbPathVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import EditEmployee from '@/views/admin/EditEmployee';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
-import dynamic from 'next/dynamic';
+import Swal from 'sweetalert';
 
 const EditEmp = () => {
   useEffect(() => {
@@ -24,7 +24,7 @@ const EditEmp = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      alert('Plz Login first!');
+      Swal('ERROR', '', 'error');
     },
   });
 

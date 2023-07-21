@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 import Text from '@/components/Input/Text';
 import TextInput from '@/components/Input/TextInput';
 import { useChangePwdMutation } from '@/types/generated/types';
+import Swal from 'sweetalert';
 
 export interface IEmployeePwdChangeFormValues {
   passwd: string;
@@ -16,7 +17,7 @@ interface IChangePwd {
   detailUserData: any;
 }
 
-const ChangeEmpPwd: React.FC<IChangePwd> = ({ detailUserData }) => {
+const ChangeEmpPwd = (props: IChangePwd) => {
   const router = useRouter();
   const schema = yup.object().shape({
     passwd: yup.string().min(6, '6글자 이상 10글자 이하로 입력해주세요.').required('비밀번호는 필수 입력사항입니다'),
@@ -50,15 +51,16 @@ const ChangeEmpPwd: React.FC<IChangePwd> = ({ detailUserData }) => {
 
     changePwdMutation({
       variables: {
-        employeeId: detailUserData?.employee?.employeeId,
+        employeeId: props.detailUserData?.employee?.employeeId,
         pwd: inputData.passwd,
       },
       onCompleted: (data) => {
-        alert('수정됐습니다.');
-        router.push('/employee/listEmp');
+        Swal('수정됐습니다', '', 'success').then((result) => {
+          router.push('/employee/listEmp');
+        });
       },
       onError: (err) => {
-        alert(err.message);
+        Swal('ERROR', '', 'error');
       },
     });
   };
@@ -79,10 +81,20 @@ const ChangeEmpPwd: React.FC<IChangePwd> = ({ detailUserData }) => {
               <form onSubmit={handleSubmit(onChangePwd)} role="form text-left">
                 <div className="mb-4 flex justify-between">
                   <div className="w-[250px] self-end">
-                    <Text inputClassName={textClassName} paragraphClassName={paragraphClassName} title="사번" value={detailUserData?.employee?.employeeId} />
+                    <Text
+                      inputClassName={textClassName}
+                      paragraphClassName={paragraphClassName}
+                      title="사번"
+                      value={props.detailUserData?.employee?.employeeId}
+                    />
                   </div>
                   <div className="w-[250px] self-end">
-                    <Text inputClassName={textClassName} paragraphClassName={paragraphClassName} title="아이디" value={detailUserData?.employee?.userId} />
+                    <Text
+                      inputClassName={textClassName}
+                      paragraphClassName={paragraphClassName}
+                      title="아이디"
+                      value={props.detailUserData?.employee?.userId}
+                    />
                   </div>
                 </div>
                 <div className="mb-4">

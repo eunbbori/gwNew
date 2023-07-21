@@ -6,6 +6,7 @@ import { memberDetailVar } from '@/stores/gqlReactVars';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useCodesMap } from '@/repository/Code';
 import { formatPhoneNumber } from '@/components/Util/CommonUtil';
+import Swal from 'sweetalert';
 
 const useEmpDetail = () => {
   const [getEmployee, { data }] = useGetEmployeeLazyQuery({
@@ -14,7 +15,7 @@ const useEmpDetail = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      alert('Plz Login first!');
+      Swal('직원 조회가 실패했습니다', '', 'error');
     },
   });
 

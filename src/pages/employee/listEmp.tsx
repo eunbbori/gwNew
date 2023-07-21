@@ -3,6 +3,7 @@ import { useGetAllEmployeeLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
 import dynamic from 'next/dynamic';
+import Swal from 'sweetalert';
 
 const DynamicEmployeeTab = dynamic(() => import('@/views/employee/EmployeeTab'), {
   ssr: false,
@@ -14,7 +15,7 @@ const ListEmp = () => {
   const [getAllEmployeeQuery, { data }] = useGetAllEmployeeLazyQuery({
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      alert('Plz Login first!');
+      Swal('ERROR', '', 'error');
     },
   });
 

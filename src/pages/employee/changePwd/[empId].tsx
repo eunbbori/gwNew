@@ -4,6 +4,7 @@ import { breadCrumbPathVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import ChangeEmpPwd from '@/views/admin/ChangeEmpPwd';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
+import Swal from 'sweetalert';
 
 const ChangePwd = () => {
   useEffect(() => {
@@ -22,7 +23,7 @@ const ChangePwd = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      alert('Plz Login first!');
+      Swal('ERROR', '', 'error');
     },
   });
 

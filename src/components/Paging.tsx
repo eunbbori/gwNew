@@ -11,7 +11,7 @@ export interface PageProps {
   perPage?: number;
   totalCount?: number;
 }
-const Paging: React.FC<PageProps> = ({ totalCount = 0, paging = 1, perPage = 10, onHandler }) => {
+const Paging = ({ totalCount = 0, paging = 1, perPage = 10, onHandler }: PageProps) => {
   return (
     <Pagination
       activePage={paging}

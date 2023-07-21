@@ -2,13 +2,14 @@ import { jwtTokensVar } from '@/stores/gqlReactVars';
 import { IGetCodesQuery, useGetAllDepartmentsLazyQuery, useGetCodesLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
 import { useEffect } from 'react';
+import Swal from 'sweetalert';
 
 export const useDepartments = () => {
   const jwtTokens = useReactiveVar(jwtTokensVar);
 
   const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery({
     onError: (err) => {
-      alert('err');
+      Swal('ERROR', '', 'error');
     },
   });
 
@@ -38,7 +39,7 @@ export const useCodes = (parent: string): IGetCodesQuery | undefined => {
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: { parents: [parent] },
     onError: (err) => {
-      alert('err');
+      Swal('ERROR', '', 'error');
     },
   });
 

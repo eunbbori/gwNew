@@ -6,6 +6,7 @@ import { useReactiveVar } from '@apollo/client';
 import { attendanceDateVar, attendanceTotalCntVar, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useCallback, useEffect } from 'react';
 import DailyTableHeader from './DailyTableHeader';
+import Swal from 'sweetalert';
 
 const useMyEmployeeWorking = () => {
   const selectedAttendanceDate = useReactiveVar(attendanceDateVar);
@@ -22,7 +23,7 @@ const useMyEmployeeWorking = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      alert('Plz Login first!');
+      Swal('ERROR', '', 'error');
     },
   });
 
