@@ -36,18 +36,10 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const [isLoading, setLoading] = useState(true);
-  console.log('isLoading', isLoading);
+  const [loginMutation] = useLoginMutation();
+  const [isLoading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 2000);
-  // }, []);
-
-  const [loginMutation, { loading }] = useLoginMutation();
-
-  if (loading) return <Spinner />;
+  if (isLoading) return <Spinner />;
 
   const onLogin = (loginData: ILoginFormValues) => {
     loginMutation({
@@ -60,7 +52,7 @@ const Login = () => {
 
         jwtTokensVar({ accessToken: auth?.accessToken || '' });
         startEndAtVar({ startAt: auth?.startAt, endAt: auth?.endAt });
-
+        setLoading(true);
         push('/');
       },
       onError: (err) => {

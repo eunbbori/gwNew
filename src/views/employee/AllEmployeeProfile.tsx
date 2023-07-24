@@ -23,22 +23,21 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
 
   return (
     <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
-      {list?.employees &&
-        list?.employees?.map((emp, idx) => (
-          <Profile
-            key={emp?.employeeId}
-            onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
-            empName={emp?.name}
-            deptName={emp?.department?.departmentName}
-            position={emp?.position}
-            photoUrl={emp?.photoUrl || ''}
-            positionOptions={positionOptions}
-          />
-        ))}
+      {list?.employees?.map((emp, idx) => (
+        <Profile
+          key={emp?.employeeId}
+          onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
+          empName={emp?.name}
+          deptName={emp?.department?.departmentName}
+          position={emp?.position}
+          photoUrl={emp?.photoUrl || ''}
+          positionOptions={positionOptions}
+        />
+      ))}
       <Link href={{ pathname: '/employee/addEmp' }}>
         <div className="mr-[35px] mb-[75px] cursor-pointer text-center">
-          <div className="w-[144px] h-[144px]">
-            <FontAwesomeIcon className="text-[#3366FF] text-10xl" icon={faPlus} />
+          <div className="flex items-center justify-center w-[144px] h-[144px]">
+            <FontAwesomeIcon className="text-[#3366FF] text-5xl" icon={faPlus} />
           </div>
         </div>
       </Link>

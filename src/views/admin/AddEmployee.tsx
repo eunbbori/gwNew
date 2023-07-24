@@ -15,6 +15,8 @@ import EmployeeProfile from './EmployeeProfile';
 import { format } from 'date-fns';
 import Swal from 'sweetalert';
 import { useHandleEmployeeImage, IEmployeeFormValues, addSchema, defaultInputAttributes, classNames } from './HandleEmployee';
+import CancelButton from '@/components/Button/CancelButton';
+import SubmitButton from '@/components/Button/SubmitButton';
 
 interface IOption {
   value: string;
@@ -23,6 +25,12 @@ interface IOption {
 interface IAddEmployeeProps {
   deptId: string;
 }
+
+const cancelClassName =
+  'w-full inline-block px-6 py-3 mt-6 mb-2 mr-4 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white';
+
+const submitClassName =
+  'w-full from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500 inline-block px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl hover:bg-slate-700 hover:text-white';
 
 const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const router = useRouter();
@@ -41,6 +49,10 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   });
 
   const controlledInputAttributes = { ...defaultInputAttributes, control };
+
+  const cancelHandler = () => {
+    router.push('/employee/listEmp');
+  };
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
   const imgRef = useRef<HTMLInputElement>(null);
@@ -165,13 +177,9 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                     </div>
                   </div>
                   <div className="mb-4"></div>
-                  <div className="text-center">
-                    <button
-                      type="submit"
-                      className="inline-block w-full px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white"
-                    >
-                      등록하기
-                    </button>
+                  <div className="text-center flex">
+                    <CancelButton onClick={cancelHandler} text="취소" cancelClassName={cancelClassName} />
+                    <SubmitButton text="등록" submitClassName={submitClassName} />
                   </div>
                 </form>
               </div>

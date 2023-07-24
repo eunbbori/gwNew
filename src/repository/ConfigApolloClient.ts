@@ -27,7 +27,6 @@ const authLink = setContext((_, { headers }) => {
       ...headers,
       authorization: token ? `Bearer ${token}` : '',
       'Apollo-Require-Preflight': 'true',
-      'Access-Control-Allow-Origin': '*',
     },
   };
 });

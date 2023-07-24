@@ -4,6 +4,7 @@ import { useReactiveVar } from '@apollo/client';
 import { jwtTokensVar } from '@/stores/gqlReactVars';
 import dynamic from 'next/dynamic';
 import Swal from 'sweetalert';
+import Spinner from '@/components/Spinner';
 
 const DynamicEmployeeTab = dynamic(() => import('@/views/employee/EmployeeTab'), {
   ssr: false,
@@ -12,13 +13,12 @@ const DynamicEmployeeTab = dynamic(() => import('@/views/employee/EmployeeTab'),
 const ListEmp = () => {
   const jwtTokens = useReactiveVar(jwtTokensVar);
 
-  const [getAllEmployeeQuery, { data }] = useGetAllEmployeeLazyQuery({
+  const [getAllEmployeeQuery, { data, loading }] = useGetAllEmployeeLazyQuery({
     fetchPolicy: 'no-cache',
     onError: (err) => {
       Swal('ERROR', '', 'error');
     },
   });
-
   useEffect(() => {
     if (jwtTokens?.accessToken) {
       console.log('TToKKEEN: ' + jwtTokens?.accessToken);
@@ -26,7 +26,7 @@ const ListEmp = () => {
     }
   }, [jwtTokens]);
 
-  return <DynamicEmployeeTab list={data} />;
+  return <>{loading ? <Spinner /> : <DynamicEmployeeTab list={data} />}</>;
 };
 
 export default ListEmp;

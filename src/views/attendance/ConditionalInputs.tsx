@@ -8,7 +8,7 @@ import { ConditionalFormValues } from './AttendanceConditional';
 
 const inputClassName =
   'text-[14px] py-[0.32rem] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full mr-5 appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
-const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center';
+const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center font-bold';
 
 const ConditionalInputs = (args: { control: Control<ConditionalFormValues, any>; handleWorkingTypeChange: (e: React.FormEvent<HTMLInputElement>) => void }) => {
   const defaultInputAttributes = {

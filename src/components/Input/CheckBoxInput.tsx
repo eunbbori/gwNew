@@ -17,7 +17,7 @@ const CheckBoxInput = <TFieldValues extends FieldValues = FieldValues, TName ext
 ) => {
   return (
     <>
-      <p className="text-sm text-[#484848] self-center mr-5">{props.title}</p>
+      <p className="text-sm text-[#484848] self-center mr-5 font-bold">{props.title}</p>
       <div className="flex justify-center">
         {props.options.map((workType, idx) => (
           <div key={workType.value} className="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">

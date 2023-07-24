@@ -5,6 +5,7 @@ import EditEmployee from '@/views/admin/EditEmployee';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
 import Swal from 'sweetalert';
+import Spinner from '@/components/Spinner';
 
 const EditEmp = () => {
   useEffect(() => {
@@ -33,7 +34,7 @@ const EditEmp = () => {
   }, [jwtTokens]);
 
   console.log('detailUserData', detailUserData);
-  return <>{detailUserData && <EditEmployee detailEmpId={detailEmpId} detailUserData={detailUserData} />}</>;
+  return <>{!detailUserData ? <Spinner /> : <EditEmployee detailEmpId={detailEmpId} detailUserData={detailUserData} />}</>;
 };
 
 export default EditEmp;
