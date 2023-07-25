@@ -28,6 +28,7 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
           key={emp?.employeeId}
           onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
           empName={emp?.name}
+          empId={emp?.employeeId || 0}
           deptName={emp?.department?.departmentName}
           position={emp?.position}
           photoUrl={emp?.photoUrl || ''}

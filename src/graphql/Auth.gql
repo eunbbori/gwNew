@@ -7,6 +7,10 @@ mutation login($email: String, $passwd: String) {
   }
 }
 
+query checkUserIdDuplication($userId: String!) {
+  checkUserIdDuplication(userId: $userId)
+}
+
 mutation logout {
   logout {
     employeeId

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { allMenuInfos, RouteInfo, getRouteInfo } from '../repository/RouteInfo';
 import Link from 'next/link';
 import CompanyLogo from './CompanyLogo';
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
 import { Sidenav, initTE } from 'tw-elements';
-import Spinner from './Spinner';
 
 const SideMenu = () => {
   useEffect(() => {

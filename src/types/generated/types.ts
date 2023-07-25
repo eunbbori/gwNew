@@ -161,12 +161,17 @@ export type IMutationSingleUploadArgs = {
 
 export type IQuery = {
   __typename?: 'Query';
+  checkUserIdDuplication?: Maybe<Scalars['Boolean']>;
   codes?: Maybe<Array<Maybe<ICodes>>>;
   departments?: Maybe<Array<Maybe<IDepartment>>>;
   employee?: Maybe<IEmployee>;
   employeeWorking?: Maybe<Array<Maybe<IEmployeeWorking>>>;
   employeeWorkingConditional?: Maybe<IEmployeeWorkingPage>;
   employees?: Maybe<Array<Maybe<IEmployee>>>;
+};
+
+export type IQueryCheckUserIdDuplicationArgs = {
+  userId: Scalars['String'];
 };
 
 export type IQueryCodesArgs = {
@@ -202,6 +207,12 @@ export type ILoginMutation = {
   __typename?: 'Mutation';
   login?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: string | null } | null;
 };
+
+export type ICheckUserIdDuplicationQueryVariables = Exact<{
+  userId: Scalars['String'];
+}>;
+
+export type ICheckUserIdDuplicationQuery = { __typename?: 'Query'; checkUserIdDuplication?: boolean | null };
 
 export type ILogoutMutationVariables = Exact<{ [key: string]: never }>;
 
@@ -495,6 +506,41 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<ILogin
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<ILoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<ILoginMutation, ILoginMutationVariables>;
+export const CheckUserIdDuplicationDocument = gql`
+  query checkUserIdDuplication($userId: String!) {
+    checkUserIdDuplication(userId: $userId)
+  }
+`;
+
+/**
+ * __useCheckUserIdDuplicationQuery__
+ *
+ * To run a query within a React component, call `useCheckUserIdDuplicationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckUserIdDuplicationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckUserIdDuplicationQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useCheckUserIdDuplicationQuery(baseOptions: Apollo.QueryHookOptions<ICheckUserIdDuplicationQuery, ICheckUserIdDuplicationQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ICheckUserIdDuplicationQuery, ICheckUserIdDuplicationQueryVariables>(CheckUserIdDuplicationDocument, options);
+}
+export function useCheckUserIdDuplicationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<ICheckUserIdDuplicationQuery, ICheckUserIdDuplicationQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ICheckUserIdDuplicationQuery, ICheckUserIdDuplicationQueryVariables>(CheckUserIdDuplicationDocument, options);
+}
+export type CheckUserIdDuplicationQueryHookResult = ReturnType<typeof useCheckUserIdDuplicationQuery>;
+export type CheckUserIdDuplicationLazyQueryHookResult = ReturnType<typeof useCheckUserIdDuplicationLazyQuery>;
+export type CheckUserIdDuplicationQueryResult = Apollo.QueryResult<ICheckUserIdDuplicationQuery, ICheckUserIdDuplicationQueryVariables>;
 export const LogoutDocument = gql`
   mutation logout {
     logout {

@@ -7,6 +7,8 @@ interface OtherOptions {
   inputClassName: string;
   paragraphClassName: string;
   divClassName?: string;
+  // onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  // ref?: React.RefObject<HTMLInputElement>;
 }
 
 const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(

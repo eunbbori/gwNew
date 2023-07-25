@@ -48,6 +48,7 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
               <Profile
                 key={emp?.employeeId}
                 empName={emp?.name}
+                empId={emp?.employeeId || 0}
                 deptName={emp?.department?.departmentName}
                 position={emp?.position}
                 photoUrl={emp?.photoUrl || ''}

@@ -1,9 +1,8 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { Modal, Ripple, initTE } from 'tw-elements';
 import { useRouter } from 'next/router';
 import { useReactiveVar } from '@apollo/client';
 import { memberDetailVar } from '@/stores/gqlReactVars';
-import Spinner from '../Spinner';
 
 export interface IModalProps {
   title?: string | null;

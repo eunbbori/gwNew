@@ -72,6 +72,11 @@ export const memberDetailVar = makeVar({
 });
 
 ////////////////
+////Employee //
+////////////////
+export const uploadFileVar = makeVar<File | null>(null);
+
+////////////////
 // BreadCrumb //
 ////////////////
 export const breadCrumbPathVar = makeVar(['/']);

@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { IEmployeeInput, useModEmployeeMutation } from '@/types/generated/types';
+import { IEmployeeInput, useCheckUserIdDuplicationLazyQuery, useModEmployeeMutation } from '@/types/generated/types';
 import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
@@ -32,6 +32,8 @@ const submitClassName =
 
 const EditEmployee = (props: IEditEmployee) => {
   const router = useRouter();
+  const [isChecking, setIsChecking] = useState(false);
+  const [isDoubleCheck, setDoubleCheck] = useState(false);
 
   const cancelHandler = () => {
     router.push('/employee/listEmp');
@@ -46,7 +48,9 @@ const EditEmployee = (props: IEditEmployee) => {
   const {
     handleSubmit,
     control,
-    formState: { errors },
+    reset,
+    getValues,
+    formState: { errors, isDirty, dirtyFields },
   } = useForm<IEmployeeEditFormValues>({
     resolver: yupResolver(editSchema),
     // mode: 'onChange',
@@ -61,6 +65,8 @@ const EditEmployee = (props: IEditEmployee) => {
     },
   });
 
+  const prevUserId = props.detailUserData?.employee?.userId;
+  const currentUserId = getValues('userId');
   const controlledInputAttributes = { ...defaultInputAttributes, control };
 
   const [modEmployeeMutation] = useModEmployeeMutation();
@@ -74,29 +80,65 @@ const EditEmployee = (props: IEditEmployee) => {
     }
   }, [props.detailUserData]);
 
-  const onModEmployee = (inputData: IEmployeeEditFormValues) => {
-    console.log(inputData);
-    const { ...newInputData } = inputData;
+  const [checkUserIdDuplication, { data: userIdData }] = useCheckUserIdDuplicationLazyQuery({
+    variables: {
+      userId: currentUserId || '',
+    },
+    fetchPolicy: 'no-cache',
+    onError: (err) => {
+      Swal('ERROR', '', 'error');
+    },
+  });
+  const doubleCheckHandler = () => {
+    setIsChecking(true);
+    setDoubleCheck(true);
+    checkUserIdDuplication();
+  };
+  useEffect(() => {
+    if (isChecking && userIdData && userIdData.checkUserIdDuplication === false && currentUserId !== '') {
+      Swal({ text: '사용 가능한 아이디입니다.', icon: 'success' });
+    } else if (isChecking && userIdData && userIdData.checkUserIdDuplication === true && prevUserId === currentUserId && currentUserId !== '') {
+      Swal(`${currentUserId}는 기존 아이디로 사용가능합니다.`);
+    } else if (isChecking && userIdData && userIdData.checkUserIdDuplication === true && currentUserId !== '') {
+      Swal({ text: `${currentUserId}는 사용 불가능한 아이디입니다.`, icon: 'warning' });
+      reset({ userId: `${prevUserId}` });
+    } else if (isChecking && currentUserId === '') {
+      Swal('아이디를 입력해주세요');
+    }
+    setIsChecking(false);
+  }, [isChecking, userIdData]);
 
-    const input: IEmployeeInput = {
-      ...newInputData,
-      departmentId: parseInt(newInputData.departmentId),
-    };
-    modEmployeeMutation({
-      variables: {
-        employeeId: props.detailEmpId,
-        input,
-        file: uploadedFile,
-      },
-      onCompleted: (data) => {
-        Swal('수정되었습니다', '', 'success').then((result) => {
-          router.push('/employee/listEmp');
-        });
-      },
-      onError: (err) => {
-        Swal('ERROR', '', 'error');
-      },
-    });
+  console.log('prevUserId', prevUserId);
+  console.log('currentUserId', currentUserId);
+
+  const onModEmployee = (inputData: IEmployeeEditFormValues) => {
+    if (!dirtyFields.userId || isDoubleCheck) {
+      console.log(inputData);
+
+      const { ...newInputData } = inputData;
+
+      const input: IEmployeeInput = {
+        ...newInputData,
+        departmentId: parseInt(newInputData.departmentId),
+      };
+      modEmployeeMutation({
+        variables: {
+          employeeId: props.detailEmpId,
+          input,
+          file: uploadedFile,
+        },
+        onCompleted: (data) => {
+          Swal('수정되었습니다', '', 'success').then((result) => {
+            router.push('/employee/listEmp');
+          });
+        },
+        onError: (err) => {
+          Swal('ERROR', '', 'error');
+        },
+      });
+    } else {
+      Swal({ text: '아이디 중복 체크를 먼저 진행하세요.', icon: 'warning' });
+    }
   };
 
   return (
@@ -129,10 +171,21 @@ const EditEmployee = (props: IEditEmployee) => {
                       <TextInput {...controlledInputAttributes} name="userId" title="아이디" placeHolder="아이디를 입력해주세요" />
                       <div className={classNames.error}>{errors.userId?.message}</div>
                     </div>
-                    <div className="w-[250px]">
-                      <TextInput {...controlledInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
-                      <div className={classNames.error}>{errors.name?.message}</div>
+                    <div className="w-[250px] self-center mt-[20px]">
+                      <button
+                        type="button"
+                        className={
+                          'self-center mr-[15px] h-[30px] inline-block px-4 mb-0 text-xs text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 border-fuchsia-500 bg-none text-fuchsia-500 hover:border-fuchsia-500'
+                        }
+                        onClick={doubleCheckHandler}
+                      >
+                        중복체크
+                      </button>
                     </div>
+                  </div>
+                  <div className="mb-4">
+                    <TextInput {...controlledInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
+                    <div className={classNames.error}>{errors.name?.message}</div>
                   </div>
                   <div className="mb-4">
                     <TextInput {...controlledInputAttributes} name="email" title="회사 이메일" placeHolder="회사 이메일을 입력해주세요" type="email" />
@@ -200,3 +253,6 @@ const EditEmployee = (props: IEditEmployee) => {
 };
 
 export default EditEmployee;
+function getFieldState(arg0: string, formState: any): { isUserIdChanged: any } {
+  throw new Error('Function not implemented.');
+}
