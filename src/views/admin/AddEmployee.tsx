@@ -62,7 +62,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
     router.push('/employee/listEmp');
   };
 
-  const [checkUserIdDuplication, { data: userIdData }] = useCheckUserIdDuplicationLazyQuery({
+  const [checkUserIdDuplication, { data: userIdData, loading }] = useCheckUserIdDuplicationLazyQuery({
     variables: {
       userId: currentUserId || '',
     },
@@ -76,17 +76,24 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
     setDoubleCheck(true);
     checkUserIdDuplication();
   };
+  // const userIdRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
+    // console.log('userIdRef.current', userIdRef.current);
+    if (loading) return;
     if (isChecking && userIdData && userIdData.checkUserIdDuplication === false && currentUserId !== '') {
       Swal({ text: '사용 가능한 아이디입니다.', icon: 'success' });
     } else if (isChecking && userIdData && userIdData.checkUserIdDuplication === true && currentUserId !== '') {
       reset({ userId: 'id' });
+      // if (userIdRef.current) {
+      //   userIdRef.current.focus();
+      // }
       Swal({ text: `${currentUserId}는 사용 불가능한 아이디입니다.`, icon: 'warning' });
     } else if (isChecking && currentUserId === '') {
       Swal('아이디를 입력해주세요');
     }
     setIsChecking(false);
-  }, [isChecking, userIdData]);
+  }, [isChecking, userIdData, loading]);
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
   const imgRef = useRef<HTMLInputElement>(null);

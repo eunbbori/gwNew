@@ -1,4 +1,6 @@
 import { FieldPath, FieldValues, UseControllerProps, useController } from 'react-hook-form';
+import { forwardRef } from 'react';
+import { ref } from 'yup';
 
 interface OtherOptions {
   title: string;
@@ -7,8 +9,8 @@ interface OtherOptions {
   inputClassName: string;
   paragraphClassName: string;
   divClassName?: string;
-  // onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  // ref?: React.RefObject<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  ref?: React.RefObject<HTMLInputElement>;
 }
 
 const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
@@ -31,6 +33,8 @@ const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends
           aria-label={props.name}
           aria-describedby={props.name + '-addon'}
           value={defaultValueOption}
+          // ref={props.ref}
+          // onChange={props.onChange}
         />
       </div>
     </>
