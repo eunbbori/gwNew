@@ -12,12 +12,7 @@ import { AuthData, jwtTokensVar } from '@/stores/gqlReactVars';
 import { useLogoutMutation } from '@/types/generated/types';
 import { Dropdown, Ripple, initTE } from 'tw-elements';
 import Spinner from './Spinner';
-
-type IUserInfo = {
-  userName: string;
-  photoUrl: string;
-  userId: string;
-};
+import { useUserToken } from '@/repository/AccessToken';
 
 const Header = () => {
   const tokens = useReactiveVar(jwtTokensVar);
@@ -29,13 +24,15 @@ const Header = () => {
   const [logoutMutation] = useLogoutMutation();
   const [isLoading, setLoading] = useState(false);
 
-  const useUserInfo: IUserInfo | null = useMemo(() => {
-    if (tokens?.accessToken) {
-      const decoded = jwt_decode<AuthData>(tokens.accessToken);
-      return { userName: decoded.userName, photoUrl: decoded.photoUrl || '', userId: decoded.userId };
-    }
-    return null;
-  }, [tokens]);
+  const useUserInfo = useUserToken();
+
+  // const useUserInfo: IUserInfo | null = useMemo(() => {
+  //   if (tokens?.accessToken) {
+  //     const decoded = jwt_decode<AuthData>(tokens.accessToken);
+  //     return { userName: decoded.userName, photoUrl: decoded.photoUrl || '', userId: decoded.userId };
+  //   }
+  //   return null;
+  // }, [tokens]);
 
   const handleLogout = () => {
     setLoading(true);

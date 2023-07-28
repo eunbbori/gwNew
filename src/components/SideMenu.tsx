@@ -5,8 +5,10 @@ import Link from 'next/link';
 import CompanyLogo from './CompanyLogo';
 import jnFirstLogo from 'src/assets/img/jnfirst.png';
 import { Sidenav, initTE } from 'tw-elements';
+import { useUserToken } from '@/repository/AccessToken';
 
 const SideMenu = () => {
+  const useUserInfo = useUserToken();
   useEffect(() => {
     initTE({ Sidenav });
   }, []);
@@ -53,6 +55,10 @@ const SideMenu = () => {
                 <ul className="show !visible relative m-0 hidden list-none p-0 data-[te-collapse-show]:block" data-te-sidenav-collapse-ref>
                   {el.secondMenu?.map((el2, idx2) => {
                     const subRouteInfo: RouteInfo | undefined = getRouteInfo(el2);
+
+                    if (subRouteInfo?.id === 'addEmp' && useUserInfo?.adminYn !== 'YES') {
+                      return null;
+                    }
 
                     return (
                       <Link

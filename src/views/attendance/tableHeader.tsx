@@ -1,6 +1,7 @@
 import { attendanceSortVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
 import SortIcon from '../common/SortIcon';
+import { useUserToken } from '@/repository/AccessToken';
 
 export interface IAttendanceHeader {
   title: string;
@@ -13,6 +14,7 @@ export interface ITableHeader {
 }
 
 const TableHeader = ({ headers }: ITableHeader) => {
+  const useUserInfo = useUserToken();
   const selectedAttendanceSort = useReactiveVar(attendanceSortVar);
 
   return (
@@ -47,7 +49,7 @@ const TableHeader = ({ headers }: ITableHeader) => {
             'px-6 py-3 font-bold tracking-normal text-left uppercase align-middle bg-transparent border-b letter border-b-solid text-xs whitespace-nowrap border-b-gray-200 text-slate-400 opacity-70'
           }
         >
-          수정
+          {useUserInfo?.adminYn === 'YES' && '수정'}
         </th>
       </tr>
     </thead>

@@ -12,6 +12,7 @@ export type AuthData = {
   userName: string;
   departmentName: string;
   photoUrl?: string;
+  adminYn?: string;
 };
 
 // Today ComeToWork / LeaveWork time of currently login user

@@ -24,12 +24,6 @@ interface IEditEmployee {
   detailUserData: any;
 }
 
-const cancelClassName =
-  'w-full inline-block px-6 py-3 mt-6 mb-2 mr-4 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white';
-
-const submitClassName =
-  'w-full from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500 inline-block px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl hover:bg-slate-700 hover:text-white';
-
 const EditEmployee = (props: IEditEmployee) => {
   const router = useRouter();
   const [isChecking, setIsChecking] = useState(false);
@@ -141,7 +135,6 @@ const EditEmployee = (props: IEditEmployee) => {
       Swal({ text: '아이디 중복 체크를 먼저 진행하세요.', icon: 'warning' });
     }
   };
-
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <div className="w-full mr-auto ml-auto px-6">
@@ -239,9 +232,9 @@ const EditEmployee = (props: IEditEmployee) => {
                   </div>
 
                   <div className="mb-4"></div>
-                  <div className="text-center flex">
-                    <CancelButton onClick={cancelHandler} text="취소" cancelClassName={cancelClassName} />
-                    <SubmitButton text="수정" submitClassName={submitClassName} />
+                  <div className="text-center flex justify-end">
+                    <CancelButton onClick={cancelHandler} text="취소" cancelClassName={classNames.cancel} />
+                    <SubmitButton text="수정" submitClassName={classNames.submit} />
                   </div>
                 </form>
               </div>
@@ -254,6 +247,3 @@ const EditEmployee = (props: IEditEmployee) => {
 };
 
 export default EditEmployee;
-function getFieldState(arg0: string, formState: any): { isUserIdChanged: any } {
-  throw new Error('Function not implemented.');
-}

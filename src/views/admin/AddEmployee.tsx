@@ -27,12 +27,6 @@ interface IAddEmployeeProps {
   deptId: string;
 }
 
-const cancelClassName =
-  'w-full inline-block px-6 py-3 mt-6 mb-2 mr-4 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white';
-
-const submitClassName =
-  'w-full from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500 inline-block px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl hover:bg-slate-700 hover:text-white';
-
 const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const [isChecking, setIsChecking] = useState(false);
   const [isDoubleCheck, setDoubleCheck] = useState(false);
@@ -47,7 +41,6 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
     control,
     reset,
     getValues,
-    setValue,
     formState: { errors },
   } = useForm<IEmployeeFormValues>({
     resolver: yupResolver(addSchema),
@@ -79,7 +72,6 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   // const userIdRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // console.log('userIdRef.current', userIdRef.current);
     if (loading) return;
     if (isChecking && userIdData && userIdData.checkUserIdDuplication === false && currentUserId !== '') {
       Swal({ text: '사용 가능한 아이디입니다.', icon: 'success' });
@@ -98,7 +90,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const [addEmployeeMutation] = useAddEmployeeMutation();
   const imgRef = useRef<HTMLInputElement>(null);
 
-  const [imgFile, uploadedFile, changeEmployeeImage, deleteImgHandler] = useHandleEmployeeImage();
+  const [imgFile, uploadedFile, setImgFile, changeEmployeeImage, deleteImgHandler] = useHandleEmployeeImage();
 
   const onAddEmployee = (inputData: IEmployeeFormValues) => {
     if (isDoubleCheck) {
@@ -127,7 +119,6 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
       Swal({ text: '아이디 중복 체크를 먼저 진행하세요.', icon: 'warning' });
     }
   };
-
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <div className="w-full mr-auto ml-auto px-6">
@@ -233,9 +224,9 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                     </div>
                   </div>
                   <div className="mb-4"></div>
-                  <div className="text-center flex">
-                    <CancelButton onClick={cancelHandler} text="취소" cancelClassName={cancelClassName} />
-                    <SubmitButton text="등록" submitClassName={submitClassName} />
+                  <div className="text-center flex justify-end">
+                    <CancelButton onClick={cancelHandler} text="취소" cancelClassName={classNames.cancel} />
+                    <SubmitButton text="등록" submitClassName={classNames.submit} />
                   </div>
                 </form>
               </div>

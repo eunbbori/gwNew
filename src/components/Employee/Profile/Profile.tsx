@@ -2,10 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import { TiDeleteOutline } from 'react-icons/ti';
 import { TiDelete } from 'react-icons/ti';
 import swal from 'sweetalert';
-
+import { useUserToken } from '@/repository/AccessToken';
 export interface IProfileProps {
   empName?: string | null;
   empId?: number;
@@ -36,6 +35,7 @@ const testHandler = (id: number | undefined) => {
 };
 
 const Profile = ({ empName, empId, photoUrl, deptName, position, positionOptions, onClick }: IProfileProps) => {
+  const useUserInfo = useUserToken();
   return (
     <div className="mr-[35px] mb-[75px]">
       <div className="flex">
@@ -60,9 +60,11 @@ const Profile = ({ empName, empId, photoUrl, deptName, position, positionOptions
           <p className="text-black font-bold text-[16px] pt-[2px] text-center">{empName}</p>
         </div>
         <div className="">
-          <button type="button" onClick={() => testHandler(empId)} className="text-xl text-red-600">
-            <TiDelete />
-          </button>
+          {useUserInfo?.adminYn === 'YES' && (
+            <button type="button" onClick={() => testHandler(empId)} className="text-xl text-red-600">
+              <TiDelete />
+            </button>
+          )}
         </div>
       </div>
     </div>

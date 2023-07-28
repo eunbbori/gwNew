@@ -6,9 +6,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React from 'react';
+import { useUserToken } from '@/repository/AccessToken';
 
 const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
   const positionOptions = useCodesMap('POSITION');
+  const useUserInfo = useUserToken();
 
   const clickHandler = (userId: string, empId: number) => {
     memberDetailVar({ userId: userId, empId: empId });
@@ -35,13 +37,15 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
           positionOptions={positionOptions}
         />
       ))}
-      <Link href={{ pathname: '/employee/addEmp' }}>
-        <div className="mr-[35px] mb-[75px] cursor-pointer text-center">
-          <div className="flex items-center justify-center w-[144px] h-[144px]">
-            <FontAwesomeIcon className="text-[#3366FF] text-5xl" icon={faPlus} />
+      {useUserInfo?.adminYn === 'YES' && (
+        <Link href={{ pathname: '/employee/addEmp' }}>
+          <div className="mr-[35px] mb-[75px] cursor-pointer text-center">
+            <div className="flex items-center justify-center w-[144px] h-[144px]">
+              <FontAwesomeIcon className="text-[#3366FF] text-5xl" icon={faPlus} />
+            </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      )}
     </div>
   );
 };
