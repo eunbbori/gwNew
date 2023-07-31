@@ -51,21 +51,23 @@ const Profile = ({ empName, empId, photoUrl, deptName, position, positionOptions
               className="cursor-pointer"
               src={photoUrl ? process.env.NEXT_PUBLIC_BASE_PROFILE_API + '/' + photoUrl : blankProfile}
               alt={empName || ''}
-              width={144}
-              height={144}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }}
               onClick={onClick}
             />
           </div>
           <p className="text-[#484848] text-xs text-[16px] mt-[10px] pt-[2px] text-center">{deptName + ' ' + (positionOptions?.get(position || '') ?? '')}</p>
           <p className="text-black font-bold text-[16px] pt-[2px] text-center">{empName}</p>
         </div>
-        <div className="">
+        {/* <div className="">
           {useUserInfo?.adminYn === 'YES' && (
             <button type="button" onClick={() => testHandler(empId)} className="text-xl text-red-600">
               <TiDelete />
             </button>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

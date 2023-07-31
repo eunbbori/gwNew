@@ -8,7 +8,7 @@ const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TN
 
   return (
     <div className="flex">
-      <p className="text-sm font-bold text-[#484848] self-center mr-5">{props.title}</p>
+      <p className="text-sm font-bold text-[#484848] self-center mr-8">{props.title}</p>
       <Datepicker
         inputName={props.name}
         containerClassName="relative text-gray-700 w-[250px]"

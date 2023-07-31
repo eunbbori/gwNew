@@ -4,7 +4,7 @@ import format from 'date-fns/format';
 import { useEffect, useState } from 'react';
 import { Input, Select, initTE } from 'tw-elements';
 import { IEmployeeWorkingCondition, useGetEmployeeWorkingConditionalLazyQuery } from '@/types/generated/types';
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import ConditionalTableHeader from './ConditionalTableHeader';
 import ConditionalTableRows from './ConditionalTableRows';
 import Paging from '@/components/Paging';

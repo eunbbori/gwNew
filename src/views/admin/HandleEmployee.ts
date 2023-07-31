@@ -1,5 +1,9 @@
+import { ICheckUserIdDuplicationQuery } from '@/types/generated/types';
+import { useRouter } from 'next/router';
 import { useCallback, useState } from 'react';
+import { UseFormSetValue } from 'react-hook-form';
 import * as yup from 'yup';
+import Swal from 'sweetalert';
 
 // css styles
 const inputClassName =
@@ -72,30 +76,46 @@ export const addSchema = yup
   })
   .concat(editSchema);
 
+// Check User ID Duplication
+export const handleUserIdDup = (args: {
+  isChecking: boolean;
+  setIsChecking: React.Dispatch<React.SetStateAction<boolean>>;
+  currentUserId: string;
+  userIdRef: React.RefObject<HTMLInputElement>;
+  userIdData: ICheckUserIdDuplicationQuery | undefined;
+  setValue: UseFormSetValue<any>;
+}) => {
+  if (args.isChecking) {
+    if (args.currentUserId === '') {
+      Swal('아이디를 입력해주세요').then(() => {
+        args.userIdRef.current?.focus();
+      });
+    } else {
+      if (args.userIdData) {
+        if (args.userIdData.checkUserIdDuplication) {
+          args.setValue('userId', '');
+          Swal({ text: `${args.currentUserId}는 사용 불가능한 아이디입니다.`, icon: 'warning' }).then(() => {
+            args.userIdRef.current?.focus();
+          });
+        } else {
+          Swal({ text: '사용 가능한 아이디입니다.', icon: 'success' });
+          return;
+        }
+      }
+    }
+    args.setIsChecking(false);
+  }
+};
+
 // Image register & modification handler
-export const useHandleEmployeeImage = () => {
-  const [imgFile, setImgFile]: any = useState(null);
+export const useHandleEmployee = () => {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
-  const changeEmployeeImage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files ? event.target.files[0] : null;
+  const router = useRouter();
 
-    if (file) {
-      setUploadedFile(file);
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          setImgFile(reader.result);
-          event.target.value = '';
-        }
-      };
-    }
-  }, []);
-
-  const deleteImgHandler = () => {
-    setImgFile(null);
+  const routeEmployeeList = () => {
+    router.push('/employee/listEmp');
   };
 
-  return [imgFile, uploadedFile, setImgFile, changeEmployeeImage, deleteImgHandler];
+  return { uploadedFile, setUploadedFile, routeEmployeeList };
 };

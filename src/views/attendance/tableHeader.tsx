@@ -42,7 +42,7 @@ const TableHeader = ({ headers }: ITableHeader) => {
             </th>
           );
         })}
-        <th
+        {/* <th
           key="__modify_attendance__"
           style={{ width: '10%' }}
           className={
@@ -50,7 +50,7 @@ const TableHeader = ({ headers }: ITableHeader) => {
           }
         >
           {useUserInfo?.adminYn === 'YES' && '수정'}
-        </th>
+        </th> */}
       </tr>
     </thead>
   );

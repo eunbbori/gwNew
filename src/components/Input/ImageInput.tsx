@@ -6,7 +6,6 @@ interface OtherOptions {
   inputClassName: string;
   paragraphClassName: string;
   divClassName?: string;
-  ref?: React.RefObject<HTMLInputElement>;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -25,7 +24,6 @@ const ImageInput = <TFieldValues extends FieldValues = FieldValues, TName extend
           id={props.id}
           type="file"
           accept={props.accept}
-          ref={props.ref}
           onChange={props.onChange}
           className={props.inputClassName}
           style={{ display: 'none' }}

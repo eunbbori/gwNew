@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unknown-property */
-import React, { useEffect, useMemo, useState } from 'react';
-import jwt_decode from 'jwt-decode';
+import React, { useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import AttendanceBtnGroup from './Attendance/AttendanceBtnGroup';
@@ -8,7 +7,7 @@ import AttendanceRecord from './Attendance/AttendanceRecord';
 import { useReactiveVar } from '@apollo/client';
 import Image from 'next/image';
 
-import { AuthData, jwtTokensVar } from '@/stores/gqlReactVars';
+import { jwtTokensVar } from '@/stores/gqlReactVars';
 import { useLogoutMutation } from '@/types/generated/types';
 import { Dropdown, Ripple, initTE } from 'tw-elements';
 import Spinner from './Spinner';
@@ -26,19 +25,14 @@ const Header = () => {
 
   const useUserInfo = useUserToken();
 
-  // const useUserInfo: IUserInfo | null = useMemo(() => {
-  //   if (tokens?.accessToken) {
-  //     const decoded = jwt_decode<AuthData>(tokens.accessToken);
-  //     return { userName: decoded.userName, photoUrl: decoded.photoUrl || '', userId: decoded.userId };
-  //   }
-  //   return null;
-  // }, [tokens]);
-
   const handleLogout = () => {
     setLoading(true);
     logoutMutation({
       onCompleted: () => {
         jwtTokensVar(undefined);
+        window.location.href = '/auth/login';
+      },
+      onError: () => {
         window.location.href = '/auth/login';
       },
     });
@@ -72,7 +66,7 @@ const Header = () => {
             <ul className="relative basis-1/2 flex justify-end items-center">
               {/* Avatar */}
               {tokens?.accessToken ? (
-                <li className="relative">
+                <li className="relative cursor-pointer">
                   <a
                     className="hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
                     // href="#"

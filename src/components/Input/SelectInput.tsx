@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FieldPath, FieldValues, PathValue, UseControllerProps, useController } from 'react-hook-form';
 import Select, { GroupBase } from 'react-select';
 
@@ -25,11 +25,13 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
     field.onChange(value);
   };
 
-  const defaultValueOption = field.value
-    ? props.selectOptions.find((c: IOption) => c.value === field.value)
-    : props.defaultValue
-    ? props.selectOptions.find((c: IOption) => c.value === props.defaultValue)
-    : null;
+  const currSelectOption = useMemo(() => {
+    return field.value
+      ? props.selectOptions.find((c: IOption) => c.value === field.value)
+      : props.defaultValue
+      ? props.selectOptions.find((c: IOption) => c.value === props.defaultValue)
+      : null;
+  }, [field.value, props.defaultValue, props.selectOptions]);
 
   return (
     <>
@@ -39,7 +41,7 @@ const SelectInput = <TFieldValues extends FieldValues = FieldValues, TName exten
           name={props.name}
           options={SelectOptions}
           placeholder={props.placeHolder}
-          value={defaultValueOption}
+          value={currSelectOption}
           onChange={handleSelectChange}
           className="w-full mr-5"
         />

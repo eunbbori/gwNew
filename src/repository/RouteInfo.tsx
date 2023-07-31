@@ -13,7 +13,7 @@ export type RouteInfo = {
 
 export type MenuInfo = {
   firstMenu: string;
-  secondMenu: string[];
+  secondMenu?: string[];
 };
 
 export const allRouteInfos: RouteInfo[] = [
@@ -43,10 +43,10 @@ export const getRouteInfo = (id: string): RouteInfo | undefined => {
 };
 
 export const allMenuInfos: MenuInfo[] = [
-  { firstMenu: 'approval', secondMenu: ['test1', 'test2'] },
-  { firstMenu: 'attendance', secondMenu: ['dailyAttendance', 'conditionalAttendance', 'test4'] },
-  { firstMenu: 'dashboard', secondMenu: ['test5', 'test6'] },
-  { firstMenu: 'dayoff', secondMenu: ['test7', 'test8'] },
+  { firstMenu: 'approval' },
+  { firstMenu: 'attendance', secondMenu: ['dailyAttendance', 'conditionalAttendance'] },
+  { firstMenu: 'dashboard' },
+  { firstMenu: 'dayoff' },
   { firstMenu: 'employee', secondMenu: ['listEmp', 'addEmp'] },
 ];
 
@@ -54,9 +54,10 @@ export const allUris = new Map<string, string>();
 
 allMenuInfos.forEach((e) => {
   const first = e.firstMenu;
-  e.secondMenu.forEach((s) => {
-    allUris.set(s, '/' + first + '/' + s);
-  });
+  e.secondMenu &&
+    e.secondMenu.forEach((s) => {
+      allUris.set(s, '/' + first + '/' + s);
+    });
 });
 
 export const defaultRouteInfo: MenuInfo = allMenuInfos[1];

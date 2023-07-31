@@ -3,7 +3,7 @@ import DatePickerRangeInput from '@/components/Input/DatePickerRangeInput';
 import SelectInput from '@/components/Input/SelectInput';
 import TextInput from '@/components/Input/TextInput';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
-import { Control } from 'react-hook-form';
+import { Control, FieldValues } from 'react-hook-form';
 import { ConditionalFormValues } from './AttendanceConditional';
 
 const inputClassName =
@@ -12,7 +12,7 @@ const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center font-bold';
 
 const ConditionalInputs = (args: { control: Control<ConditionalFormValues, any>; handleWorkingTypeChange: (e: React.FormEvent<HTMLInputElement>) => void }) => {
   const defaultInputAttributes = {
-    control: args.control,
+    control: args.control as unknown as Control<FieldValues>,
     type: 'text',
     inputClassName,
     divClassName: 'flex',
@@ -26,7 +26,7 @@ const ConditionalInputs = (args: { control: Control<ConditionalFormValues, any>;
   };
 
   const deptOptions = [{ value: '-1', label: '전체' }, ...useDepartmentsOption()];
-  const positionOptions = [{ value: '', label: '전체' }, ...useCodesOption('POSITION').reverse()];
+  const positionOptions = [{ value: '', label: '전체' }, ...useCodesOption('POSITION')];
   const workingTypeOptions = useCodesOption('WORKING_TYPE');
 
   return (

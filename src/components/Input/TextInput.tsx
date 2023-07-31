@@ -1,6 +1,5 @@
-import { FieldPath, FieldValues, UseControllerProps, useController, useFormContext } from 'react-hook-form';
-import { forwardRef } from 'react';
-import { ref } from 'yup';
+import { FieldPath, FieldValues, UseControllerProps, useController } from 'react-hook-form';
+import { ForwardedRef, forwardRef } from 'react';
 
 interface OtherOptions {
   title: string;
@@ -10,15 +9,13 @@ interface OtherOptions {
   paragraphClassName: string;
   divClassName?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
-  ref?: React.RefObject<HTMLInputElement>;
 }
 
-const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
-  props: UseControllerProps<TFieldValues, TName> & OtherOptions,
-) => {
+const TextInput = forwardRef(function textInput<
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>(props: UseControllerProps<TFieldValues, TName> & OtherOptions, ref: ForwardedRef<HTMLInputElement>) {
   const { field } = useController(props);
-
-  const defaultValueOption = field.value ? field.value : props.defaultValue;
 
   return (
     <>
@@ -32,13 +29,13 @@ const TextInput = <TFieldValues extends FieldValues = FieldValues, TName extends
           className={props.inputClassName}
           aria-label={props.name}
           aria-describedby={props.name + '-addon'}
-          value={defaultValueOption}
-          // ref={props.ref}
-          // onChange={props.onChange}
+          value={field.value ?? props.defaultValue}
+          ref={ref}
+          onChange={field.onChange}
         />
       </div>
     </>
   );
-};
+});
 
 export default TextInput;

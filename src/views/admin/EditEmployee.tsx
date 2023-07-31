@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Control, FieldValues, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IEmployeeInput, useCheckUserIdDuplicationLazyQuery, useModEmployeeMutation } from '@/types/generated/types';
-import { useRouter } from 'next/router';
 import 'react-datepicker/dist/react-datepicker.css';
 import DatePickerInput from '@/components/Input/DatePickerInput';
 import SelectInput from '@/components/Input/SelectInput';
@@ -15,7 +14,15 @@ import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
 import EmployeeProfile from './EmployeeProfile';
 import { format, parseISO } from 'date-fns';
 import Swal from 'sweetalert';
-import { useHandleEmployeeImage, IEmployeeEditFormValues, editSchema, defaultInputAttributes, defaultTextAttributes, classNames } from './HandleEmployee';
+import {
+  useHandleEmployee,
+  IEmployeeEditFormValues,
+  editSchema,
+  defaultInputAttributes,
+  defaultTextAttributes,
+  classNames,
+  handleUserIdDup,
+} from './HandleEmployee';
 import CancelButton from '@/components/Button/CancelButton';
 import SubmitButton from '@/components/Button/SubmitButton';
 
@@ -25,13 +32,9 @@ interface IEditEmployee {
 }
 
 const EditEmployee = (props: IEditEmployee) => {
-  const router = useRouter();
+  const [imgFile, setImgFile]: any = useState(null);
   const [isChecking, setIsChecking] = useState(false);
-  const [isDoubleCheck, setDoubleCheck] = useState(false);
 
-  const cancelHandler = () => {
-    router.push('/employee/listEmp');
-  };
   const deptOptions = useDepartmentsOption();
   const contractOptions = useCodesOption('CONTRACT_TYPE');
   const positionOptions = useCodesOption('POSITION');
@@ -44,6 +47,7 @@ const EditEmployee = (props: IEditEmployee) => {
     control,
     reset,
     getValues,
+    setValue,
     formState: { errors, isDirty, dirtyFields },
   } = useForm<IEmployeeEditFormValues>({
     resolver: yupResolver(editSchema),
@@ -61,12 +65,12 @@ const EditEmployee = (props: IEditEmployee) => {
 
   const prevUserId = props.detailUserData?.employee?.userId;
   const currentUserId = getValues('userId');
-  const controlledInputAttributes = { ...defaultInputAttributes, control };
+  // const controlledInputAttributes = { ...defaultInputAttributes, control };
+  const controlledInputAttributes = { ...defaultInputAttributes, control: control as unknown as Control<FieldValues> };
 
   const [modEmployeeMutation] = useModEmployeeMutation();
-  const imgRef = useRef<HTMLInputElement>(null);
 
-  const [imgFile, uploadedFile, setImgFile, changeEmployeeImage, deleteImgHandler] = useHandleEmployeeImage();
+  const { uploadedFile, setUploadedFile, routeEmployeeList } = useHandleEmployee();
 
   useEffect(() => {
     if (props.detailUserData?.employee?.photoUrl) {
@@ -83,31 +87,24 @@ const EditEmployee = (props: IEditEmployee) => {
       Swal('ERROR', '', 'error');
     },
   });
+
   const doubleCheckHandler = () => {
     setIsChecking(true);
-    setDoubleCheck(true);
     checkUserIdDuplication();
   };
+  const userIdRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (loading) return;
-    if (isChecking && userIdData && userIdData.checkUserIdDuplication === false && currentUserId !== '') {
-      Swal({ text: '사용 가능한 아이디입니다.', icon: 'success' });
-    } else if (isChecking && userIdData && userIdData.checkUserIdDuplication === true && prevUserId === currentUserId && currentUserId !== '') {
-      Swal(`${currentUserId}는 기존 아이디로 사용가능합니다.`);
-    } else if (isChecking && userIdData && userIdData.checkUserIdDuplication === true && currentUserId !== '') {
-      Swal({ text: `${currentUserId}는 사용 불가능한 아이디입니다.`, icon: 'warning' });
-      reset({ userId: `${prevUserId}` });
-    } else if (isChecking && currentUserId === '') {
-      Swal('아이디를 입력해주세요');
-    }
-    setIsChecking(false);
+
+    if (prevUserId === currentUserId) setIsChecking(false);
+    else handleUserIdDup({ isChecking, setIsChecking, currentUserId, userIdRef, userIdData, setValue });
   }, [isChecking, userIdData, loading]);
 
-  console.log('prevUserId', prevUserId);
-  console.log('currentUserId', currentUserId);
-
   const onModEmployee = (inputData: IEmployeeEditFormValues) => {
-    if (!dirtyFields.userId || isDoubleCheck) {
+    if (isChecking === !!dirtyFields.userId) {
+      //if (isChecking ? dirtyFields.userId : !dirtyFields.userId) {
+      //if ((isChecking && dirtyFields.userId) || (!isChecking && !dirtyFields.userId)) {
       console.log(inputData);
 
       const { ...newInputData } = inputData;
@@ -124,7 +121,7 @@ const EditEmployee = (props: IEditEmployee) => {
         },
         onCompleted: (data) => {
           Swal('수정되었습니다', '', 'success').then((result) => {
-            router.push('/employee/listEmp');
+            routeEmployeeList();
           });
         },
         onError: (err) => {
@@ -135,6 +132,7 @@ const EditEmployee = (props: IEditEmployee) => {
       Swal({ text: '아이디 중복 체크를 먼저 진행하세요.', icon: 'warning' });
     }
   };
+
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
       <div className="w-full mr-auto ml-auto px-6">
@@ -145,16 +143,7 @@ const EditEmployee = (props: IEditEmployee) => {
                 <form onSubmit={handleSubmit(onModEmployee)} role="form text-left">
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <EmployeeProfile
-                        {...controlledInputAttributes}
-                        title="프로필 이미지"
-                        name="img"
-                        info="사진을 수정하세요"
-                        imgRef={imgRef}
-                        handleAddImage={changeEmployeeImage}
-                        imgDeleteHandler={deleteImgHandler}
-                        imgFile={imgFile}
-                      />
+                      <EmployeeProfile {...controlledInputAttributes} name="img" info="사진을 수정하세요" imgFile={imgFile} setUploadedFile={setUploadedFile} />
                     </div>
                     <div className="w-[250px] self-end">
                       <Text {...defaultTextAttributes} title="사번" value={props.detailUserData?.employee?.employeeId} />
@@ -162,7 +151,14 @@ const EditEmployee = (props: IEditEmployee) => {
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
-                      <TextInput {...controlledInputAttributes} name="userId" title="아이디" placeHolder="아이디를 입력해주세요" />
+                      <TextInput
+                        {...controlledInputAttributes}
+                        name="userId"
+                        title="아이디"
+                        placeHolder="아이디를 입력해주세요"
+                        ref={userIdRef}
+                        onChange={() => setIsChecking(false)}
+                      />
                       <div className={classNames.error}>{errors.userId?.message}</div>
                     </div>
                     <div className="w-[250px] self-center mt-[20px]">
@@ -233,7 +229,7 @@ const EditEmployee = (props: IEditEmployee) => {
 
                   <div className="mb-4"></div>
                   <div className="text-center flex justify-end">
-                    <CancelButton onClick={cancelHandler} text="취소" cancelClassName={classNames.cancel} />
+                    <CancelButton onClick={routeEmployeeList} text="취소" cancelClassName={classNames.cancel} />
                     <SubmitButton text="수정" submitClassName={classNames.submit} />
                   </div>
                 </form>

@@ -80,7 +80,7 @@ const TableRows = ({ data }: TableRowsProps) => {
               <TableCell cellData={workingTypeCodes.get(e?.workingType ?? '')} />
               <TableCell cellData={e.startAt ? format(e.startAt, 'MM-dd HH:mm') : '-'} />
               <TableCell cellData={e.endAt ? format(e.endAt, 'MM-dd HH:mm') : '-'} />
-              <TableCellMod cellData={e} />
+              {/* <TableCellMod cellData={e} /> */}
             </tr>
           );
         })}
