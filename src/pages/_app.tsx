@@ -1,8 +1,8 @@
 import '@/styles/globals.css';
 import '@/styles/datepicker.css';
 import type { AppProps } from 'next/app';
-import { ApolloProvider } from '@apollo/client';
-import { setLocalFromToken } from '@/stores/gqlReactVars';
+import { ApolloProvider, useReactiveVar } from '@apollo/client';
+import { jwtTokensVar, setLocalFromToken } from '@/stores/gqlReactVars';
 import { useEffect } from 'react';
 import { useRefreshMutation } from '@/types/generated/types';
 import createApolloClient from '@/repository/ConfigApolloClient';
@@ -11,8 +11,8 @@ import { useRouter } from 'next/router';
 
 const client = createApolloClient();
 
-const RefreshPreprocessor = () => {
-  const [refreshMutation] = useRefreshMutation();
+const RefreshPreprocessor = ({ children }: { children: React.ReactNode }) => {
+  const [refreshMutation, { data, loading }] = useRefreshMutation();
   const { push } = useRouter();
 
   async function refreshSync() {
@@ -30,24 +30,33 @@ const RefreshPreprocessor = () => {
     refreshSync();
   }, []);
 
-  return <></>;
+  return <>{children}</>;
 };
 
 const DynamicLayout = dynamic(() => import('@/components/Layout'), { ssr: false });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const jwtTokens = useReactiveVar(jwtTokensVar);
+
   console.log('Front App is Launched!');
   return (
     <>
       <ApolloProvider client={client}>
-        <RefreshPreprocessor />
-        {pageProps.noLayout ? (
-          <Component {...pageProps} />
-        ) : (
-          <DynamicLayout>
+        <RefreshPreprocessor>
+          {pageProps.noLayout ? (
             <Component {...pageProps} />
-          </DynamicLayout>
-        )}
+          ) : (
+            <>
+              {jwtTokens.accessToken.length > 0 ? (
+                <DynamicLayout>
+                  <Component {...pageProps} />
+                </DynamicLayout>
+              ) : (
+                <></>
+              )}
+            </>
+          )}
+        </RefreshPreprocessor>
       </ApolloProvider>
     </>
   );

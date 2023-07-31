@@ -59,7 +59,6 @@ export const useCodesMap = (parent: string): Map<string, string> => {
     data?.codes[0]?.codes?.forEach((c) => {
       options.set(c?.code, c?.name);
     });
-  console.log('useCodes: ' + parent);
   return options;
 };
 

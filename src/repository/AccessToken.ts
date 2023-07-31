@@ -16,7 +16,6 @@ export const useUserToken: IUserToken = () => {
 
   if (tokens?.accessToken) {
     const decoded = jwt_decode<AuthData>(tokens.accessToken);
-    console.log('decoded', decoded);
     return {
       userName: decoded.userName,
       photoUrl: decoded.photoUrl || '',

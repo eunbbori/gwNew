@@ -16,7 +16,7 @@ import { useUserToken } from '@/repository/AccessToken';
 const Header = () => {
   const tokens = useReactiveVar(jwtTokensVar);
   useEffect(() => {
-    console.log('Header useEffect!!!', tokens);
+    // console.log('Header useEffect!!!', tokens);
     initTE({ Dropdown, Ripple });
   }, [tokens]);
 
@@ -29,7 +29,7 @@ const Header = () => {
     setLoading(true);
     logoutMutation({
       onCompleted: () => {
-        jwtTokensVar(undefined);
+        jwtTokensVar({ accessToken: '' });
         window.location.href = '/auth/login';
       },
       onError: () => {

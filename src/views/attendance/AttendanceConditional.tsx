@@ -8,11 +8,9 @@ import { useForm } from 'react-hook-form';
 import ConditionalTableHeader from './ConditionalTableHeader';
 import ConditionalTableRows from './ConditionalTableRows';
 import Paging from '@/components/Paging';
-import { attendanceConditionalActivePageVar } from '@/stores/gqlReactVars';
 import ConditionalInputs from './ConditionalInputs';
 import SelectPageCount from './SelectPageCount';
 import Swal from 'sweetalert';
-import Spinner from '@/components/Spinner';
 export interface DateRange {
   startDate: Date;
   endDate: Date;
@@ -29,15 +27,31 @@ export interface ConditionalFormValues {
 }
 
 const AttendanceConditional = () => {
-  const [pageCount, setPageCount] = useState<number>(10);
+  const [pageCount, setPageCount] = useState(10);
+  const [pageNo, setPageNo] = useState(1);
+  const [workingTypeChecked, setWorkingTypeChecked] = useState<string[]>([]);
+
   const handlePageCountChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
     setPageCount(Number(selectedValue));
   };
 
+  const handlePageChange = (page: React.SetStateAction<number>) => {
+    setPageNo(page.valueOf() as number);
+  };
+
+  const handleWorkingTypeChange = (e: React.FormEvent<HTMLInputElement>) => {
+    const value = e.currentTarget.value;
+    if (workingTypeChecked.includes(value)) {
+      setWorkingTypeChecked(workingTypeChecked.filter((type) => type !== value));
+    } else {
+      setWorkingTypeChecked([...workingTypeChecked, value]);
+    }
+  };
+
   useEffect(() => {
     handleSubmit(onSearchCondition)();
-  }, [pageCount]);
+  }, [pageCount, pageNo]);
 
   const { handleSubmit, control } = useForm<ConditionalFormValues>({});
 
@@ -50,22 +64,6 @@ const AttendanceConditional = () => {
   useEffect(() => {
     initTE({ Input, Select });
   }, [loading]);
-
-  const [workingTypeChecked, setWorkingTypeChecked] = useState<string[]>([]);
-
-  const handleWorkingTypeChange = (e: React.FormEvent<HTMLInputElement>) => {
-    const value = e.currentTarget.value;
-    if (workingTypeChecked.includes(value)) {
-      setWorkingTypeChecked(workingTypeChecked.filter((type) => type !== value));
-    } else {
-      setWorkingTypeChecked([...workingTypeChecked, value]);
-    }
-  };
-
-  const handlePageChange = (page: React.SetStateAction<number>) => {
-    attendanceConditionalActivePageVar(page.valueOf() as number);
-    handleSubmit(onSearchCondition)();
-  };
 
   const onSearchCondition = async (inputData: ConditionalFormValues) => {
     try {
@@ -80,21 +78,19 @@ const AttendanceConditional = () => {
       const { data } = await getEmployeeWorkingConditionalQuery({
         variables: {
           searchCondition: input,
-          page: attendanceConditionalActivePageVar(),
+          page: pageNo,
           size: pageCount,
         },
         fetchPolicy: 'no-cache',
       });
 
       const newPage = data?.employeeWorkingConditional?.page ?? 1;
-      attendanceConditionalActivePageVar(newPage < 1 ? 1 : newPage);
+      setPageNo(newPage < 1 ? 1 : newPage);
     } catch (error) {
       Swal('ERROR', '', 'error');
     }
   };
 
-  // if (loading) return <Spinner />;
-  // else
   return (
     <>
       <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-3 pb-0 pr-5">
@@ -107,12 +103,6 @@ const AttendanceConditional = () => {
               <span className="ml-1 font-semibold">{data?.employeeWorkingConditional?.totalElements ?? 0}</span> 명
             </p>
             <div className="flex justify-end basis-1/2">
-              {/* <button
-                type="button"
-                className="inline-block rounded bg-danger px-6 pb-2 pt-2.5 mr-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#dc4c64] transition duration-150 ease-in-out hover:bg-danger-600 hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:bg-danger-600 focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] focus:outline-none focus:ring-0 active:bg-danger-700 active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.3),0_4px_18px_0_rgba(220,76,100,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(220,76,100,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(220,76,100,0.2),0_4px_18px_0_rgba(220,76,100,0.1)]"
-              >
-                초기화
-              </button> */}
               <button
                 type="submit"
                 className="mr-[30px] inline-block rounded bg-primary px-6 py-1 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
@@ -136,7 +126,7 @@ const AttendanceConditional = () => {
           <div className="flex mt-4">
             <Paging
               perPage={pageCount}
-              paging={attendanceConditionalActivePageVar()}
+              paging={pageNo}
               onHandler={handlePageChange}
               totalCount={data?.employeeWorkingConditional?.totalElements || undefined}
             />

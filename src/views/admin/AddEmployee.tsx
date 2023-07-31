@@ -80,6 +80,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
       const input: IEmployeeInput = {
         ...newInputData,
         departmentId: parseInt(newInputData.departmentId),
+        email: newInputData.email + '@jnfirst.co.kr',
       };
       addEmployeeMutation({
         variables: {
@@ -141,9 +142,12 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
                     <TextInput {...controlledInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
                     <div className={classNames.error}>{errors.name?.message}</div>
                   </div>
-                  <div className="mb-4">
-                    <TextInput {...controlledInputAttributes} name="email" title="회사 이메일" placeHolder="회사 이메일을 입력해주세요" type="email" />
-                    <div className={classNames.error}>{errors.email?.message}</div>
+                  <div className="mb-4 flex">
+                    <div className="w-[450px]">
+                      <TextInput {...controlledInputAttributes} name="email" title="회사 이메일" placeHolder="메일 아이디만 입력해주세요" />
+                      <div className={classNames.error}>{errors.email?.message}</div>
+                    </div>
+                    <span className="text-[#8e8e8e] font-medium self-center mt-[20px] ml-[10px]">@jnfirst.co.kr</span>
                   </div>
                   <div className="mb-4">
                     <TextInput {...controlledInputAttributes} name="passwd" title="임시 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />

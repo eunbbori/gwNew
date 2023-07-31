@@ -55,7 +55,7 @@ const EditEmployee = (props: IEditEmployee) => {
     defaultValues: {
       userId: props.detailUserData?.employee?.userId,
       name: props.detailUserData?.employee?.name,
-      email: props.detailUserData?.employee?.email,
+      email: props.detailUserData?.employee?.email.split('@')[0],
       departmentId: props.detailUserData?.employee?.department?.departmentId,
       contractType: props.detailUserData?.employee?.contractType,
       phone: props.detailUserData?.employee?.phone,
@@ -112,6 +112,7 @@ const EditEmployee = (props: IEditEmployee) => {
       const input: IEmployeeInput = {
         ...newInputData,
         departmentId: parseInt(newInputData.departmentId),
+        email: newInputData.email + '@jnfirst.co.kr',
       };
       modEmployeeMutation({
         variables: {
@@ -177,9 +178,12 @@ const EditEmployee = (props: IEditEmployee) => {
                     <TextInput {...controlledInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
                     <div className={classNames.error}>{errors.name?.message}</div>
                   </div>
-                  <div className="mb-4">
-                    <TextInput {...controlledInputAttributes} name="email" title="회사 이메일" placeHolder="회사 이메일을 입력해주세요" type="email" />
-                    <div className={classNames.error}>{errors.email?.message}</div>
+                  <div className="mb-4 flex">
+                    <div className="w-[450px]">
+                      <TextInput {...controlledInputAttributes} name="email" title="회사 이메일" placeHolder="메일 아이디만 입력해주세요" />
+                      <div className={classNames.error}>{errors.email?.message}</div>
+                    </div>
+                    <span className="text-[#8e8e8e] font-medium self-center mt-[20px] ml-[10px]">@jnfirst.co.kr</span>
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">

@@ -57,8 +57,14 @@ export interface IEmployeeFormValues extends IEmployeeEditFormValues {
 export const editSchema = yup.object().shape({
   userId: yup.string().required('아이디는 필수 입력사항입니다.'),
   name: yup.string().required('이름은 필수 입력사항입니다.'),
-  phone: yup.string().required('핸드폰 번호는 필수 입력사항입니다.').max(11, '핸드폰 번호는 11자리까지 입력 가능합니다.'),
-  email: yup.string().required('이메일은 필수 입력사항입니다').email('이메일 형식에 맞지 않습니다.'),
+  phone: yup
+    .string()
+    .required('핸드폰 번호는 필수 입력사항입니다.')
+    .matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
+  email: yup
+    .string()
+    .required('이메일은 필수 입력사항입니다')
+    .matches(/^[^@]*$/, '메일 아이디는 "@" 기호를 포함해서는 안 됩니다.'),
   startDate: yup.date().required('입사일은 필수 입력사항입니다'),
   contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
   departmentId: yup.string().required('부서는 필수 선택사항입니다'),
@@ -86,7 +92,7 @@ export const handleUserIdDup = (args: {
   setValue: UseFormSetValue<any>;
 }) => {
   if (args.isChecking) {
-    if (args.currentUserId === '') {
+    if (!args.currentUserId) {
       Swal('아이디를 입력해주세요').then(() => {
         args.userIdRef.current?.focus();
       });
