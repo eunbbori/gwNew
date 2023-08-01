@@ -7,8 +7,8 @@ export interface ICompanyLogoProps {
 
 const CompanyLogo = ({ companyNm, imgSrc }: ICompanyLogoProps) => {
   return (
-    <a className="flex px-8 py-6 mb-3 text-base whitespace-nowrap" href="javascript:;" target="_blank" rel="noreferrer">
-      <Image src={imgSrc} className="inline w-8 h-full" alt="main_logo" />
+    <a className="flex px-8 py-6 mb-3 text-base whitespace-nowrap" href="/" rel="noreferrer">
+      {/* <Image src={imgSrc} className="inline w-8 h-full" alt="main_logo" /> */}
       <span className="self-center ml-4 font-semibold text-sky-700">{companyNm}</span>
     </a>
   );
