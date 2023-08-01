@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Control, FieldValues, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useRouter } from 'next/router';
 import Text from '@/components/Input/Text';
@@ -43,7 +43,7 @@ const ChangeEmpPwd = (props: IChangePwd) => {
     resolver: yupResolver(schema),
   });
 
-  const controlledInputAttributes = { ...defaultInputAttributes, control };
+  const controlledInputAttributes = { ...defaultInputAttributes, control: control as unknown as Control<FieldValues> };
 
   const [changePwdMutation, { loading }] = useChangePwdMutation();
   const cancelHandler = () => {
