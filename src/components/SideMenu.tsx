@@ -25,7 +25,7 @@ const SideMenu = () => {
         //data-te-sidenav-content="#content"
         data-te-sidenav-accordion="true"
       >
-        <CompanyLogo imgSrc={jnFirstLogo} companyNm="JF Groupware" />
+        <CompanyLogo imgSrc={jnFirstLogo} companyNm="J&F Groupware" />
 
         <ul className="relative m-0 list-none px-[0.2rem]" data-te-sidenav-menu-ref>
           {allMenuInfos.map((el, idx) => {
