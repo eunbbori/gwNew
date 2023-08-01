@@ -68,7 +68,7 @@ const Header = () => {
               {tokens?.accessToken ? (
                 <li className="relative cursor-pointer">
                   <a
-                    className="hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
+                    className="w-[40px] h-[40px] hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
                     // href="#"
                     type="button"
                     data-te-dropdown-toggle-ref
@@ -81,14 +81,15 @@ const Header = () => {
                         className="inline rounded-5"
                         src={process.env.NEXT_PUBLIC_BASE_PROFILE_API + '/' + useUserInfo?.photoUrl}
                         alt={useUserInfo?.userName || ''}
-                        width={40}
-                        height={40}
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        style={{ width: 'auto', height: '100%' }}
                       />
                     ) : (
                       useUserInfo?.userName
                     )}
                   </a>
-
                   <ul
                     className="absolute left-auto right-0 z-[1000] float-left m-0 mt-1 hidden min-w-[10rem] list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-zinc-700 [&[data-te-dropdown-show]]:block"
                     aria-labelledby="dropdownMenuButton2"
