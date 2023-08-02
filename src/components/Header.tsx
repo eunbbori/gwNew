@@ -12,6 +12,7 @@ import { useLogoutMutation } from '@/types/generated/types';
 import { Dropdown, Ripple, initTE } from 'tw-elements';
 import Spinner from './Spinner';
 import { useUserToken } from '@/repository/AccessToken';
+import Swal from 'sweetalert';
 
 const Header = () => {
   const tokens = useReactiveVar(jwtTokensVar);
@@ -36,6 +37,10 @@ const Header = () => {
         window.location.href = '/auth/login';
       },
     });
+  };
+
+  const tempAlertHandler = () => {
+    Swal({ text: '기능 개발 중입니다.', icon: 'warning' });
   };
 
   return (
@@ -95,16 +100,16 @@ const Header = () => {
                     aria-labelledby="dropdownMenuButton2"
                     data-te-dropdown-menu-ref
                   >
-                    <li>
+                    <li onClick={tempAlertHandler}>
                       <a
                         className="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 active:text-zinc-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-gray-400 dark:text-gray-200 dark:hover:bg-white/30"
-                        href={`/employee/myPage/${useUserInfo?.userId}`}
+                        // href={`/employee/myPage/${useUserInfo?.userId}`}
                         data-te-dropdown-item-ref
                       >
                         My profile
                       </a>
                     </li>
-                    <li>
+                    <li onClick={tempAlertHandler}>
                       <a
                         className="block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 active:text-zinc-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-gray-400 dark:text-gray-200 dark:hover:bg-white/30"
                         href="#"
