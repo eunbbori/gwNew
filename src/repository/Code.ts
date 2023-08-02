@@ -26,7 +26,7 @@ export const useDepartmentsOption = (): { value: string; label: string }[] => {
   return (
     (data?.departments &&
       data.departments?.map((dept) => ({
-        value: dept?.departmentId ?? '',
+        value: String(dept?.departmentId ?? ''),
         label: dept?.departmentName ?? '',
       }))) ??
     []

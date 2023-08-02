@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import Text from '@/components/Input/Text';
 import { useChangePwdMutation } from '@/types/generated/types';
 import Swal from 'sweetalert';
-import { classNames } from './HandleEmployee';
+import { classNames, passwordSchema } from './HandleEmployee';
 import SubmitButton from '@/components/Button/SubmitButton';
 import CancelButton from '@/components/Button/CancelButton';
 import Spinner from '@/components/Spinner';
@@ -27,16 +27,9 @@ const submitClassName =
 
 const ChangeEmpPwd = (props: IChangePwd) => {
   const router = useRouter();
-  const schema = yup.object().shape({
-    passwd: yup.string().min(6, '6글자 이상 10글자 이하로 입력해주세요.').required('비밀번호는 필수 입력사항입니다'),
-    passwdConfirm: yup
-      .string()
-      .oneOf([yup.ref('passwd')], '비밀번호가 일치하지 않습니다.')
-      .required('비밀번호는 필수 입력사항입니다'),
-  });
 
   const methods = useForm<IEmployeePwdChangeFormValues>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(passwordSchema),
     defaultValues: { passwd: '', passwdConfirm: '' },
   });
 

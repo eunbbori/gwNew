@@ -21,7 +21,7 @@ export interface ConditionalFormValues {
   workingDateTo: string;
   name: string;
   userId: string;
-  departmentId: string;
+  departmentId: number;
   position: string;
   workingType: string[];
 }

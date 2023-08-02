@@ -40,7 +40,7 @@ export type ICodes = {
 
 export type IDepartment = {
   __typename?: 'Department';
-  departmentId?: Maybe<Scalars['ID']>;
+  departmentId?: Maybe<Scalars['Int']>;
   departmentName?: Maybe<Scalars['String']>;
 };
 
@@ -95,7 +95,7 @@ export type IEmployeeWorking = {
 };
 
 export type IEmployeeWorkingCondition = {
-  departmentId?: InputMaybe<Scalars['ID']>;
+  departmentId?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<Scalars['String']>;
   userId?: InputMaybe<Scalars['String']>;
@@ -248,7 +248,7 @@ export type IGoToWorkMutation = {
     workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 
@@ -265,7 +265,7 @@ export type ILeaveWorkMutation = {
     workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 
@@ -282,7 +282,7 @@ export type IAttendedSubscription = {
     workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 
@@ -301,9 +301,9 @@ export type IGetAllEmployeeQuery = {
     email?: string | null;
     startDate?: any | null;
     photoUrl?: string | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null> | null;
-  departments?: Array<{ __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null> | null;
+  departments?: Array<{ __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null> | null;
 };
 
 export type IGetEmployeeQueryVariables = Exact<{
@@ -324,7 +324,7 @@ export type IGetEmployeeQuery = {
     email?: string | null;
     startDate?: any | null;
     photoUrl?: string | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 
@@ -332,7 +332,7 @@ export type IGetAllDepartmentsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type IGetAllDepartmentsQuery = {
   __typename?: 'Query';
-  departments?: Array<{ __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null> | null;
+  departments?: Array<{ __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null> | null;
 };
 
 export type IGetEmployeeWorkingQueryVariables = Exact<{
@@ -351,7 +351,7 @@ export type IGetEmployeeWorkingQuery = {
     workingType?: string | null;
     startAt?: any | null;
     endAt?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null> | null;
 };
 
@@ -379,7 +379,7 @@ export type IGetEmployeeWorkingConditionalQuery = {
       workingType?: string | null;
       startAt?: any | null;
       endAt?: any | null;
-      department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+      department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
     } | null> | null;
   } | null;
 };
@@ -401,7 +401,7 @@ export type IAddEmployeeMutation = {
     contractType?: string | null;
     phone?: string | null;
     startDate?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 
@@ -423,7 +423,7 @@ export type IModEmployeeMutation = {
     contractType?: string | null;
     phone?: string | null;
     startDate?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 
@@ -465,7 +465,7 @@ export type IChangePwdMutation = {
     contractType?: string | null;
     phone?: string | null;
     startDate?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: string | null; departmentName?: string | null } | null;
+    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
   } | null;
 };
 

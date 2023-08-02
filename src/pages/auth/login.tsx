@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
 import Swal from 'sweetalert';
 import Spinner from '@/components/Spinner';
+import { classNames, yupEmail, yupPassword } from '@/views/admin/HandleEmployee';
 
 export interface ILoginFormValues {
   empEmail: string;
@@ -15,15 +16,8 @@ export interface ILoginFormValues {
 
 const Login = () => {
   const loginSchema = yup.object().shape({
-    empEmail: yup
-      .string()
-      .matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/, '이메일 형식에 맞지 않습니다.')
-      .required('이메일을 입력해주세요.'),
-    empPassword: yup
-      .string()
-      //.matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,10}$/, '6~10자의 영문, 숫자를 조합해서 입력하세요.')
-      .min(6, '6글자 이상 10글자 이하로 입력해주세요.')
-      .required('비밀번호를 입력해주세요.'),
+    empEmail: yupEmail,
+    empPassword: yupPassword,
   });
 
   const { push, refresh } = useRouter();
@@ -81,7 +75,7 @@ const Login = () => {
                   {...register('empEmail')}
                   placeholder="사용자 E-mail"
                   type="text"
-                  className="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                  className={classNames.input}
                   aria-label="EmpEmail"
                   aria-describedby="EmpEmail-addon"
                 />
@@ -93,7 +87,7 @@ const Login = () => {
                   {...register('empPassword')}
                   placeholder="비밀번호"
                   type="password"
-                  className="text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow"
+                  className={classNames.input}
                   aria-label="Password"
                   aria-describedby="Password-login"
                 />

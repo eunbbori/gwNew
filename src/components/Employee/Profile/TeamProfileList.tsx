@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useUserToken } from '@/repository/AccessToken';
 
 export interface ITeamEmpProfileProps {
-  deptId?: string | null;
+  deptId?: number | null;
   deptName?: string | null;
   employees?: Array<IEmployee | null> | null;
   positionOptions: Map<string, string>;

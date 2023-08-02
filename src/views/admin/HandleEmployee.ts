@@ -6,8 +6,10 @@ import * as yup from 'yup';
 import Swal from 'sweetalert';
 
 // css styles
+// const inputClassName =
+//   'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
 const inputClassName =
-  'text-[14px] text-[#484848] bg-[#fafafa] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] border-2 border-solid border-[#e8e8e8] bg-clip-padding py-2 px-3 font-normal transition-all focus:border-fuchsia-200 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
+  'text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
 const paragraphClassName = 'text-sm text-[#484848] self-center';
 const errMsgClassName = 'text-[11px] text-red-400';
 const textClassName =
@@ -54,33 +56,32 @@ export interface IEmployeeFormValues extends IEmployeeEditFormValues {
 }
 
 // Yup schema
+const yupStringRequired = (title: string) => yup.string().required(`${title} 필수 입력사항입니다.`);
+const yupStringRequiredMax = (title: string, max: number) => yup.string().required(`${title} 필수 입력사항입니다.`).max(max, `${max}자 이하로 입력해주세요.`);
+const yupStringRequiredMinMax = (title: string, min: number, max: number) =>
+  yup.string().required(`${title} 필수 입력사항입니다.`).min(min, `${min}자 이상으로 입력해주세요.`).max(max, `${max}자 이하로 입력해주세요.`);
+
 export const editSchema = yup.object().shape({
-  userId: yup.string().required('아이디는 필수 입력사항입니다.'),
-  name: yup.string().required('이름은 필수 입력사항입니다.'),
-  phone: yup
-    .string()
-    .required('핸드폰 번호는 필수 입력사항입니다.')
-    .matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
-  email: yup
-    .string()
-    .required('이메일은 필수 입력사항입니다')
-    .matches(/^[^@]*$/, '메일 아이디는 "@" 기호를 포함해서는 안 됩니다.'),
+  userId: yupStringRequiredMax('아이디는', 50),
+  name: yupStringRequiredMax('이름은', 50),
+  phone: yupStringRequired('핸드폰 번호는').matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
+  email: yupStringRequiredMax('이메일은', 256).matches(/^[^@]*$/, '메일 아이디는 "@" 기호를 포함해서는 안 됩니다.'),
   startDate: yup.date().required('입사일은 필수 입력사항입니다'),
-  contractType: yup.string().required('계약형태는 필수 선택사항입니다'),
-  departmentId: yup.string().required('부서는 필수 선택사항입니다'),
-  position: yup.string().required('직급은 필수 선택사항입니다'),
+  contractType: yupStringRequired('계약형태는'),
+  departmentId: yupStringRequired('부서는'),
+  position: yupStringRequired('직급은'),
 });
 
-export const addSchema = yup
-  .object()
-  .shape({
-    passwd: yup.string().min(6, '6글자 이상 10글자 이하로 입력해주세요.').required('비밀번호는 필수 입력사항입니다'),
-    passwdConfirm: yup
-      .string()
-      .oneOf([yup.ref('passwd')], '비밀번호가 일치하지 않습니다.')
-      .required('비밀번호는 필수 입력사항입니다'),
-  })
-  .concat(editSchema);
+export const yupEmail = yupStringRequired('이메일은').matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/, '이메일 형식에 맞지 않습니다.');
+
+export const yupPassword = yupStringRequiredMinMax('비밀번호는', 6, 256);
+
+export const passwordSchema = yup.object().shape({
+  passwd: yupPassword,
+  passwdConfirm: yupStringRequired('비밀번호는').oneOf([yup.ref('passwd')], '비밀번호가 일치하지 않습니다.'),
+});
+
+export const addSchema = passwordSchema.concat(editSchema);
 
 // Check User ID Duplication
 interface IHandleUserIdDup {

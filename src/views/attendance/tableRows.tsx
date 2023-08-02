@@ -18,14 +18,14 @@ const TableRows = ({ data }: TableRowsProps) => {
   const positionCodes = useCodesMap('POSITION');
   const workingTypeCodes = useCodesMap('WORKING_TYPE');
 
-  const filteredDeptToString = selectedAttendanceFilter.dept.toString();
+  const filteredDept = selectedAttendanceFilter.dept;
 
-  const filteredCondition = selectedAttendanceFilter.isDisplayed && (selectedAttendanceFilter.name?.length > 0 || filteredDeptToString);
+  const filteredCondition = selectedAttendanceFilter.isDisplayed && (selectedAttendanceFilter.name?.length > 0 || filteredDept);
 
   const filteredData = filteredCondition
     ? data?.employeeWorking?.filter((empData) => {
         const isNameMatched = selectedAttendanceFilter.name?.length === 0 || empData?.name?.includes(selectedAttendanceFilter.name);
-        const isDeptMatched = selectedAttendanceFilter.dept === -1 || empData?.department?.departmentId === filteredDeptToString;
+        const isDeptMatched = selectedAttendanceFilter.dept === -1 || empData?.department?.departmentId === filteredDept;
         return isNameMatched && isDeptMatched;
       })
     : data?.employeeWorking;
