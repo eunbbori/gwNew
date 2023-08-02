@@ -1,41 +1,43 @@
-import { FieldPath, FieldValues, UseControllerProps, useController } from 'react-hook-form';
-import { ForwardedRef, forwardRef } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { defaultInputAttributes } from '@/views/admin/HandleEmployee';
 
 interface OtherOptions {
+  name: string;
   title: string;
   placeHolder: string;
-  type: string;
-  inputClassName: string;
-  paragraphClassName: string;
+  type?: string;
+
   divClassName?: string;
+  inputClassName?: string;
+  paragraphClassName?: string;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-const TextInput = forwardRef(function textInput<
-  TFieldValues extends FieldValues = FieldValues,
-  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
->(props: UseControllerProps<TFieldValues, TName> & OtherOptions, ref: ForwardedRef<HTMLInputElement>) {
-  const { field } = useController(props);
+const TextInput = (props: OtherOptions) => {
+  const { register } = useFormContext();
+  const fields = register(props.name);
 
   return (
-    <>
-      <div className={props.divClassName}>
-        <p className={props.paragraphClassName}>{props.title}</p>
-        <input
-          {...field}
-          name={props.name}
-          placeholder={props.placeHolder}
-          type={props.type}
-          className={props.inputClassName}
-          aria-label={props.name}
-          aria-describedby={props.name + '-addon'}
-          value={field.value ?? props.defaultValue}
-          ref={ref}
-          onChange={field.onChange}
-        />
-      </div>
-    </>
+    <div className={props.divClassName}>
+      <p className={props.paragraphClassName ?? defaultInputAttributes.paragraphClassName}>{props.title}</p>
+      <input
+        name={fields.name}
+        ref={fields.ref}
+        placeholder={props.placeHolder}
+        type={props.type ?? 'text'}
+        className={props.inputClassName ?? defaultInputAttributes.inputClassName}
+        aria-label={props.name}
+        aria-describedby={props.name + '-addon'}
+        onBlur={fields.onBlur}
+        onChange={(e) => {
+          fields.onChange(e);
+          if (props.onChange) {
+            props.onChange(e);
+          }
+        }}
+      />
+    </div>
   );
-});
+};
 
 export default TextInput;

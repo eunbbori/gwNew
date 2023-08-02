@@ -1,16 +1,16 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { Control, FieldValues, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useRouter } from 'next/router';
 import Text from '@/components/Input/Text';
-import TextInput from '@/components/Input/TextInput';
 import { useChangePwdMutation } from '@/types/generated/types';
 import Swal from 'sweetalert';
-import { classNames, defaultTextAttributes, defaultInputAttributes } from './HandleEmployee';
+import { classNames } from './HandleEmployee';
 import SubmitButton from '@/components/Button/SubmitButton';
 import CancelButton from '@/components/Button/CancelButton';
 import Spinner from '@/components/Spinner';
+import TextInput from '@/components/Input/TextInput';
 
 export interface IEmployeePwdChangeFormValues {
   passwd: string;
@@ -22,9 +22,9 @@ interface IChangePwd {
 }
 const cancelClassName =
   'inline-block px-6 py-3 mt-6 mb-2 mr-4 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white';
-
 const submitClassName =
   'from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500 inline-block px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl hover:bg-slate-700 hover:text-white';
+
 const ChangeEmpPwd = (props: IChangePwd) => {
   const router = useRouter();
   const schema = yup.object().shape({
@@ -35,15 +35,10 @@ const ChangeEmpPwd = (props: IChangePwd) => {
       .required('비밀번호는 필수 입력사항입니다'),
   });
 
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm<IEmployeePwdChangeFormValues>({
+  const methods = useForm<IEmployeePwdChangeFormValues>({
     resolver: yupResolver(schema),
+    defaultValues: { passwd: '', passwdConfirm: '' },
   });
-
-  const controlledInputAttributes = { ...defaultInputAttributes, control: control as unknown as Control<FieldValues> };
 
   const [changePwdMutation, { loading }] = useChangePwdMutation();
   const cancelHandler = () => {
@@ -80,33 +75,29 @@ const ChangeEmpPwd = (props: IChangePwd) => {
               <div className="w-full max-w-full px-3 mx-auto mt-[400px] md:flex-0 shrink-0 md:w-7/12 lg:w-5/12 xl:w-4/12">
                 <div className="relative z-0 flex flex-col min-w-0 break-words border-0 rounded-2xl bg-clip-border items-center">
                   <div className="flex-auto p-6 w-[600px] border rounded-lg border-dashed border-gray-400">
-                    <form onSubmit={handleSubmit(onChangePwd)} role="form text-left">
-                      <div className="mb-4 flex justify-between">
-                        <div className="w-[250px] self-end">
-                          <Text {...defaultTextAttributes} title="사번" value={props.detailUserData?.employee?.employeeId} />
+                    <form onSubmit={methods.handleSubmit(onChangePwd)} role="form text-left">
+                      <FormProvider {...methods}>
+                        <div className="mb-4 flex justify-between">
+                          <div className="w-[250px] self-end">
+                            <Text title="사번" value={props.detailUserData?.employee?.employeeId} />
+                          </div>
+                          <div className="w-[250px] self-end">
+                            <Text title="아이디" value={props.detailUserData?.employee?.userId} />
+                          </div>
                         </div>
-                        <div className="w-[250px] self-end">
-                          <Text {...defaultTextAttributes} title="아이디" value={props.detailUserData?.employee?.userId} />
+                        <div className="mb-4">
+                          <TextInput name="passwd" title="변경 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
+                          <div className={classNames.error}>{methods.formState.errors.passwd?.message}</div>
                         </div>
-                      </div>
-                      <div className="mb-4">
-                        <TextInput {...controlledInputAttributes} name="passwd" title="변경 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
-                        <div className={classNames.error}>{errors.passwd?.message}</div>
-                      </div>
-                      <div className="mb-4">
-                        <TextInput
-                          {...controlledInputAttributes}
-                          name="passwdConfirm"
-                          title="변경 비밀번호 확인"
-                          placeHolder="비밀번호 한번 더 입력해주세요"
-                          type="password"
-                        />
-                        <div className={classNames.error}>{errors.passwdConfirm?.message}</div>
-                      </div>
-                      <div className="text-center flex justify-end">
-                        <CancelButton onClick={cancelHandler} text="취소" cancelClassName={cancelClassName} />
-                        <SubmitButton text="수정" submitClassName={submitClassName} />
-                      </div>
+                        <div className="mb-4">
+                          <TextInput name="passwdConfirm" title="변경 비밀번호 확인" placeHolder="비밀번호 한번 더 입력해주세요" type="password" />
+                          <div className={classNames.error}>{methods.formState.errors.passwdConfirm?.message}</div>
+                        </div>
+                        <div className="text-center flex justify-end">
+                          <CancelButton onClick={cancelHandler} text="취소" cancelClassName={cancelClassName} />
+                          <SubmitButton text="수정" submitClassName={submitClassName} />
+                        </div>
+                      </FormProvider>
                     </form>
                   </div>
                 </div>

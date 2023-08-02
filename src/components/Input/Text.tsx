@@ -1,17 +1,15 @@
-import { FieldPath, FieldValues, UseControllerProps, useController } from 'react-hook-form';
+import { defaultTextAttributes } from '@/views/admin/HandleEmployee';
 
 interface OtherOptions {
   title: string;
   value: string;
-  inputClassName: string;
-  paragraphClassName: string;
 }
 
-const Text = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(props: OtherOptions) => {
+const Text = (props: OtherOptions) => {
   return (
     <>
-      <p className={props.paragraphClassName}>{props.title}</p>
-      <input disabled className={props.inputClassName} value={props.value} />
+      <p className={defaultTextAttributes.paragraphClassName}>{props.title}</p>
+      <input disabled className={defaultTextAttributes.inputClassName} value={props.value} />
     </>
   );
 };

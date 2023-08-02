@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import { TiDelete } from 'react-icons/ti';
 import swal from 'sweetalert';
 import { useUserToken } from '@/repository/AccessToken';
 export interface IProfileProps {
@@ -15,26 +14,7 @@ export interface IProfileProps {
   onClick?: () => void;
 }
 
-const testHandler = (id: number | undefined) => {
-  console.log('클릭1111', id);
-
-  swal({
-    title: '정말 삭제하시겠습니까?',
-    text: '한번 삭제하시면 되돌릴 수 없습니다.',
-    icon: 'warning',
-    buttons: ['취소', '삭제'],
-    dangerMode: true,
-  }).then((willDelete) => {
-    if (willDelete) {
-      swal('삭제됐습니다.', {
-        icon: 'success',
-      });
-    }
-  });
-  // 삭제 api 적용
-};
-
-const Profile = ({ empName, empId, photoUrl, deptName, position, positionOptions, onClick }: IProfileProps) => {
+const Profile = ({ empName, photoUrl, deptName, position, positionOptions, onClick }: IProfileProps) => {
   const useUserInfo = useUserToken();
   return (
     <div className="mr-[35px] mb-[75px]">
@@ -61,13 +41,6 @@ const Profile = ({ empName, empId, photoUrl, deptName, position, positionOptions
           <p className="text-[#484848] text-xs text-[16px] mt-[10px] pt-[2px] text-center">{deptName + ' ' + (positionOptions?.get(position || '') ?? '')}</p>
           <p className="text-black font-bold text-[16px] pt-[2px] text-center">{empName}</p>
         </div>
-        {/* <div className="">
-          {useUserInfo?.adminYn === 'YES' && (
-            <button type="button" onClick={() => testHandler(empId)} className="text-xl text-red-600">
-              <TiDelete />
-            </button>
-          )}
-        </div> */}
       </div>
     </div>
   );

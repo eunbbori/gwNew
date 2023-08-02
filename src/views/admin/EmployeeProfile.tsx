@@ -1,25 +1,18 @@
 import ImageInput from '@/components/Input/ImageInput';
-import { FieldPath, FieldValues, UseControllerProps } from 'react-hook-form';
 import { IoIosClose } from 'react-icons/io';
 import Image from 'next/image';
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
-import { useHandleEmployee } from './HandleEmployee';
 
 interface IEmployeeProfileProps {
+  name: string;
   info: string;
   imgFile?: string;
-  inputClassName: string;
-  paragraphClassName: string;
   setUploadedFile: Dispatch<SetStateAction<File | null>>;
 }
 
-const EmployeeProfile = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
-  props: UseControllerProps<TFieldValues, TName> & IEmployeeProfileProps,
-) => {
+const EmployeeProfile = (props: IEmployeeProfileProps) => {
   const [imgFile, setImgFile]: any = useState(null);
-
-  const { uploadedFile } = useHandleEmployee();
 
   useEffect(() => {
     setImgFile(props.imgFile);
@@ -47,16 +40,7 @@ const EmployeeProfile = <TFieldValues extends FieldValues = FieldValues, TName e
 
   return (
     <label htmlFor="inputFile">
-      <ImageInput
-        id="inputFile"
-        name={props.name ?? 'img'}
-        title={'프로필 이미지'}
-        control={props.control}
-        onChange={changeEmployeeImage}
-        accept=".jpg,.png,.jpeg"
-        inputClassName={props.inputClassName}
-        paragraphClassName={props.paragraphClassName}
-      />
+      <ImageInput id="inputFile" name={props.name ?? 'img'} title={'프로필 이미지'} onChange={changeEmployeeImage} accept=".jpg,.png,.jpeg" />
       <div className="relative cursor-pointer w-[250px] h-[250px] overflow-hidden">
         <div className="group">
           <Image src={imgFile ? imgFile : blankProfile} alt="프로필 이미지" width={250} height={250} className="cursor-pointer" />

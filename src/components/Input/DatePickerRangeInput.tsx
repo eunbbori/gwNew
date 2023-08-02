@@ -1,9 +1,15 @@
 import Datepicker from 'react-tailwindcss-datepicker';
-import { useController, UseControllerProps, FieldPath, FieldValues } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 
-const DatePickerRangeInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
-  props: UseControllerProps<TFieldValues, TName> & { title: string },
-) => {
+interface IDatePickerRangeInput {
+  name: string;
+  title: string;
+  defaultValue: {
+    startDate: Date;
+    endDate: Date;
+  };
+}
+const DatePickerRangeInput = (props: IDatePickerRangeInput) => {
   const { field } = useController(props);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IEmployeeInput, useAddEmployeeMutation } from '@/types/generated/types';
@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import Swal from 'sweetalert';
-import { useHandleEmployee, IEmployeeFormValues, addSchema, handleUserIdDup } from './HandleEmployee';
+import { useRouteEmployeeList, IEmployeeFormValues, addSchema, handleUserIdDup } from './HandleEmployee';
 import { useCheckUserIdDuplicationLazyQuery } from './../../types/generated/types';
 import FormEmployee from './FormEmployee';
 
@@ -16,8 +16,7 @@ interface IAddEmployeeProps {
 
 const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const [isChecking, setIsChecking] = useState(false);
-
-  const userIdRef = useRef<HTMLInputElement>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const methods = useForm<IEmployeeFormValues>({
     resolver: yupResolver(addSchema),
@@ -38,11 +37,18 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
 
   const [addEmployeeMutation] = useAddEmployeeMutation();
 
-  const { uploadedFile, routeEmployeeList } = useHandleEmployee();
+  const { routeEmployeeList } = useRouteEmployeeList();
 
   useEffect(() => {
     if (loading) return;
-    handleUserIdDup({ isChecking, setIsChecking, currentUserId, userIdRef, userIdData, setValue: methods.setValue });
+    handleUserIdDup({
+      isChecking,
+      setIsChecking,
+      currentUserId,
+      userIdData,
+      setValue: methods.setValue,
+      setFocus: methods.setFocus,
+    });
   }, [isChecking, userIdData, loading]);
 
   const onAddEmployee = (inputData: IEmployeeFormValues) => {
@@ -80,7 +86,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
           mode="REGISTER"
           submitHandler={onAddEmployee}
           setIsChecking={setIsChecking}
-          userIdRef={userIdRef}
+          setUploadedFile={setUploadedFile}
           checkUserIdDuplication={checkUserIdDuplication}
         />
       </FormProvider>

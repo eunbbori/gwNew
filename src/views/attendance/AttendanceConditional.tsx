@@ -4,7 +4,7 @@ import format from 'date-fns/format';
 import { useEffect, useState } from 'react';
 import { Input, Select, initTE } from 'tw-elements';
 import { IEmployeeWorkingCondition, useGetEmployeeWorkingConditionalLazyQuery } from '@/types/generated/types';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import ConditionalTableHeader from './ConditionalTableHeader';
 import ConditionalTableRows from './ConditionalTableRows';
 import Paging from '@/components/Paging';
@@ -50,10 +50,10 @@ const AttendanceConditional = () => {
   };
 
   useEffect(() => {
-    handleSubmit(onSearchCondition)();
+    methods.handleSubmit(onSearchCondition)();
   }, [pageCount, pageNo]);
 
-  const { handleSubmit, control } = useForm<ConditionalFormValues>({});
+  const methods = useForm<ConditionalFormValues>({});
 
   const [getEmployeeWorkingConditionalQuery, { data, loading }] = useGetEmployeeWorkingConditionalLazyQuery({
     onError: (err) => {
@@ -92,10 +92,10 @@ const AttendanceConditional = () => {
   };
 
   return (
-    <>
+    <FormProvider {...methods}>
       <div className="border-black/12.5 mb-0 rounded-t-2xl border-b-0 border-solid p-3 pb-0 pr-5">
-        <form onSubmit={handleSubmit(onSearchCondition)} role="form text-left">
-          <ConditionalInputs control={control} handleWorkingTypeChange={handleWorkingTypeChange} />
+        <form onSubmit={methods.handleSubmit(onSearchCondition)} role="form text-left">
+          <ConditionalInputs handleWorkingTypeChange={handleWorkingTypeChange} />
 
           <div className="relative flex w-full px-3 my-3">
             <p className="basis-1/2 mb-0 mr-5 w-30 leading-8 text-sm">
@@ -136,7 +136,7 @@ const AttendanceConditional = () => {
           </div>
         </div>
       </div>
-    </>
+    </FormProvider>
   );
 };
 

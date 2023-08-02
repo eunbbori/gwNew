@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IEmployeeInput, useCheckUserIdDuplicationLazyQuery, useModEmployeeMutation } from '@/types/generated/types';
@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
 import Swal from 'sweetalert';
-import { useHandleEmployee, IEmployeeEditFormValues, editSchema, handleUserIdDup } from './HandleEmployee';
+import { useRouteEmployeeList, IEmployeeEditFormValues, editSchema, handleUserIdDup } from './HandleEmployee';
 import FormEmployee from './FormEmployee';
 
 interface IEditEmployee {
@@ -17,8 +17,7 @@ interface IEditEmployee {
 const EditEmployee = (props: IEditEmployee) => {
   const [imgFile, setImgFile]: any = useState(null);
   const [isChecking, setIsChecking] = useState(false);
-
-  const userIdRef = useRef<HTMLInputElement>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const methods = useForm<IEmployeeEditFormValues>({
     resolver: yupResolver(editSchema),
@@ -30,6 +29,7 @@ const EditEmployee = (props: IEditEmployee) => {
       contractType: props.detailUserData?.employee?.contractType,
       phone: props.detailUserData?.employee?.phone,
       position: props.detailUserData?.employee?.position,
+      startDate: props.detailUserData?.employee?.startDate,
     },
   });
 
@@ -47,7 +47,7 @@ const EditEmployee = (props: IEditEmployee) => {
 
   const [modEmployeeMutation] = useModEmployeeMutation();
 
-  const { uploadedFile, routeEmployeeList } = useHandleEmployee();
+  const { routeEmployeeList } = useRouteEmployeeList();
 
   useEffect(() => {
     if (props.detailUserData?.employee?.photoUrl) {
@@ -59,7 +59,15 @@ const EditEmployee = (props: IEditEmployee) => {
     if (loading) return;
 
     if (prevUserId === methods.getValues('userId')) setIsChecking(false);
-    else handleUserIdDup({ isChecking, setIsChecking, currentUserId: methods.getValues('userId'), userIdRef, userIdData, setValue: methods.setValue });
+    else
+      handleUserIdDup({
+        isChecking,
+        setIsChecking,
+        currentUserId: methods.getValues('userId'),
+        userIdData,
+        setValue: methods.setValue,
+        setFocus: methods.setFocus,
+      });
   }, [isChecking, userIdData, loading]);
 
   const onModEmployee = (inputData: IEmployeeEditFormValues) => {
@@ -98,7 +106,7 @@ const EditEmployee = (props: IEditEmployee) => {
           mode="MODIFY"
           submitHandler={onModEmployee}
           setIsChecking={setIsChecking}
-          userIdRef={userIdRef}
+          setUploadedFile={setUploadedFile}
           checkUserIdDuplication={checkUserIdDuplication}
           imgFile={imgFile}
           employeeId={props.detailUserData?.employee?.employeeId}

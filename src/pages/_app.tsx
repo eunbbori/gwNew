@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 const client = createApolloClient();
 
 const RefreshPreprocessor = ({ children }: { children: React.ReactNode }) => {
-  const [refreshMutation, { data, loading }] = useRefreshMutation();
+  const [refreshMutation] = useRefreshMutation();
   const { push } = useRouter();
 
   async function refreshSync() {

@@ -1,9 +1,8 @@
 import { ErrorBoundary } from '@/components/Error/ErrorBoundary';
 import { ErrorFallback } from '@/components/Error/ErrorFallback';
-import { Control, FieldValues, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import EmployeeProfile from './EmployeeProfile';
-import { IEmployeeFormValues, classNames, defaultInputAttributes, defaultTextAttributes, useHandleEmployee } from './HandleEmployee';
-import TextInput from '@/components/Input/TextInput';
+import { IEmployeeFormValues, classNames, useRouteEmployeeList } from './HandleEmployee';
 import Text from '@/components/Input/Text';
 import SelectInput from '@/components/Input/SelectInput';
 import { useCodesOption, useDepartmentsOption } from '@/repository/Code';
@@ -11,44 +10,41 @@ import PhoneNoInput from '@/components/Input/PhoneNoInput';
 import DatePickerInput from '@/components/Input/DatePickerInput';
 import CancelButton from '@/components/Button/CancelButton';
 import SubmitButton from '@/components/Button/SubmitButton';
-import { format } from 'date-fns';
 import { LazyQueryExecFunction } from '@apollo/client';
 import { Exact, ICheckUserIdDuplicationQuery } from '@/types/generated/types';
+import TextInput from '@/components/Input/TextInput';
 
 interface IFormEmployee {
   mode: 'REGISTER' | 'MODIFY';
   submitHandler: (input: any) => void;
   setIsChecking: React.Dispatch<React.SetStateAction<boolean>>;
+  setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>;
   checkUserIdDuplication: LazyQueryExecFunction<
     ICheckUserIdDuplicationQuery,
     Exact<{
       userId: string;
     }>
   >;
-  userIdRef: React.RefObject<HTMLInputElement>;
   imgFile?: string;
   employeeId?: any;
 }
 
-const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUserIdDuplication, imgFile, employeeId }: IFormEmployee) => {
+const FormEmployee = ({ mode, submitHandler, setIsChecking, setUploadedFile, checkUserIdDuplication, imgFile, employeeId }: IFormEmployee) => {
   const deptOptions = useDepartmentsOption();
   const contractOptions = useCodesOption('CONTRACT_TYPE');
   const positionOptions = useCodesOption('POSITION');
 
   const {
     handleSubmit,
-    control,
     formState: { errors },
   } = useFormContext<IEmployeeFormValues>();
-
-  const controlledInputAttributes = { ...defaultInputAttributes, control: control as unknown as Control<FieldValues> };
 
   const doubleCheckHandler = () => {
     setIsChecking(true);
     checkUserIdDuplication();
   };
 
-  const { setUploadedFile, routeEmployeeList } = useHandleEmployee();
+  const { routeEmployeeList } = useRouteEmployeeList();
 
   return (
     <ErrorBoundary fallback={<ErrorFallback />}>
@@ -60,21 +56,15 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                 <form onSubmit={handleSubmit(submitHandler)} role="form text-left">
                   {mode === 'REGISTER' ? (
                     <div className="mb-4 w-[250px]">
-                      <EmployeeProfile {...controlledInputAttributes} name="img" info="사진을 저장하세요" imgFile={imgFile} setUploadedFile={setUploadedFile} />
+                      <EmployeeProfile name="img" info="사진을 저장하세요" imgFile={imgFile} setUploadedFile={setUploadedFile} />
                     </div>
                   ) : (
                     <div className="mb-4 flex justify-between">
                       <div className="w-[250px]">
-                        <EmployeeProfile
-                          {...controlledInputAttributes}
-                          name="img"
-                          info="사진을 수정하세요"
-                          imgFile={imgFile}
-                          setUploadedFile={setUploadedFile}
-                        />
+                        <EmployeeProfile name="img" info="사진을 수정하세요" imgFile={imgFile} setUploadedFile={setUploadedFile} />
                       </div>
                       <div className="w-[250px] self-end">
-                        <Text {...defaultTextAttributes} title="사번" value={employeeId} />
+                        <Text title="사번" value={employeeId} />
                       </div>
                     </div>
                   )}
@@ -82,14 +72,12 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
                       <TextInput
-                        {...controlledInputAttributes}
                         name="userId"
                         title="아이디"
                         placeHolder="아이디를 입력해주세요"
                         onChange={() => {
                           setIsChecking(false);
                         }}
-                        ref={userIdRef}
                       />
                       <div className={classNames.error}>{errors.userId?.message}</div>
                     </div>
@@ -106,12 +94,12 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                     </div>
                   </div>
                   <div className="mb-4">
-                    <TextInput {...controlledInputAttributes} name="name" title="이름" placeHolder="이름을 입력해주세요" />
+                    <TextInput name="name" title="이름" placeHolder="이름을 입력해주세요" />
                     <div className={classNames.error}>{errors.name?.message}</div>
                   </div>
                   <div className="mb-4 flex">
                     <div className="w-[450px]">
-                      <TextInput {...controlledInputAttributes} name="email" title="회사 이메일" placeHolder="메일 아이디만 입력해주세요" />
+                      <TextInput name="email" title="회사 이메일" placeHolder="메일 아이디만 입력해주세요" />
                       <div className={classNames.error}>{errors.email?.message}</div>
                     </div>
                     <span className="text-[#8e8e8e] font-medium self-center mt-[20px] ml-[10px]">@jnfirst.co.kr</span>
@@ -119,17 +107,11 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                   {mode === 'REGISTER' && (
                     <>
                       <div className="mb-4">
-                        <TextInput {...controlledInputAttributes} name="passwd" title="임시 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
+                        <TextInput name="passwd" title="임시 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
                         <div className={classNames.error}>{errors.passwd?.message}</div>
                       </div>
                       <div className="mb-4">
-                        <TextInput
-                          {...controlledInputAttributes}
-                          name="passwdConfirm"
-                          title="임시 비밀번호 확인"
-                          placeHolder="비밀번호 한번 더 입력해주세요"
-                          type="password"
-                        />
+                        <TextInput name="passwdConfirm" title="임시 비밀번호 확인" placeHolder="비밀번호 한번 더 입력해주세요" type="password" />
                         <div className={classNames.error}>{errors.passwdConfirm?.message}</div>
                       </div>
                     </>
@@ -139,7 +121,6 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                     <div className="w-[250px]">
                       <SelectInput
                         name="departmentId"
-                        control={control}
                         selectOptions={deptOptions}
                         title="부서"
                         placeHolder="부서를 선택해주세요"
@@ -150,7 +131,6 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                     <div className="w-[250px]">
                       <SelectInput
                         name="contractType"
-                        control={control}
                         selectOptions={contractOptions}
                         title="계약형태"
                         placeHolder="계약형태를 선택해주세요"
@@ -160,14 +140,13 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                     </div>
                   </div>
                   <div className="mb-4">
-                    <PhoneNoInput name="phone" title="핸드폰번호" control={control} placeHolder="핸드폰번호를 입력해주세요" inputClassName={classNames.input} />
+                    <PhoneNoInput name="phone" title="핸드폰번호" placeHolder="핸드폰번호를 입력해주세요" inputClassName={classNames.input} />
                     <div className={classNames.error}>{errors.phone?.message}</div>
                   </div>
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
                       <SelectInput
                         name="position"
-                        control={control}
                         selectOptions={positionOptions}
                         title="직급"
                         placeHolder="직급을 선택해주세요"
@@ -176,7 +155,7 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, userIdRef, checkUser
                       <div className={classNames.error}>{errors.position?.message}</div>
                     </div>
                     <div className="w-[250px]">
-                      <DatePickerInput name="startDate" control={control} title="입사일(YYYY-MM-DD)" defaultValue={format(new Date(), 'yyyy-MM-dd') ?? ''} />
+                      <DatePickerInput name="startDate" title="입사일(YYYY-MM-DD)" />
                       <div className={classNames.error}>{errors.startDate?.message}</div>
                     </div>
                   </div>

@@ -1,7 +1,7 @@
 import { ICheckUserIdDuplicationQuery } from '@/types/generated/types';
 import { useRouter } from 'next/router';
-import { useCallback, useState } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
+import { useState } from 'react';
+import { UseFormSetFocus, UseFormSetValue } from 'react-hook-form';
 import * as yup from 'yup';
 import Swal from 'sweetalert';
 
@@ -83,25 +83,27 @@ export const addSchema = yup
   .concat(editSchema);
 
 // Check User ID Duplication
-export const handleUserIdDup = (args: {
+interface IHandleUserIdDup {
   isChecking: boolean;
   setIsChecking: React.Dispatch<React.SetStateAction<boolean>>;
   currentUserId: string;
-  userIdRef: React.RefObject<HTMLInputElement>;
   userIdData: ICheckUserIdDuplicationQuery | undefined;
   setValue: UseFormSetValue<any>;
-}) => {
+  setFocus: UseFormSetFocus<any>;
+}
+
+export const handleUserIdDup = (args: IHandleUserIdDup) => {
   if (args.isChecking) {
     if (!args.currentUserId) {
       Swal('아이디를 입력해주세요').then(() => {
-        args.userIdRef.current?.focus();
+        args.setFocus('userId');
       });
     } else {
       if (args.userIdData) {
         if (args.userIdData.checkUserIdDuplication) {
-          args.setValue('userId', '');
           Swal({ text: `${args.currentUserId}는 사용 불가능한 아이디입니다.`, icon: 'warning' }).then(() => {
-            args.userIdRef.current?.focus();
+            args.setValue('userId', '');
+            args.setFocus('userId');
           });
         } else {
           Swal({ text: '사용 가능한 아이디입니다.', icon: 'success' });
@@ -114,14 +116,12 @@ export const handleUserIdDup = (args: {
 };
 
 // Image register & modification handler
-export const useHandleEmployee = () => {
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
+export const useRouteEmployeeList = () => {
   const router = useRouter();
 
   const routeEmployeeList = () => {
     router.push('/employee/listEmp');
   };
 
-  return { uploadedFile, setUploadedFile, routeEmployeeList };
+  return { routeEmployeeList };
 };

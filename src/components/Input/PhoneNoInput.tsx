@@ -1,15 +1,17 @@
-import { Controller, FieldPath, FieldValues, UseControllerProps, UseFormSetValue, useController } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 interface OtherOptions {
+  name: string;
   title: string;
   value?: string;
   placeHolder: string;
   inputClassName: string;
 }
 
-const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>(
-  props: UseControllerProps<TFieldValues, TName> & OtherOptions,
-) => {
+const PhoneNoInput = (props: OtherOptions) => {
+  const { register } = useFormContext();
+  const fields = register(props.name);
+
   const formatPhoneNo = (phoneNo: string) => {
     const phoneLength = phoneNo.length ?? 0;
     if (phoneLength < 4) return phoneNo;
@@ -21,27 +23,21 @@ const PhoneNoInput = <TFieldValues extends FieldValues = FieldValues, TName exte
   return (
     <>
       <p className="text-sm text-[#484848]">{props.title}</p>
-      <Controller
-        name={props.name}
-        control={props.control}
-        render={({ field: { value, onChange, ...field } }) => (
-          <input
-            {...field}
-            onChange={({ target }) => {
-              console.log('onChangeeeeeeeeeeee');
-              const phoneNo = target.value.trim().replace(/\D/g, '');
-              onChange(phoneNo);
+      <input
+        name={fields.name}
+        ref={fields.ref}
+        placeholder={props.placeHolder}
+        type="text"
+        className={props.inputClassName}
+        aria-label={props.name}
+        aria-describedby={props.name + '-addon'}
+        onBlur={fields.onBlur}
+        onChange={(e) => {
+          const phoneNo = e.target.value.trim().replace(/\D/g, '');
+          fields.onChange({ target: phoneNo });
 
-              target.value = formatPhoneNo(phoneNo);
-            }}
-            type="text"
-            value={value ? formatPhoneNo(value) : formatPhoneNo(props.defaultValue ?? '')}
-            placeholder={props.placeHolder}
-            className={props.inputClassName}
-            aria-label={props.name}
-            aria-describedby={props.name + '-addon'}
-          />
-        )}
+          e.target.value = formatPhoneNo(phoneNo);
+        }}
       />
     </>
   );
