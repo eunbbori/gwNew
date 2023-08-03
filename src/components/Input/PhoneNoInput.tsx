@@ -1,3 +1,5 @@
+import { faAsterisk } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useFormContext } from 'react-hook-form';
 
 interface OtherOptions {
@@ -5,6 +7,8 @@ interface OtherOptions {
   title: string;
   value?: string;
   placeHolder: string;
+  optional?: boolean;
+
   inputClassName: string;
 }
 
@@ -22,7 +26,10 @@ const PhoneNoInput = (props: OtherOptions) => {
 
   return (
     <>
-      <p className="text-sm text-[#484848]">{props.title}</p>
+      <p className="text-sm text-[#484848]">
+        {props.title}
+        {!props.optional ? <FontAwesomeIcon className={'ml-1 text-sm font-bold text-rose-500'} icon={faAsterisk} /> : ''}
+      </p>
       <input
         name={fields.name}
         ref={fields.ref}

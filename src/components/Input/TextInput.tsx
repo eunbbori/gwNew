@@ -1,11 +1,14 @@
 import { useFormContext } from 'react-hook-form';
 import { defaultInputAttributes } from '@/views/admin/HandleEmployee';
+import { faAsterisk } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface OtherOptions {
   name: string;
   title: string;
   placeHolder: string;
   type?: string;
+  optional?: boolean;
 
   divClassName?: string;
   inputClassName?: string;
@@ -19,7 +22,10 @@ const TextInput = (props: OtherOptions) => {
 
   return (
     <div className={props.divClassName}>
-      <p className={props.paragraphClassName ?? defaultInputAttributes.paragraphClassName}>{props.title}</p>
+      <p className={props.paragraphClassName ?? defaultInputAttributes.paragraphClassName}>
+        {props.title}
+        {!props.optional ? <FontAwesomeIcon className={'ml-1 text-sm font-bold text-rose-500'} icon={faAsterisk} /> : ''}
+      </p>
       <input
         name={fields.name}
         ref={fields.ref}

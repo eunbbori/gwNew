@@ -10,12 +10,14 @@ const paragraphClassName = 'w-1/5 text-sm text-[#484848] self-center font-bold';
 
 const ConditionalInputs = (args: { handleWorkingTypeChange: (e: React.FormEvent<HTMLInputElement>) => void }) => {
   const defaultInputAttributes = {
+    optional: true,
     inputClassName,
     divClassName: 'flex',
     paragraphClassName,
   };
 
   const defaultSelectAttributes = {
+    optional: true,
     divClassName: 'flex',
     paragraphClassName,
   };

@@ -1,3 +1,5 @@
+import { faAsterisk } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import Select from 'react-select';
@@ -12,6 +14,8 @@ interface OtherOptions {
   selectOptions: any;
   title: string;
   placeHolder: string;
+  optional?: boolean;
+
   paragraphClassName: string;
   divClassName?: string;
 }
@@ -28,16 +32,18 @@ const SelectInput = (props: OtherOptions) => {
     const defaultValue = formState.defaultValues ? formState.defaultValues[props.name] : '';
 
     return field.value
-      ? props.selectOptions.find((c: IOption) => c.value === field.value)
+      ? props.selectOptions.find((c: IOption) => c.value == field.value)
       : defaultValue
-      ? props.selectOptions.find((c: IOption) => c.value === defaultValue)
+      ? props.selectOptions.find((c: IOption) => c.value == defaultValue)
       : null;
   }, [field.value, formState.defaultValues, props.selectOptions]);
-
   return (
     <>
       <div className={props.divClassName}>
-        <p className={props.paragraphClassName}>{props.title}</p>
+        <p className={props.paragraphClassName}>
+          {props.title}
+          {!props.optional ? <FontAwesomeIcon className={'ml-1 text-sm font-bold text-rose-500'} icon={faAsterisk} /> : ''}
+        </p>
         <Select
           styles={{
             control: (baseStyles, state) => ({
