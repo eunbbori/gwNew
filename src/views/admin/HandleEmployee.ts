@@ -64,7 +64,10 @@ const yupStringRequiredMinMax = (title: string, min: number, max: number) =>
 export const editSchema = yup.object().shape({
   userId: yupStringRequiredMax('아이디는', 50),
   name: yupStringRequiredMax('이름은', 50),
-  phone: yupStringRequired('핸드폰 번호는').matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
+  phone: yup
+    .string()
+    .required(`핸드폰 번호는 '-'값을 제외하고 숫자만 입력해 주세요`)
+    .matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
   email: yupStringRequiredMax('이메일은', 256).matches(/^[^@]*$/, '메일 아이디는 "@" 기호를 포함해서는 안 됩니다.'),
   startDate: yup.date().required('입사일은 필수 입력사항입니다'),
   contractType: yupStringRequired('계약형태는'),

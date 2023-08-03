@@ -33,9 +33,9 @@ const PhoneNoInput = (props: OtherOptions) => {
         aria-describedby={props.name + '-addon'}
         onBlur={fields.onBlur}
         onChange={(e) => {
-          fields.onChange(e);
           const phoneNo = e.target.value.trim().replace(/\D/g, '');
           e.target.value = formatPhoneNo(phoneNo);
+          fields.onChange(e);
         }}
       />
     </>
