@@ -16,6 +16,7 @@ const AttendanceFilterGroup = () => {
 
   return (
     <div className="flex w-[23rem] text-xs self-center">
+      <span className="w-[2rem] self-center text-sm mr-2 font-semibold">이름</span>
       <div className="relative mb-1 w-[10rem] mr-5" data-te-input-wrapper-init>
         <input
           type="text"
@@ -32,7 +33,7 @@ const AttendanceFilterGroup = () => {
         </label>
       </div>
       <div className="w-[10rem] text-xs flex">
-        <span className="w-[4rem] self-center text-sm font-semibold">부서</span>
+        <span className="w-[3rem] self-center text-sm font-semibold">부서</span>
         <div className="self-center">
           <select
             data-te-select-init
