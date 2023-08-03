@@ -2,6 +2,7 @@ import { useController } from 'react-hook-form';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { useEffect } from 'react';
 
 interface OtherOptions {
   name: string;
@@ -17,6 +18,10 @@ const DatePickerInput = (props: OtherOptions) => {
     field.onChange(selectedDate);
   };
 
+  useEffect(() => {
+    field.onChange(defaultValue);
+  }, []);
+
   return (
     <>
       <p className="text-sm text-[#484848]">{props.title}</p>
@@ -24,7 +29,7 @@ const DatePickerInput = (props: OtherOptions) => {
         name={props.name}
         value={field.value}
         minDate={new Date('2000-01-01')}
-        maxDate={new Date()}
+        // maxDate={new Date()}
         shouldCloseOnSelect
         selected={field.value ? new Date(field.value) : defaultValue ? new Date(defaultValue) : new Date()}
         onChange={handleDatePickerChange}
