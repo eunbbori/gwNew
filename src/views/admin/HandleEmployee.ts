@@ -56,13 +56,13 @@ export interface IEmployeeFormValues extends IEmployeeEditFormValues {
 }
 
 // Yup schema
-const yupStringRequired = (title: string) => yup.string().required(`${title} 필수 입력사항입니다.`);
-const yupStringRequiredMax = (title: string, max: number) => yup.string().required(`${title} 필수 입력사항입니다.`).max(max, `${max}자 이하로 입력해주세요.`);
-const yupStringRequiredMinMax = (title: string, min: number, max: number) =>
-  yup.string().required(`${title} 필수 입력사항입니다.`).min(min, `${min}자 이상으로 입력해주세요.`).max(max, `${max}자 이하로 입력해주세요.`);
+const yupStringRequiredNotTrim = (title: string) => yup.string().required(`${title} 필수 입력사항입니다.`);
+const yupStringRequired = (title: string) => yup.string().trim().required(`${title} 필수 입력사항입니다.`);
+const yupStringRequiredMax = (title: string, max: number) => yupStringRequired(title).max(max, `${max}자 이하로 입력해주세요.`);
+const yupStringRequiredMinMax = (title: string, min: number, max: number) => yupStringRequiredMax(title, max).min(min, `${min}자 이상으로 입력해주세요.`);
 
 export const editSchema = yup.object().shape({
-  userId: yupStringRequiredMax('아이디는', 50),
+  userId: yupStringRequiredNotTrim('아이디는').matches(/^[\wㄱ-ㅎㅏ-ㅣ가-힣]{1,20}$/, '아이디값은 특수문자 및 공백을 제외하고 최대 20자 제한입니다.'),
   name: yupStringRequiredMax('이름은', 50),
   phone: yupStringRequired('핸드폰 번호는').matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
   email: yupStringRequiredMax('이메일은', 256).matches(/^[^@]*$/, '메일 아이디는 "@" 기호를 포함해서는 안 됩니다.'),
@@ -71,7 +71,6 @@ export const editSchema = yup.object().shape({
   departmentId: yupStringRequired('부서는'),
   position: yupStringRequired('직급은'),
 });
-
 export const yupEmail = yupStringRequired('이메일은').matches(/^[^@\s]+@[^@\s]+\.[^@\s]+$/, '이메일 형식에 맞지 않습니다.');
 
 export const yupPassword = yupStringRequiredMinMax('비밀번호는', 6, 256);
@@ -94,7 +93,7 @@ interface IHandleUserIdDup {
 }
 
 export const handleUserIdDup = (args: IHandleUserIdDup) => {
-  if (args.isChecking) {
+  if (args.isChecking && args.currentUserId.trim().length > 0) {
     if (!args.currentUserId) {
       Swal('아이디를 입력해주세요').then(() => {
         args.setFocus('userId');
