@@ -37,7 +37,7 @@ const CheckBoxInput = (props: OtherOptions) => {
                 }
               }}
             />
-            <label className="inline-block text-sm pl-[0.15rem] hover:cursor-pointer" htmlFor={`workingType${idx}`}>
+            <label className="inline-block text-sm text-gray-700pl-[0.15rem] hover:cursor-pointer" htmlFor={`workingType${idx}`}>
               {workType.label}
             </label>
           </div>

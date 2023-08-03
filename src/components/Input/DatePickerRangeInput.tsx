@@ -17,7 +17,8 @@ const DatePickerRangeInput = (props: IDatePickerRangeInput) => {
       <p className="text-sm font-bold text-[#484848] self-center mr-5">{props.title}</p>
       <Datepicker
         inputName={props.name}
-        containerClassName="relative text-gray-700 w-[250px]"
+        containerClassName="relative text-gray-700 w-[250px] h-[35px]"
+        inputClassName="pl-3 rounded-lg text-sm w-[250px] h-[35px] border border-solid border-gray-300"
         value={field.value}
         onChange={field.onChange}
         displayFormat={'YYYY-MM-DD'}

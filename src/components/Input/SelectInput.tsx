@@ -39,6 +39,18 @@ const SelectInput = (props: OtherOptions) => {
       <div className={props.divClassName}>
         <p className={props.paragraphClassName}>{props.title}</p>
         <Select
+          styles={{
+            control: (baseStyles, state) => ({
+              ...baseStyles,
+              fontSize: '14px',
+            }),
+            option: (styles) => {
+              return {
+                ...styles,
+                fontSize: '14px',
+              };
+            },
+          }}
           name={props.name}
           options={SelectOptions}
           placeholder={props.placeHolder}

@@ -9,6 +9,7 @@ export interface ITabbedContent {
 
 interface ITabProps {
   'data-te-nav-active': boolean;
+  'data-te-tab-active': boolean;
 }
 
 const TabbedContent = ({ tabs }: { tabs: ITabbedContent[] }) => {
@@ -48,9 +49,12 @@ const TabbedContent = ({ tabs }: { tabs: ITabbedContent[] }) => {
       <div className="mb-6">
         {tabs.map((tab, idx) => {
           const className = 'hidden transition-opacity duration-150 ease-linear data-[te-tab-active]:block ' + (idx === 0 ? 'opacity-100' : 'opacity-0');
+          const props = {} as ITabProps;
+
+          if (idx === 0) props['data-te-tab-active'] = true;
 
           return (
-            <div key={tab.id} className={className} id={tab.id} role="tabpanel" aria-labelledby={tab.id + '-tab'} data-te-tab-active={idx === 0}>
+            <div key={tab.id} className={className} id={tab.id} role="tabpanel" aria-labelledby={tab.id + '-tab'} {...props}>
               {tab.content}
             </div>
           );
