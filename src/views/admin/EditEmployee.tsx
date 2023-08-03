@@ -18,7 +18,6 @@ const EditEmployee = (props: IEditEmployee) => {
   const [imgFile, setImgFile]: any = useState(null);
   const [isChecking, setIsChecking] = useState(false);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-
   const methods = useForm<IEmployeeEditFormValues>({
     resolver: yupResolver(editSchema),
     defaultValues: {
@@ -35,9 +34,11 @@ const EditEmployee = (props: IEditEmployee) => {
 
   const prevUserId = props.detailUserData?.employee?.userId;
 
+  const currentUserId = methods.getValues('userId');
+
   const [checkUserIdDuplication, { data: userIdData, loading }] = useCheckUserIdDuplicationLazyQuery({
     variables: {
-      userId: methods.getValues('userId') || '',
+      userId: isChecking ? currentUserId || '' : '',
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
@@ -63,7 +64,7 @@ const EditEmployee = (props: IEditEmployee) => {
       handleUserIdDup({
         isChecking,
         setIsChecking,
-        currentUserId: methods.getValues('userId'),
+        currentUserId: currentUserId,
         userIdData,
         setValue: methods.setValue,
         setFocus: methods.setFocus,

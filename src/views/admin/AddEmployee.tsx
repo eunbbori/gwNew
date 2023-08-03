@@ -27,7 +27,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
 
   const [checkUserIdDuplication, { data: userIdData, loading }] = useCheckUserIdDuplicationLazyQuery({
     variables: {
-      userId: currentUserId || '',
+      userId: isChecking ? currentUserId || '' : '',
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
@@ -40,7 +40,8 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const { routeEmployeeList } = useRouteEmployeeList();
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !isChecking) return;
+
     handleUserIdDup({
       isChecking,
       setIsChecking,
