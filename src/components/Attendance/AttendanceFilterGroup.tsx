@@ -15,7 +15,7 @@ const AttendanceFilterGroup = () => {
   }, []);
 
   return (
-    <div className="flex w-[23rem] text-xs">
+    <div className="flex w-[23rem] text-xs self-center">
       <div className="relative mb-1 w-[10rem] mr-5" data-te-input-wrapper-init>
         <input
           type="text"
@@ -26,24 +26,27 @@ const AttendanceFilterGroup = () => {
         />
         <label
           htmlFor="nameFilter"
-          className="text-sm pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+          className="text-xs pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
         >
           이름을 입력해주세요
         </label>
       </div>
-      <div className="w-[10rem] text-xs">
-        <select
-          data-te-select-init
-          data-te-select-filter="true"
-          onChange={(e) => attendanceFilterVar({ name: selectedAttendanceFilter.name, dept: parseInt(e.target.value), isDisplayed: true })}
-        >
-          <option value={-1}>전체</option>
-          {deptData?.departments?.map((dept, idx) => (
-            <option key={dept?.departmentId} value={dept?.departmentId ?? ''}>
-              {dept?.departmentName}
-            </option>
-          ))}
-        </select>
+      <div className="w-[10rem] text-xs flex">
+        <span className="w-[4rem] self-center text-sm font-semibold">부서</span>
+        <div className="self-center">
+          <select
+            data-te-select-init
+            data-te-select-filter="true"
+            onChange={(e) => attendanceFilterVar({ name: selectedAttendanceFilter.name, dept: parseInt(e.target.value), isDisplayed: true })}
+          >
+            <option value={-1}>전체</option>
+            {deptData?.departments?.map((dept, idx) => (
+              <option key={dept?.departmentId} value={dept?.departmentId ?? ''}>
+                {dept?.departmentName}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
     </div>
   );
