@@ -7,6 +7,7 @@ import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useCodesMap } from '@/repository/Code';
 import { formatPhoneNumber } from '@/components/Util/CommonUtil';
 import Swal from 'sweetalert';
+import { format } from 'date-fns';
 
 const useEmpDetail = () => {
   const [getEmployee, { data }] = useGetEmployeeLazyQuery({
@@ -37,7 +38,7 @@ const MemberModalContent = () => {
   const detailUserId = useReactiveVar(memberDetailVar).userId;
   const { data, getEmployee } = useEmpDetail();
   const startDateString = data?.employee?.startDate;
-  const formattedStartDate = startDateString ? startDateString.slice(0, 10) : '';
+  const formattedStartDate = startDateString ? format(new Date(startDateString), 'yyyy-MM-dd') : '';
 
   useEffect(() => {
     if (detailUserId) getEmployee();
