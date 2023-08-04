@@ -11,6 +11,7 @@ import Paging from '@/components/Paging';
 import ConditionalInputs from './ConditionalInputs';
 import SelectPageCount from './SelectPageCount';
 import Swal from 'sweetalert';
+import router, { useRouter } from 'next/router';
 export interface DateRange {
   startDate: Date;
   endDate: Date;
@@ -57,7 +58,9 @@ const AttendanceConditional = () => {
 
   const [getEmployeeWorkingConditionalQuery, { data, loading }] = useGetEmployeeWorkingConditionalLazyQuery({
     onError: (err) => {
-      Swal('ERROR', '', 'error');
+      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+        router.push('/auth/login');
+      });
     },
   });
 

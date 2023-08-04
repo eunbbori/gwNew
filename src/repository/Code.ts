@@ -1,15 +1,19 @@
 import { jwtTokensVar } from '@/stores/gqlReactVars';
 import { IGetCodesQuery, useGetAllDepartmentsLazyQuery, useGetCodesLazyQuery } from '@/types/generated/types';
 import { useReactiveVar } from '@apollo/client';
+import router, { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Swal from 'sweetalert';
 
 export const useDepartments = () => {
+  const { push } = useRouter();
   const jwtTokens = useReactiveVar(jwtTokensVar);
 
   const [getAllDepartmentsQuery, { data: deptData }] = useGetAllDepartmentsLazyQuery({
     onError: (err) => {
-      Swal('ERROR', '', 'error');
+      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+        push('/auth/login');
+      });
     },
   });
 
@@ -39,7 +43,9 @@ export const useCodes = (parent: string): IGetCodesQuery | undefined => {
   const [getCodesQuery, { data: codeData }] = useGetCodesLazyQuery({
     variables: { parents: [parent] },
     onError: (err) => {
-      Swal('ERROR', '', 'error');
+      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+        router.push('/auth/login');
+      });
     },
   });
 

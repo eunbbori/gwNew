@@ -1,6 +1,7 @@
 import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 import { useReactiveVar } from '@apollo/client';
 import { getRouteInfo, allUris } from '@/repository/RouteInfo';
+import { Fragment } from 'react';
 
 const Slash = () => {
   return (
@@ -25,7 +26,7 @@ const BreadCrumb = () => {
               const curr = getRouteInfo(e);
 
               return (
-                <>
+                <Fragment key={curr?.id}>
                   {idx > 0 && <Slash />}
                   {!curr?.linkable || idx === currBreadCrumbPath.length - 1 ? (
                     <li className="text-neutral-500 dark:text-neutral-400">{curr?.title}</li>
@@ -39,7 +40,7 @@ const BreadCrumb = () => {
                       </a>
                     </li>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </ol>

@@ -25,7 +25,9 @@ const EditEmp = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      Swal('ERROR', '', 'error');
+      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+        router.push('/auth/login');
+      });
     },
   });
 

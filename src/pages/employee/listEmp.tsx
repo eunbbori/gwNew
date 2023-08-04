@@ -5,6 +5,7 @@ import { jwtTokensVar } from '@/stores/gqlReactVars';
 import dynamic from 'next/dynamic';
 import Swal from 'sweetalert';
 import Spinner from '@/components/Spinner';
+import { useRouter } from 'next/router';
 
 const DynamicEmployeeTab = dynamic(() => import('@/views/employee/EmployeeTab'), {
   ssr: false,
@@ -12,11 +13,14 @@ const DynamicEmployeeTab = dynamic(() => import('@/views/employee/EmployeeTab'),
 
 const ListEmp = () => {
   const jwtTokens = useReactiveVar(jwtTokensVar);
+  const { push } = useRouter();
 
   const [getAllEmployeeQuery, { data, loading }] = useGetAllEmployeeLazyQuery({
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      Swal('ERROR', '', 'error');
+      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+        push('/auth/login');
+      });
     },
   });
   useEffect(() => {

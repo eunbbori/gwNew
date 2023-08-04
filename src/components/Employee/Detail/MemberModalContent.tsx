@@ -16,7 +16,10 @@ const useEmpDetail = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      Swal('직원 조회가 실패했습니다', '', 'error');
+      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+        window.location.href = '/';
+        window.location.href = '/auth/login';
+      });
     },
   });
 
