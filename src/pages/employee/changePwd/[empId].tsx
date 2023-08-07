@@ -23,7 +23,7 @@ const ChangePwd = () => {
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
-      Swal('세션이 만료되어 다시 로그인 해주시기 바랍니다.', '', 'error').then((result) => {
+      Swal('미접속시간(30분)이 경과하여 로그아웃합니다.', '', 'error').then((result) => {
         router.push('/auth/login');
       });
     },
