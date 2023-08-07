@@ -16,6 +16,7 @@ import Swal from 'sweetalert';
 
 const Header = () => {
   const tokens = useReactiveVar(jwtTokensVar);
+  const [isWorking, setIsWorking] = useState(false);
   useEffect(() => {
     // console.log('Header useEffect!!!', tokens);
     initTE({ Dropdown, Ripple });
@@ -61,8 +62,8 @@ const Header = () => {
             <div className="basis-1/2">
               {tokens?.accessToken && (
                 <div className="flex">
-                  <AttendanceBtnGroup />
-                  <AttendanceRecord />
+                  <AttendanceBtnGroup isWorking={isWorking} setIsWorking={setIsWorking} />
+                  <AttendanceRecord isWorking={isWorking} />
                 </div>
               )}
             </div>

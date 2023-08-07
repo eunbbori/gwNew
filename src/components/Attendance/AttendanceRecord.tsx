@@ -5,7 +5,11 @@ import parseISO from 'date-fns/parseISO';
 import { startEndAtVar } from '@/stores/gqlReactVars';
 import { calculateDateDiff } from '@/components/Util/DateUtil';
 
-const AttendanceRecord = () => {
+interface IAttendanceRecordProps {
+  isWorking: boolean;
+}
+
+const AttendanceRecord = ({ isWorking }: IAttendanceRecordProps) => {
   const [duration, setDuration] = useState<string | undefined>('');
   const startEndAt = useReactiveVar(startEndAtVar);
 
@@ -26,9 +30,9 @@ const AttendanceRecord = () => {
         {startEndAt.startAt && '출근 : ' + format(parseISO(startEndAt.startAt), 'MM-dd HH:mm')}
         {startEndAt.endAt && ' / ' + '퇴근 : ' + format(parseISO(startEndAt.endAt), 'MM-dd HH:mm')}
         {startEndAt.startAt && startEndAt.endAt && (
-          <strong className="text-red-400"> / 근무 : {calculateDateDiff(parseISO(startEndAt.startAt), parseISO(startEndAt.endAt))}</strong>
+          <strong className="text-red-500"> / 근무 : {calculateDateDiff(parseISO(startEndAt.startAt), parseISO(startEndAt.endAt))}</strong>
         )}
-        {startEndAt.startAt && !startEndAt.endAt && <strong className="text-red-400"> / 근무 : {duration}</strong>}
+        {startEndAt.startAt && !startEndAt.endAt && <strong className={isWorking ? 'text-blue-500' : 'text-red-500'}> / 근무 : {duration}</strong>}
       </span>
     </div>
   );
