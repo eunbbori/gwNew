@@ -19,17 +19,28 @@ interface IFormEmployee {
   submitHandler: (input: any) => void;
   setIsChecking: React.Dispatch<React.SetStateAction<boolean>>;
   setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>;
-  checkUserIdDuplication: LazyQueryExecFunction<
+  setUserIdForCheckDuplication: () => void;
+  /* checkUserIdDuplication: LazyQueryExecFunction<
     ICheckUserIdDuplicationQuery,
     Exact<{
       userId: string;
     }>
-  >;
+  >; */
+  requestUserIdDupCheck: () => void;
   imgFile?: string;
   employeeId?: any;
 }
 
-const FormEmployee = ({ mode, submitHandler, setIsChecking, setUploadedFile, checkUserIdDuplication, imgFile, employeeId }: IFormEmployee) => {
+const FormEmployee = ({
+  mode,
+  submitHandler,
+  setIsChecking,
+  setUploadedFile,
+  requestUserIdDupCheck,
+  setUserIdForCheckDuplication,
+  imgFile,
+  employeeId,
+}: IFormEmployee) => {
   const deptOptions = useDepartmentsOption();
   const contractOptions = useCodesOption('CONTRACT_TYPE');
   const positionOptions = useCodesOption('POSITION');
@@ -41,7 +52,8 @@ const FormEmployee = ({ mode, submitHandler, setIsChecking, setUploadedFile, che
 
   const doubleCheckHandler = () => {
     setIsChecking(true);
-    checkUserIdDuplication();
+    setUserIdForCheckDuplication();
+    requestUserIdDupCheck();
   };
 
   const { routeEmployeeList } = useRouteEmployeeList();

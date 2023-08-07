@@ -17,7 +17,9 @@ interface IEditEmployee {
 const EditEmployee = (props: IEditEmployee) => {
   const [imgFile, setImgFile]: any = useState(null);
   const [isChecking, setIsChecking] = useState(false);
+  const [userIdForCheck, setUserIdForCheck] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+
   const methods = useForm<IEmployeeEditFormValues>({
     resolver: yupResolver(editSchema),
     defaultValues: {
@@ -34,11 +36,23 @@ const EditEmployee = (props: IEditEmployee) => {
 
   const prevUserId = props.detailUserData?.employee?.userId;
 
-  const currentUserId = methods.getValues('userId');
+  const setUserIdForCheckDuplication = () => {
+    setUserIdForCheck(methods.getValues('userId'));
+  };
+
+  const requestUserIdDupCheck = () => {
+    if (prevUserId === methods.getValues('userId')) return;
+
+    checkUserIdDuplication({
+      variables: {
+        userId: methods.getValues('userId'),
+      },
+    });
+  };
 
   const [checkUserIdDuplication, { data: userIdData, loading }] = useCheckUserIdDuplicationLazyQuery({
     variables: {
-      userId: isChecking ? currentUserId || '' : '',
+      userId: userIdForCheck,
     },
     fetchPolicy: 'no-cache',
     onError: (err) => {
@@ -64,7 +78,7 @@ const EditEmployee = (props: IEditEmployee) => {
       handleUserIdDup({
         isChecking,
         setIsChecking,
-        currentUserId: currentUserId,
+        currentUserId: userIdForCheck,
         userIdData,
         setValue: methods.setValue,
         setFocus: methods.setFocus,
@@ -108,7 +122,8 @@ const EditEmployee = (props: IEditEmployee) => {
           submitHandler={onModEmployee}
           setIsChecking={setIsChecking}
           setUploadedFile={setUploadedFile}
-          checkUserIdDuplication={checkUserIdDuplication}
+          setUserIdForCheckDuplication={setUserIdForCheckDuplication}
+          requestUserIdDupCheck={requestUserIdDupCheck}
           imgFile={imgFile}
           employeeId={props.detailUserData?.employee?.employeeId}
         />

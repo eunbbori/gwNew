@@ -15,20 +15,28 @@ interface IAddEmployeeProps {
 }
 
 const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
-  const [isChecking, setIsChecking] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isChecking, setIsChecking] = useState(false); // Is 'Check Duplication' button clicked?
+  const [userIdForCheck, setUserIdForCheck] = useState('');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null); // Image file
 
   const methods = useForm<IEmployeeFormValues>({
     resolver: yupResolver(addSchema),
     defaultValues: { departmentId: deptId },
   });
 
-  const currentUserId = methods.getValues('userId');
+  const setUserIdForCheckDuplication = () => {
+    setUserIdForCheck(methods.getValues('userId'));
+  };
+
+  const requestUserIdDupCheck = () => {
+    checkUserIdDuplication({
+      variables: {
+        userId: methods.getValues('userId'),
+      },
+    });
+  };
 
   const [checkUserIdDuplication, { data: userIdData, loading }] = useCheckUserIdDuplicationLazyQuery({
-    variables: {
-      userId: isChecking ? currentUserId || '' : '',
-    },
     fetchPolicy: 'no-cache',
     onError: (err) => {
       Swal('ERROR', '', 'error');
@@ -40,12 +48,13 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const { routeEmployeeList } = useRouteEmployeeList();
 
   useEffect(() => {
+    console.log('in useEffect:' + loading + ', isChecking=' + isChecking);
     if (loading || !isChecking) return;
-
+    console.log('in useEffect:' + loading + ', isChecking=' + isChecking);
     handleUserIdDup({
       isChecking,
       setIsChecking,
-      currentUserId,
+      currentUserId: userIdForCheck,
       userIdData,
       setValue: methods.setValue,
       setFocus: methods.setFocus,
@@ -88,7 +97,8 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
           submitHandler={onAddEmployee}
           setIsChecking={setIsChecking}
           setUploadedFile={setUploadedFile}
-          checkUserIdDuplication={checkUserIdDuplication}
+          setUserIdForCheckDuplication={setUserIdForCheckDuplication}
+          requestUserIdDupCheck={requestUserIdDupCheck}
         />
       </FormProvider>
     </ErrorBoundary>
