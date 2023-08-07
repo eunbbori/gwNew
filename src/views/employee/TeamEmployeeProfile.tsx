@@ -7,17 +7,19 @@ const TeamEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined 
   const positionOptions = useCodesMap('POSITION');
 
   return (
-    <div className="bg-[white] p-[30px] rounded-xl">
-      {list?.departments?.map((dept, idx) => (
-        <TeamProfileList
-          key={dept?.departmentId}
-          deptId={dept?.departmentId}
-          deptName={dept?.departmentName}
-          employees={list.employees}
-          positionOptions={positionOptions}
-        />
-      ))}
-    </div>
+    <>
+      <div className="bg-[white] p-[30px] rounded-xl">
+        {list?.departments?.map((dept, idx) => (
+          <TeamProfileList
+            key={dept?.departmentId}
+            deptId={dept?.departmentId}
+            deptName={dept?.departmentName}
+            employees={list.employees}
+            positionOptions={positionOptions}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 

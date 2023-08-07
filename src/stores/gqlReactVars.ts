@@ -55,12 +55,6 @@ export const attendanceSortVar = makeVar({
 //Attendance Total Count
 export const attendanceTotalCntVar = makeVar(0);
 
-//Member Detail Info
-export const memberDetailVar = makeVar({
-  userId: '',
-  empId: 0,
-});
-
 ////////////////
 // BreadCrumb //
 ////////////////

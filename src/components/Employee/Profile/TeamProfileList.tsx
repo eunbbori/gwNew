@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Profile from './Profile';
 import { IEmployee } from '@/types/generated/types';
-import { memberDetailVar } from '@/stores/gqlReactVars';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useUserToken } from '@/repository/AccessToken';
+import { MemberDetailContext } from '@/views/employee/EmployeeTab';
 
 export interface ITeamEmpProfileProps {
   deptId?: number | null;
@@ -15,6 +14,7 @@ export interface ITeamEmpProfileProps {
   positionOptions: Map<string, string>;
 }
 const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeamEmpProfileProps) => {
+  const memberDetailContext = useContext(MemberDetailContext);
   const useUserInfo = useUserToken();
 
   const deptEmployees = employees
@@ -26,8 +26,13 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
       return a?.name < b?.name ? -1 : 0;
     })
     .filter((dept) => dept?.department?.departmentId === deptId);
+
   const clickHandler = (userId: string, empId: number) => {
-    memberDetailVar({ userId: userId, empId: empId });
+    memberDetailContext &&
+      memberDetailContext.setMemberDetail({
+        userId: userId,
+        empId: empId,
+      });
   };
 
   return (

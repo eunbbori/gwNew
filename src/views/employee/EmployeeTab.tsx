@@ -2,12 +2,29 @@ import { IGetAllEmployeeQuery } from '@/types/generated/types';
 import AllEmployeeProfile from './AllEmployeeProfile';
 import TeamEmployeeProfile from './TeamEmployeeProfile';
 import TabbedContent, { ITabbedContent } from '../common/TabbedContent';
+import { Dispatch, SetStateAction, createContext, useEffect, useState } from 'react';
+import { breadCrumbPathVar } from '@/stores/gqlReactVars';
 import DetailModal from '@/components/Modal/DetailModal';
 import MemberModalContent from '@/components/Employee/Detail/MemberModalContent';
-import { useEffect } from 'react';
-import { breadCrumbPathVar } from '@/stores/gqlReactVars';
+
+interface IMemberIds {
+  userId: string;
+  empId: number;
+}
+
+interface IMemberDetail {
+  memberDetail: IMemberIds;
+  setMemberDetail: Dispatch<SetStateAction<IMemberIds>>;
+}
+
+export const MemberDetailContext = createContext<IMemberDetail | null>(null);
 
 const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
+  const [memberDetail, setMemberDetail] = useState({
+    userId: '',
+    empId: 0,
+  });
+
   useEffect(() => {
     breadCrumbPathVar(['/', 'employee', 'listEmp']);
   }, []);
@@ -27,8 +44,10 @@ const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
 
   return (
     <>
-      <TabbedContent tabs={attendanceTabList} />
-      <DetailModal title={'상세정보'} content={<MemberModalContent />} />
+      <MemberDetailContext.Provider value={{ memberDetail, setMemberDetail }}>
+        <TabbedContent tabs={attendanceTabList} />
+        <DetailModal title={'상세정보'} empId={memberDetail.empId ?? 0} content={<MemberModalContent userId={memberDetail.userId ?? ''} />} />
+      </MemberDetailContext.Provider>
     </>
   );
 };

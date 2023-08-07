@@ -1,19 +1,25 @@
 import Profile from '@/components/Employee/Profile/Profile';
 import { useCodesMap } from '@/repository/Code';
-import { memberDetailVar } from '@/stores/gqlReactVars';
 import { IGetAllEmployeeQuery } from '@/types/generated/types';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { useUserToken } from '@/repository/AccessToken';
+import { MemberDetailContext } from './EmployeeTab';
 
 const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
+  const memberDetailContext = useContext(MemberDetailContext);
+
   const positionOptions = useCodesMap('POSITION');
   const useUserInfo = useUserToken();
 
   const clickHandler = (userId: string, empId: number) => {
-    memberDetailVar({ userId: userId, empId: empId });
+    console.log('AllEmployeeProfile=' + userId + ', ' + empId);
+    memberDetailContext?.setMemberDetail({
+      userId: userId,
+      empId: empId,
+    });
   };
 
   list?.employees?.sort((a, b) => {
@@ -24,29 +30,31 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
   });
 
   return (
-    <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
-      {list?.employees?.map((emp, idx) => (
-        <Profile
-          key={emp?.employeeId}
-          onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
-          empName={emp?.name}
-          empId={emp?.employeeId || 0}
-          deptName={emp?.department?.departmentName}
-          position={emp?.position}
-          photoUrl={emp?.photoUrl || ''}
-          positionOptions={positionOptions}
-        />
-      ))}
-      {useUserInfo?.adminYn === 'YES' && (
-        <Link href={{ pathname: '/employee/addEmp' }}>
-          <div className="mr-[35px] mb-[75px] cursor-pointer text-center">
-            <div className="flex items-center justify-center w-[144px] h-[144px]">
-              <FontAwesomeIcon className="text-[#3366FF] text-5xl" icon={faPlus} />
+    <>
+      <div className="bg-[white] p-[30px] rounded-xl flex flex-wrap">
+        {list?.employees?.map((emp, idx) => (
+          <Profile
+            key={emp?.employeeId}
+            onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
+            empName={emp?.name}
+            empId={emp?.employeeId || 0}
+            deptName={emp?.department?.departmentName}
+            position={emp?.position}
+            photoUrl={emp?.photoUrl || ''}
+            positionOptions={positionOptions}
+          />
+        ))}
+        {useUserInfo?.adminYn === 'YES' && (
+          <Link href={{ pathname: '/employee/addEmp' }}>
+            <div className="mr-[35px] mb-[75px] cursor-pointer text-center">
+              <div className="flex items-center justify-center w-[144px] h-[144px]">
+                <FontAwesomeIcon className="text-[#3366FF] text-5xl" icon={faPlus} />
+              </div>
             </div>
-          </div>
-        </Link>
-      )}
-    </div>
+          </Link>
+        )}
+      </div>
+    </>
   );
 };
 

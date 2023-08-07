@@ -1,31 +1,29 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useCallback, useEffect } from 'react';
 import { Modal, Ripple, initTE } from 'tw-elements';
 import { useRouter } from 'next/router';
-import { useReactiveVar } from '@apollo/client';
-import { memberDetailVar } from '@/stores/gqlReactVars';
 import { useUserToken } from '@/repository/AccessToken';
 
 export interface IModalProps {
   title?: string | null;
+  empId: number;
   content?: ReactElement;
 }
 
-const DetailModal = ({ title, content }: IModalProps) => {
+const DetailModal = ({ title, empId, content }: IModalProps) => {
   const useUserInfo = useUserToken();
-  const selectedMemberDetailVar = useReactiveVar(memberDetailVar);
   const { push } = useRouter();
 
   useEffect(() => {
     initTE({ Modal, Ripple });
   });
 
-  const goEditHandler = () => {
-    push(`/employee/editEmp/${selectedMemberDetailVar.empId}`);
-  };
+  const goEditHandler = useCallback(() => {
+    push(`/employee/editEmp/${empId}`);
+  }, [empId]);
 
-  const goChangePwdHandler = () => {
-    push(`/employee/changePwd/${selectedMemberDetailVar.empId}`);
-  };
+  const goChangePwdHandler = useCallback(() => {
+    push(`/employee/changePwd/${empId}`);
+  }, [empId]);
 
   return (
     <>

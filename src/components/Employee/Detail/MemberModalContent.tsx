@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import { useReactiveVar } from '@apollo/client';
-import { memberDetailVar } from '@/stores/gqlReactVars';
 import { useGetEmployeeLazyQuery } from '@/types/generated/types';
 import { useCodesMap } from '@/repository/Code';
 import { formatPhoneNumber } from '@/components/Util/CommonUtil';
@@ -11,9 +9,6 @@ import { format } from 'date-fns';
 
 const useEmpDetail = () => {
   const [getEmployee, { data }] = useGetEmployeeLazyQuery({
-    variables: {
-      userId: memberDetailVar().userId,
-    },
     fetchPolicy: 'no-cache',
     onError: (err) => {
       Swal('미접속시간(30분)이 경과하여 로그아웃합니다.', '', 'error').then((result) => {
@@ -37,15 +32,21 @@ const MemberInfoField = ({ title, value }: { title: string; value: string }) => 
   );
 };
 
-const MemberModalContent = () => {
-  const detailUserId = useReactiveVar(memberDetailVar).userId;
+const MemberModalContent = ({ userId }: { userId: string }) => {
   const { data, getEmployee } = useEmpDetail();
   const startDateString = data?.employee?.startDate;
   const formattedStartDate = startDateString ? format(new Date(startDateString), 'yyyy-MM-dd') : '';
 
   useEffect(() => {
-    if (detailUserId) getEmployee();
-  }, [detailUserId]);
+    if (userId) {
+      console.log('MemberModalContent=' + userId);
+      getEmployee({
+        variables: {
+          userId,
+        },
+      });
+    }
+  }, [userId]);
 
   const matchedContractType = useCodesMap('CONTRACT_TYPE').get(data?.employee?.contractType ?? '');
   const matchedPosition = useCodesMap('POSITION').get(data?.employee?.position ?? '');
