@@ -10,7 +10,7 @@ import { useRouteEmployeeList, IEmployeeEditFormValues, editSchema, handleUserId
 import FormEmployee from './FormEmployee';
 
 interface IEditEmployee {
-  detailEmpId: number;
+  detailEmpId: string;
   detailUserData: any;
 }
 

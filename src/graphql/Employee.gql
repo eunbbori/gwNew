@@ -20,7 +20,7 @@ query getAllEmployee {
   }
 }
 
-query getEmployee($employeeId: Int, $userId: String) {
+query getEmployee($employeeId: String, $userId: String) {
   employee(employeeId: $employeeId, userId: $userId) {
     employeeId
     userId
@@ -102,7 +102,7 @@ mutation addEmployee($input: EmployeeInput!, $file: Upload) {
   }
 }
 
-mutation modEmployee($employeeId: Int, $input: EmployeeModInput!, $file: Upload) {
+mutation modEmployee($employeeId: String, $input: EmployeeModInput!, $file: Upload) {
   modEmployee(employeeId: $employeeId, input: $input, file: $file) {
     employeeId
     userId
@@ -130,13 +130,13 @@ query getCodes($parents: [String]) {
   }
 }
 
-mutation singleUpload($employeeId: Int, $file: Upload!) {
+mutation singleUpload($employeeId: String, $file: Upload!) {
   singleUpload(employeeId: $employeeId, file: $file) {
     filename
   }
 }
 
-mutation changePwd($employeeId: Int, $pwd: String) {
+mutation changePwd($employeeId: String, $pwd: String) {
   changePwd(employeeId: $employeeId, pwd: $pwd) {
     employeeId
     userId

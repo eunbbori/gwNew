@@ -27,7 +27,7 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
     })
     .filter((dept) => dept?.department?.departmentId === deptId);
 
-  const clickHandler = (userId: string, empId: number) => {
+  const clickHandler = (userId: string, empId: string) => {
     memberDetailContext &&
       memberDetailContext.setMemberDetail({
         userId: userId,
@@ -56,12 +56,12 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
               <Profile
                 key={emp?.employeeId}
                 empName={emp?.name}
-                empId={emp?.employeeId || 0}
+                empId={emp?.employeeId ?? ''}
                 deptName={emp?.department?.departmentName}
                 position={emp?.position}
                 photoUrl={emp?.photoUrl || ''}
                 positionOptions={positionOptions}
-                onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
+                onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || '')}
               />
             ))}
         </div>

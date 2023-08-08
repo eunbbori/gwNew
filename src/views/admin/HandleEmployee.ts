@@ -12,6 +12,7 @@ const inputClassName =
   'text-sm focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-lg border border-solid border-gray-300 bg-white bg-clip-padding py-2 px-3 font-normal text-gray-700 transition-all focus:border-fuchsia-300 focus:bg-white focus:text-gray-700 focus:outline-none focus:transition-shadow';
 const paragraphClassName = 'text-sm text-[#484848] self-center';
 const errMsgClassName = 'text-[11px] text-red-400';
+const guideMsgClassName = 'text-[11px] text-green-400';
 const textClassName =
   'text-[18px] text-[#e8e8e8] bg-[#5a5a5a] focus:shadow-soft-primary-outline leading-5.6 ease-soft block w-full appearance-none rounded-[4px] bg-clip-padding py-2 px-3 font-normal transition-all';
 const cancelClassName =
@@ -23,6 +24,7 @@ export const classNames = {
   input: inputClassName,
   paragraph: paragraphClassName,
   error: errMsgClassName,
+  guide: guideMsgClassName,
   cancel: cancelClassName,
   submit: submitClassName,
 };
@@ -51,6 +53,7 @@ export interface IEmployeeEditFormValues {
 }
 
 export interface IEmployeeFormValues extends IEmployeeEditFormValues {
+  employeeId: string;
   passwd: string;
   passwdConfirm: string;
 }
@@ -62,7 +65,10 @@ const yupStringRequiredMax = (title: string, max: number) => yupStringRequired(t
 const yupStringRequiredMinMax = (title: string, min: number, max: number) => yupStringRequiredMax(title, max).min(min, `${min}자 이상으로 입력해주세요.`);
 
 export const editSchema = yup.object().shape({
-  userId: yupStringRequiredNotTrim('아이디는').matches(/^[\wㄱ-ㅎㅏ-ㅣ가-힣]{1,20}$/, '아이디값은 특수문자 및 공백을 제외하고 최대 20자 제한입니다.'),
+  userId: yupStringRequiredNotTrim('아이디는').matches(
+    /^[\wㄱ-ㅎㅏ-ㅣ가-힣]{1,20}$/,
+    '아이디값은 특수문자인 space,₩,|,/ 등을 제외하고 최대 20자가 제한입니다.',
+  ),
   name: yupStringRequiredMax('이름은', 50),
   phone: yupStringRequired('핸드폰 번호는').matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
   email: yupStringRequiredMax('이메일은', 256).matches(/^[^@]*$/, '메일 아이디는 "@" 기호를 포함해서는 안 됩니다.'),
@@ -80,7 +86,15 @@ export const passwordSchema = yup.object().shape({
   passwdConfirm: yupStringRequired('비밀번호는').oneOf([yup.ref('passwd')], '비밀번호가 일치하지 않습니다.'),
 });
 
-export const addSchema = passwordSchema.concat(editSchema);
+export const myPasswordSchema = passwordSchema.shape({
+  curPasswd: yupStringRequired('현재 비밀번호는'),
+});
+
+export const addSchema = passwordSchema.concat(
+  editSchema.shape({
+    employeeId: yupStringRequiredNotTrim('사번은'),
+  }),
+);
 
 // Check User ID Duplication
 interface IHandleUserIdDup {

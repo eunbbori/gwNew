@@ -28,7 +28,7 @@ interface IFormEmployee {
   >; */
   requestUserIdDupCheck: () => void;
   imgFile?: string;
-  employeeId?: any;
+  employeeId?: string;
 }
 
 const FormEmployee = ({
@@ -76,7 +76,7 @@ const FormEmployee = ({
                         <EmployeeProfile name="img" info="사진을 수정하세요" imgFile={imgFile} setUploadedFile={setUploadedFile} />
                       </div>
                       <div className="w-[250px] self-end">
-                        <Text title="사번" value={employeeId} />
+                        <Text title="사번" value={employeeId ?? ''} />
                       </div>
                     </div>
                   )}
@@ -91,9 +91,12 @@ const FormEmployee = ({
                           setIsChecking(false);
                         }}
                       />
+                      {!errors.userId?.message && (
+                        <div className={classNames.guide}>아이디값은 특수문자인 space,₩,|,/ 등을 제외하고 최대 20자가 제한입니다.</div>
+                      )}
                       <div className={classNames.error}>{errors.userId?.message}</div>
                     </div>
-                    <div className="w-[250px] self-center mt-[20px]">
+                    <div className="w-[250px] self-center">
                       <button
                         type="button"
                         className={
@@ -105,10 +108,23 @@ const FormEmployee = ({
                       </button>
                     </div>
                   </div>
-                  <div className="mb-4">
-                    <TextInput name="name" title="이름" placeHolder="이름을 입력해주세요" />
-                    <div className={classNames.error}>{errors.name?.message}</div>
-                  </div>
+                  {mode === 'REGISTER' ? (
+                    <div className="mb-4 flex justify-between">
+                      <div className="w-[250px]">
+                        <TextInput name="employeeId" title="사번" placeHolder="사번을 입력해주세요" />
+                        <div className={classNames.error}>{errors.employeeId?.message}</div>
+                      </div>
+                      <div className="w-[250px]">
+                        <TextInput name="name" title="이름" placeHolder="이름을 입력해주세요" />
+                        <div className={classNames.error}>{errors.name?.message}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mb-4">
+                      <TextInput name="name" title="이름" placeHolder="이름을 입력해주세요" />
+                      <div className={classNames.error}>{errors.name?.message}</div>
+                    </div>
+                  )}
                   <div className="mb-4 flex">
                     <div className="w-[450px]">
                       <TextInput name="email" title="회사 이메일" placeHolder="메일 아이디만 입력해주세요" />
@@ -128,7 +144,6 @@ const FormEmployee = ({
                       </div>
                     </>
                   )}
-
                   <div className="mb-4 flex justify-between">
                     <div className="w-[250px]">
                       <SelectInput

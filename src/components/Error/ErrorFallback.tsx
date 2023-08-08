@@ -1,11 +1,11 @@
 interface IError {
-  name?: string
-  message?: string
-  stack?: string
+  name?: string;
+  message?: string;
+  stack?: string;
 }
 
 export interface IErrorFallbackProps {
-  error?: IError
+  error?: IError;
 }
 
 export const ErrorFallback = (props: IErrorFallbackProps) => {
@@ -15,5 +15,5 @@ export const ErrorFallback = (props: IErrorFallbackProps) => {
       <h5>{props?.error?.message}</h5>
       <h6>{props?.error?.stack}</h6>
     </div>
-  )
-}
+  );
+};

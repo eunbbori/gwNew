@@ -15,7 +15,7 @@ const ChangePwd = () => {
 
   const router = useRouter();
   const { empId } = router.query;
-  const detailEmpId = typeof empId === 'string' ? parseInt(empId) : 0;
+  const detailEmpId = typeof empId === 'string' ? empId : '';
 
   const [getEmployee, { data: detailUserData }] = useGetEmployeeLazyQuery({
     variables: {

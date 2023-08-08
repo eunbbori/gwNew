@@ -18,7 +18,7 @@ const AddEmployee = ({ deptId }: IAddEmployeeProps) => {
   const [isChecking, setIsChecking] = useState(false); // Is 'Check Duplication' button clicked?
   const [userIdForCheck, setUserIdForCheck] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null); // Image file
-
+  console.log('uploadedFile', uploadedFile);
   const methods = useForm<IEmployeeFormValues>({
     resolver: yupResolver(addSchema),
     defaultValues: { departmentId: deptId },

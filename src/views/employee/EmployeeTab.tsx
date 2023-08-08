@@ -9,7 +9,7 @@ import MemberModalContent from '@/components/Employee/Detail/MemberModalContent'
 
 interface IMemberIds {
   userId: string;
-  empId: number;
+  empId: string;
 }
 
 interface IMemberDetail {
@@ -22,7 +22,7 @@ export const MemberDetailContext = createContext<IMemberDetail | null>(null);
 const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
   const [memberDetail, setMemberDetail] = useState({
     userId: '',
-    empId: 0,
+    empId: '',
   });
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const EmployeeTab = ({ list }: { list: IGetAllEmployeeQuery | undefined }) => {
     <>
       <MemberDetailContext.Provider value={{ memberDetail, setMemberDetail }}>
         <TabbedContent tabs={attendanceTabList} />
-        <DetailModal title={'상세정보'} empId={memberDetail.empId ?? 0} content={<MemberModalContent userId={memberDetail.userId ?? ''} />} />
+        <DetailModal title={'상세정보'} empId={memberDetail.empId ?? ''} content={<MemberModalContent userId={memberDetail.userId ?? ''} />} />
       </MemberDetailContext.Provider>
     </>
   );

@@ -6,7 +6,7 @@ import swal from 'sweetalert';
 import { useUserToken } from '@/repository/AccessToken';
 export interface IProfileProps {
   empName?: string | null;
-  empId?: number;
+  empId?: string;
   photoUrl?: string;
   deptName?: string | null;
   position?: string | null;

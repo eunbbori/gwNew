@@ -5,7 +5,7 @@ import { useUserToken } from '@/repository/AccessToken';
 
 export interface IModalProps {
   title?: string | null;
-  empId: number;
+  empId: string;
   content?: ReactElement;
 }
 

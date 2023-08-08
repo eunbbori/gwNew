@@ -49,7 +49,7 @@ export type IEmployee = {
   contractType?: Maybe<Scalars['String']>;
   department?: Maybe<IDepartment>;
   email?: Maybe<Scalars['String']>;
-  employeeId?: Maybe<Scalars['Int']>;
+  employeeId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   photoUrl?: Maybe<Scalars['String']>;
@@ -62,6 +62,7 @@ export type IEmployeeInput = {
   contractType?: InputMaybe<Scalars['String']>;
   departmentId?: InputMaybe<Scalars['Int']>;
   email?: InputMaybe<Scalars['String']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   passwd?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
@@ -84,7 +85,7 @@ export type IEmployeeModInput = {
 export type IEmployeeWorking = {
   __typename?: 'EmployeeWorking';
   department?: Maybe<IDepartment>;
-  employeeId?: Maybe<Scalars['Int']>;
+  employeeId?: Maybe<Scalars['String']>;
   endAt?: Maybe<Scalars['Date']>;
   name?: Maybe<Scalars['String']>;
   position?: Maybe<Scalars['String']>;
@@ -139,7 +140,7 @@ export type IMutationAddEmployeeArgs = {
 };
 
 export type IMutationChangePwdArgs = {
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   pwd?: InputMaybe<Scalars['String']>;
 };
 
@@ -149,13 +150,13 @@ export type IMutationLoginArgs = {
 };
 
 export type IMutationModEmployeeArgs = {
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   file?: InputMaybe<Scalars['Upload']>;
   input?: InputMaybe<IEmployeeModInput>;
 };
 
 export type IMutationSingleUploadArgs = {
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   file: Scalars['Upload'];
 };
 
@@ -179,7 +180,7 @@ export type IQueryCodesArgs = {
 };
 
 export type IQueryEmployeeArgs = {
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   userId?: InputMaybe<Scalars['String']>;
 };
 
@@ -220,7 +221,7 @@ export type ILogoutMutation = {
   __typename?: 'Mutation';
   logout?: {
     __typename?: 'Employee';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     email?: string | null;
@@ -241,7 +242,7 @@ export type IGoToWorkMutation = {
   __typename?: 'Mutation';
   goToWork?: {
     __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     workingDate?: any | null;
@@ -258,7 +259,7 @@ export type ILeaveWorkMutation = {
   __typename?: 'Mutation';
   leaveWork?: {
     __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     workingDate?: any | null;
@@ -275,7 +276,7 @@ export type IAttendedSubscription = {
   __typename?: 'Subscription';
   attended?: {
     __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
+    employeeId?: string | null;
     name?: string | null;
     userId?: string | null;
     workingDate?: any | null;
@@ -292,7 +293,7 @@ export type IGetAllEmployeeQuery = {
   __typename?: 'Query';
   employees?: Array<{
     __typename?: 'Employee';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -307,7 +308,7 @@ export type IGetAllEmployeeQuery = {
 };
 
 export type IGetEmployeeQueryVariables = Exact<{
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   userId?: InputMaybe<Scalars['String']>;
 }>;
 
@@ -315,7 +316,7 @@ export type IGetEmployeeQuery = {
   __typename?: 'Query';
   employee?: {
     __typename?: 'Employee';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -343,7 +344,7 @@ export type IGetEmployeeWorkingQuery = {
   __typename?: 'Query';
   employeeWorking?: Array<{
     __typename?: 'EmployeeWorking';
-    employeeId?: number | null;
+    employeeId?: string | null;
     name?: string | null;
     position?: string | null;
     userId?: string | null;
@@ -371,7 +372,7 @@ export type IGetEmployeeWorkingConditionalQuery = {
     size?: number | null;
     content?: Array<{
       __typename?: 'EmployeeWorking';
-      employeeId?: number | null;
+      employeeId?: string | null;
       name?: string | null;
       position?: string | null;
       userId?: string | null;
@@ -393,7 +394,7 @@ export type IAddEmployeeMutation = {
   __typename?: 'Mutation';
   addEmployee?: {
     __typename?: 'Employee';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -406,7 +407,7 @@ export type IAddEmployeeMutation = {
 };
 
 export type IModEmployeeMutationVariables = Exact<{
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   input: IEmployeeModInput;
   file?: InputMaybe<Scalars['Upload']>;
 }>;
@@ -415,7 +416,7 @@ export type IModEmployeeMutation = {
   __typename?: 'Mutation';
   modEmployee?: {
     __typename?: 'Employee';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -442,14 +443,14 @@ export type IGetCodesQuery = {
 };
 
 export type ISingleUploadMutationVariables = Exact<{
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   file: Scalars['Upload'];
 }>;
 
 export type ISingleUploadMutation = { __typename?: 'Mutation'; singleUpload: { __typename?: 'File'; filename: string } };
 
 export type IChangePwdMutationVariables = Exact<{
-  employeeId?: InputMaybe<Scalars['Int']>;
+  employeeId?: InputMaybe<Scalars['String']>;
   pwd?: InputMaybe<Scalars['String']>;
 }>;
 
@@ -457,7 +458,7 @@ export type IChangePwdMutation = {
   __typename?: 'Mutation';
   changePwd?: {
     __typename?: 'Employee';
-    employeeId?: number | null;
+    employeeId?: string | null;
     userId?: string | null;
     name?: string | null;
     position?: string | null;
@@ -788,7 +789,7 @@ export type GetAllEmployeeQueryHookResult = ReturnType<typeof useGetAllEmployeeQ
 export type GetAllEmployeeLazyQueryHookResult = ReturnType<typeof useGetAllEmployeeLazyQuery>;
 export type GetAllEmployeeQueryResult = Apollo.QueryResult<IGetAllEmployeeQuery, IGetAllEmployeeQueryVariables>;
 export const GetEmployeeDocument = gql`
-  query getEmployee($employeeId: Int, $userId: String) {
+  query getEmployee($employeeId: String, $userId: String) {
     employee(employeeId: $employeeId, userId: $userId) {
       employeeId
       userId
@@ -1020,7 +1021,7 @@ export type AddEmployeeMutationHookResult = ReturnType<typeof useAddEmployeeMuta
 export type AddEmployeeMutationResult = Apollo.MutationResult<IAddEmployeeMutation>;
 export type AddEmployeeMutationOptions = Apollo.BaseMutationOptions<IAddEmployeeMutation, IAddEmployeeMutationVariables>;
 export const ModEmployeeDocument = gql`
-  mutation modEmployee($employeeId: Int, $input: EmployeeModInput!, $file: Upload) {
+  mutation modEmployee($employeeId: String, $input: EmployeeModInput!, $file: Upload) {
     modEmployee(employeeId: $employeeId, input: $input, file: $file) {
       employeeId
       userId
@@ -1106,7 +1107,7 @@ export type GetCodesQueryHookResult = ReturnType<typeof useGetCodesQuery>;
 export type GetCodesLazyQueryHookResult = ReturnType<typeof useGetCodesLazyQuery>;
 export type GetCodesQueryResult = Apollo.QueryResult<IGetCodesQuery, IGetCodesQueryVariables>;
 export const SingleUploadDocument = gql`
-  mutation singleUpload($employeeId: Int, $file: Upload!) {
+  mutation singleUpload($employeeId: String, $file: Upload!) {
     singleUpload(employeeId: $employeeId, file: $file) {
       filename
     }
@@ -1140,7 +1141,7 @@ export type SingleUploadMutationHookResult = ReturnType<typeof useSingleUploadMu
 export type SingleUploadMutationResult = Apollo.MutationResult<ISingleUploadMutation>;
 export type SingleUploadMutationOptions = Apollo.BaseMutationOptions<ISingleUploadMutation, ISingleUploadMutationVariables>;
 export const ChangePwdDocument = gql`
-  mutation changePwd($employeeId: Int, $pwd: String) {
+  mutation changePwd($employeeId: String, $pwd: String) {
     changePwd(employeeId: $employeeId, pwd: $pwd) {
       employeeId
       userId

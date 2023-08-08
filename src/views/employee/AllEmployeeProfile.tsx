@@ -14,7 +14,7 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
   const positionOptions = useCodesMap('POSITION');
   const useUserInfo = useUserToken();
 
-  const clickHandler = (userId: string, empId: number) => {
+  const clickHandler = (userId: string, empId: string) => {
     console.log('AllEmployeeProfile=' + userId + ', ' + empId);
     memberDetailContext?.setMemberDetail({
       userId: userId,
@@ -35,9 +35,9 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
         {list?.employees?.map((emp, idx) => (
           <Profile
             key={emp?.employeeId}
-            onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || 0)}
+            onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || '')}
             empName={emp?.name}
-            empId={emp?.employeeId || 0}
+            empId={emp?.employeeId || ''}
             deptName={emp?.department?.departmentName}
             position={emp?.position}
             photoUrl={emp?.photoUrl || ''}
