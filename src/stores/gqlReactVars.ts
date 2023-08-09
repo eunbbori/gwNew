@@ -8,6 +8,7 @@ export const jwtTokensVar = makeVar({
 
 // JWT Token Payload
 export type AuthData = {
+  employeeId: string;
   userId: string;
   userName: string;
   departmentName: string;

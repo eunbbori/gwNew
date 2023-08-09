@@ -62,7 +62,8 @@ export interface IEmployeeFormValues extends IEmployeeEditFormValues {
 const yupStringRequiredNotTrim = (title: string) => yup.string().required(`${title} 필수 입력사항입니다.`);
 const yupStringRequired = (title: string) => yup.string().trim().required(`${title} 필수 입력사항입니다.`);
 const yupStringRequiredMax = (title: string, max: number) => yupStringRequired(title).max(max, `${max}자 이하로 입력해주세요.`);
-const yupStringRequiredMinMax = (title: string, min: number, max: number) => yupStringRequiredMax(title, max).min(min, `${min}자 이상으로 입력해주세요.`);
+const yupStringRequiredMinMax = (title: string, min: number, max: number) =>
+  yupStringRequiredMax(title, max).min(min, `비밀번호를 ${min}자 이상으로 입력해주세요.`);
 
 export const editSchema = yup.object().shape({
   userId: yupStringRequiredNotTrim('아이디는').matches(
@@ -87,7 +88,7 @@ export const passwordSchema = yup.object().shape({
 });
 
 export const myPasswordSchema = passwordSchema.shape({
-  curPasswd: yupStringRequired('현재 비밀번호는'),
+  prevPasswd: yupStringRequired('비밀번호는').min(6, '비밀번호를 6자 이상으로 입력해주세요.'),
 });
 
 export const addSchema = passwordSchema.concat(

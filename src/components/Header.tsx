@@ -13,6 +13,7 @@ import { Dropdown, Ripple, initTE } from 'tw-elements';
 import Spinner from './Spinner';
 import { useUserToken } from '@/repository/AccessToken';
 import Swal from 'sweetalert';
+import router from 'next/router';
 
 const Header = () => {
   const tokens = useReactiveVar(jwtTokensVar);
@@ -117,6 +118,15 @@ const Header = () => {
                         data-te-dropdown-item-ref
                       >
                         Settings
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        className="cursor-pointer block w-full whitespace-nowrap bg-transparent px-4 py-2 text-sm font-normal text-gray-700 hover:bg-gray-100 active:text-zinc-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-gray-400 dark:text-gray-200 dark:hover:bg-white/30"
+                        href={`/employee/changeMyPwd/${useUserInfo?.employeeId}`}
+                        data-te-dropdown-item-ref
+                      >
+                        비밀번호 변경
                       </a>
                     </li>
                     <li>

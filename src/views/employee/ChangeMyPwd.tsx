@@ -1,35 +1,34 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { useRouter } from 'next/router';
-import Text from '@/components/Input/Text';
 import { useChangePwdMutation } from '@/types/generated/types';
 import Swal from 'sweetalert';
-import { classNames, passwordSchema } from './HandleEmployee';
 import SubmitButton from '@/components/Button/SubmitButton';
 import CancelButton from '@/components/Button/CancelButton';
 import Spinner from '@/components/Spinner';
 import TextInput from '@/components/Input/TextInput';
+import { classNames, myPasswordSchema } from '../admin/HandleEmployee';
+import { useUserToken } from '@/repository/AccessToken';
 
 export interface IEmployeePwdChangeFormValues {
+  prevPasswd: string;
   passwd: string;
   passwdConfirm: string;
 }
 
-interface IChangePwd {
-  detailUserData: any;
-}
 const cancelClassName =
   'inline-block px-6 py-3 mt-6 mb-2 mr-4 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl from-gray-900 to-slate-800 hover:border-slate-700 hover:bg-slate-700 hover:text-white';
 const submitClassName =
   'from-purple-700 to-pink-500 bg-fuchsia-500 hover:border-fuchsia-500 inline-block px-6 py-3 mt-6 mb-2 font-bold text-center text-white uppercase align-middle transition-all bg-transparent border-0 rounded-lg cursor-pointer active:opacity-85 hover:scale-102 hover:shadow-soft-xs leading-pro text-xs ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 bg-gradient-to-tl hover:bg-slate-700 hover:text-white';
 
-const ChangeEmpPwd = (props: IChangePwd) => {
+const ChangeMyPwd = () => {
+  const useUserInfo = useUserToken();
+
   const router = useRouter();
 
   const methods = useForm<IEmployeePwdChangeFormValues>({
-    resolver: yupResolver(passwordSchema),
+    resolver: yupResolver(myPasswordSchema),
     defaultValues: { passwd: '', passwdConfirm: '' },
   });
 
@@ -43,7 +42,8 @@ const ChangeEmpPwd = (props: IChangePwd) => {
 
     changePwdMutation({
       variables: {
-        employeeId: props.detailUserData?.employee?.employeeId,
+        prevPwd: inputData.prevPasswd,
+        employeeId: useUserInfo?.employeeId,
         pwd: inputData.passwd,
       },
       onCompleted: (data) => {
@@ -52,7 +52,7 @@ const ChangeEmpPwd = (props: IChangePwd) => {
         });
       },
       onError: (err) => {
-        Swal('ERROR', '', 'error');
+        Swal('현재비밀번호와 ', '', 'error');
       },
     });
   };
@@ -70,21 +70,18 @@ const ChangeEmpPwd = (props: IChangePwd) => {
                   <div className="flex-auto p-6 w-[600px] border rounded-lg border-dashed border-gray-400">
                     <form onSubmit={methods.handleSubmit(onChangePwd)} role="form text-left">
                       <FormProvider {...methods}>
-                        <div className="mb-4 flex justify-between">
-                          <div className="w-[250px] self-end">
-                            <Text title="사번" value={props.detailUserData?.employee?.employeeId} />
-                          </div>
-                          <div className="w-[250px] self-end">
-                            <Text title="아이디" value={props.detailUserData?.employee?.userId} />
-                          </div>
+                        <div className="mb-4">
+                          <TextInput name="prevPasswd" title="현재 비밀번호" placeHolder="현재 비밀번호를 6자 이상 입력해주세요." type="password" />
+                          {!methods.formState.errors.prevPasswd?.message && <div className={classNames.guide}>현재 비밀번호를 6자 이상으로 입력해주세요</div>}
+                          <div className={classNames.error}>{methods.formState.errors.prevPasswd?.message}</div>
                         </div>
                         <div className="mb-4">
-                          <TextInput name="passwd" title="변경 비밀번호" placeHolder="비밀번호를 입력해주세요" type="password" />
-                          {!methods.formState.errors.passwd?.message && <div className={classNames.guide}>현재 비밀번호를 6자 이상으로 입력해주세요</div>}
+                          <TextInput name="passwd" title="변경 비밀번호" placeHolder="변경할 비밀번호를 입력해주세요" type="password" />
+                          {!methods.formState.errors.passwd?.message && <div className={classNames.guide}>변경할 비밀번호를 6자 이상으로 입력해주세요</div>}
                           <div className={classNames.error}>{methods.formState.errors.passwd?.message}</div>
                         </div>
                         <div className="mb-4">
-                          <TextInput name="passwdConfirm" title="변경 비밀번호 확인" placeHolder="비밀번호 한번 더 입력해주세요" type="password" />
+                          <TextInput name="passwdConfirm" title="변경 비밀번호 확인" placeHolder="변경할 비밀번호 한번 더 입력해주세요" type="password" />
                           <div className={classNames.error}>{methods.formState.errors.passwdConfirm?.message}</div>
                         </div>
                         <div className="text-center flex justify-end">
@@ -104,4 +101,4 @@ const ChangeEmpPwd = (props: IChangePwd) => {
   );
 };
 
-export default ChangeEmpPwd;
+export default ChangeMyPwd;

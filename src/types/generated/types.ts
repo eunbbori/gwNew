@@ -141,6 +141,7 @@ export type IMutationAddEmployeeArgs = {
 
 export type IMutationChangePwdArgs = {
   employeeId?: InputMaybe<Scalars['String']>;
+  prevPwd?: InputMaybe<Scalars['String']>;
   pwd?: InputMaybe<Scalars['String']>;
 };
 
@@ -452,6 +453,7 @@ export type ISingleUploadMutation = { __typename?: 'Mutation'; singleUpload: { _
 export type IChangePwdMutationVariables = Exact<{
   employeeId?: InputMaybe<Scalars['String']>;
   pwd?: InputMaybe<Scalars['String']>;
+  prevPwd?: InputMaybe<Scalars['String']>;
 }>;
 
 export type IChangePwdMutation = {
@@ -1141,8 +1143,8 @@ export type SingleUploadMutationHookResult = ReturnType<typeof useSingleUploadMu
 export type SingleUploadMutationResult = Apollo.MutationResult<ISingleUploadMutation>;
 export type SingleUploadMutationOptions = Apollo.BaseMutationOptions<ISingleUploadMutation, ISingleUploadMutationVariables>;
 export const ChangePwdDocument = gql`
-  mutation changePwd($employeeId: String, $pwd: String) {
-    changePwd(employeeId: $employeeId, pwd: $pwd) {
+  mutation changePwd($employeeId: String, $pwd: String, $prevPwd: String) {
+    changePwd(employeeId: $employeeId, pwd: $pwd, prevPwd: $prevPwd) {
       employeeId
       userId
       name
@@ -1175,6 +1177,7 @@ export type IChangePwdMutationFn = Apollo.MutationFunction<IChangePwdMutation, I
  *   variables: {
  *      employeeId: // value for 'employeeId'
  *      pwd: // value for 'pwd'
+ *      prevPwd: // value for 'prevPwd'
  *   },
  * });
  */

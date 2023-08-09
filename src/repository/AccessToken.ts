@@ -3,6 +3,7 @@ import { useReactiveVar } from '@apollo/client';
 import { AuthData, jwtTokensVar } from '@/stores/gqlReactVars';
 
 type IUserInfo = {
+  employeeId: string;
   userName: string;
   photoUrl: string;
   userId: string;
@@ -17,6 +18,7 @@ export const useUserToken: IUserToken = () => {
   if (tokens?.accessToken) {
     const decoded = jwt_decode<AuthData>(tokens.accessToken);
     return {
+      employeeId: decoded.employeeId,
       userName: decoded.userName,
       photoUrl: decoded.photoUrl || '',
       userId: decoded.userId,
