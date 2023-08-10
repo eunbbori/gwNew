@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { allMenuInfos, RouteInfo, getRouteInfo } from '../repository/RouteInfo';
 import Link from 'next/link';
 import CompanyLogo from './CompanyLogo';
-import jnFirstLogo from 'src/assets/img/jnfirst.png';
+import jnFirstLogo from 'src/assets/img/logos/FAPIG.png';
 import { Sidenav, initTE } from 'tw-elements';
 import { useUserToken } from '@/repository/AccessToken';
 

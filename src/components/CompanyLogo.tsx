@@ -7,10 +7,12 @@ export interface ICompanyLogoProps {
 
 const CompanyLogo = ({ companyNm, imgSrc }: ICompanyLogoProps) => {
   return (
-    <a className="flex px-8 py-6 mb-3 text-base whitespace-nowrap" href="/" rel="noreferrer">
-      {/* <Image src={imgSrc} className="inline w-8 h-full" alt="main_logo" /> */}
-      <span className="self-center ml-4 font-semibold text-sky-700">{companyNm}</span>
-    </a>
+    <div className="mt-5 mb-5 text-center">
+      <a className="px-4 py-4 mb-3 text-base whitespace-nowrap" href="/" rel="noreferrer">
+        <Image src={imgSrc} className="inline w-30 h-full" alt="main_logo" />
+        {/* <span className="self-center ml-4 font-semibold text-sky-700">{companyNm}</span> */}
+      </a>
+    </div>
   );
 };
 
