@@ -139,16 +139,17 @@ mutation singleUpload($employeeId: String, $file: Upload!) {
 mutation changePwd($employeeId: String, $pwd: String, $prevPwd: String) {
   changePwd(employeeId: $employeeId, pwd: $pwd, prevPwd: $prevPwd) {
     employeeId
-    userId
-    name
-    position
-    email
-    department {
-      departmentId
-      departmentName
-    }
-    contractType
-    phone
-    startDate
+  }
+}
+
+mutation changeFirstPwd($email: String, $pwd: String, $prevPwd: String) {
+  changeFirstPwd(email: $email, pwd: $pwd, prevPwd: $prevPwd) {
+    employeeId
+  }
+}
+
+mutation changePwdByAdmin($employeeId: String, $pwd: String) {
+  changePwdByAdmin(employeeId: $employeeId, pwd: $pwd) {
+    employeeId
   }
 }

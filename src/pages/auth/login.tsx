@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLoginMutation } from '@/types/generated/types';
 import { useRouter } from 'next/navigation';
-import { jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
+import { emailVar, jwtTokensVar, startEndAtVar } from '@/stores/gqlReactVars';
 import Swal from 'sweetalert';
 import Spinner from '@/components/Spinner';
 import { classNames, yupEmail, yupPassword } from '@/views/admin/HandleEmployee';
+import { useUserToken } from '@/repository/AccessToken';
+import { useReactiveVar } from '@apollo/client';
 
 export interface ILoginFormValues {
   empEmail: string;
@@ -15,10 +17,16 @@ export interface ILoginFormValues {
 }
 
 const Login = () => {
+  const router = useRouter();
+  const emailInfo = useReactiveVar(emailVar);
+  const [lastLoginTime, setLastLoginTime] = useState<string | null>(null);
+  // const [emailInfo, setEmailInfo] = useState('');
   const loginSchema = yup.object().shape({
     empEmail: yupEmail,
     empPassword: yupPassword,
   });
+
+  const useUserInfo = useUserToken();
 
   const { push, refresh } = useRouter();
 
@@ -33,8 +41,6 @@ const Login = () => {
   const [loginMutation] = useLoginMutation();
   const [isLoading, setLoading] = useState(false);
 
-  if (isLoading) return <Spinner />;
-
   const onLogin = (loginData: ILoginFormValues) => {
     loginMutation({
       variables: {
@@ -42,11 +48,14 @@ const Login = () => {
         passwd: loginData.empPassword,
       },
       onCompleted: (data) => {
+        emailVar({ emailInfo: loginData.empEmail });
+        // setEmailInfo(loginData.empEmail);
         const auth = data?.login;
 
         jwtTokensVar({ accessToken: auth?.accessToken || '' });
         startEndAtVar({ startAt: auth?.startAt, endAt: auth?.endAt });
         setLoading(true);
+        setLastLoginTime(auth?.lastLogin || null);
         push('/');
       },
       onError: (err) => {
@@ -56,6 +65,13 @@ const Login = () => {
       },
     });
   };
+  useEffect(() => {
+    if (lastLoginTime === null && emailInfo.emailInfo) {
+      router.push(`/auth/changeFirstPwd`);
+    }
+  }, [lastLoginTime, emailInfo, router]);
+
+  // if (isLoading) return <Spinner />;
 
   return (
     <div className="w-full mr-auto ml-auto px-6">

@@ -4,6 +4,7 @@ mutation login($email: String, $passwd: String) {
     startAt
     endAt
     workingType
+    lastLogin
   }
 }
 

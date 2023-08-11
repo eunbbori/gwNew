@@ -14,6 +14,7 @@ export type Scalars = {
   Int: number;
   Float: number;
   Date: any;
+  DateTime: any;
   Upload: any;
 };
 
@@ -21,6 +22,7 @@ export type IAuthInfo = {
   __typename?: 'AuthInfo';
   accessToken?: Maybe<Scalars['String']>;
   endAt?: Maybe<Scalars['Date']>;
+  lastLogin?: Maybe<Scalars['Date']>;
   startAt?: Maybe<Scalars['Date']>;
   workingType?: Maybe<Scalars['String']>;
 };
@@ -78,6 +80,7 @@ export type IEmployeeModInput = {
   name?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   position?: InputMaybe<Scalars['String']>;
+  removePhoto?: InputMaybe<Scalars['String']>;
   startDate?: InputMaybe<Scalars['Date']>;
   userId?: InputMaybe<Scalars['String']>;
 };
@@ -124,7 +127,9 @@ export type IFile = {
 export type IMutation = {
   __typename?: 'Mutation';
   addEmployee?: Maybe<IEmployee>;
+  changeFirstPwd?: Maybe<IEmployee>;
   changePwd?: Maybe<IEmployee>;
+  changePwdByAdmin?: Maybe<IEmployee>;
   goToWork?: Maybe<IEmployeeWorking>;
   leaveWork?: Maybe<IEmployeeWorking>;
   login?: Maybe<IAuthInfo>;
@@ -139,9 +144,20 @@ export type IMutationAddEmployeeArgs = {
   input?: InputMaybe<IEmployeeInput>;
 };
 
+export type IMutationChangeFirstPwdArgs = {
+  email?: InputMaybe<Scalars['String']>;
+  prevPwd?: InputMaybe<Scalars['String']>;
+  pwd?: InputMaybe<Scalars['String']>;
+};
+
 export type IMutationChangePwdArgs = {
   employeeId?: InputMaybe<Scalars['String']>;
   prevPwd?: InputMaybe<Scalars['String']>;
+  pwd?: InputMaybe<Scalars['String']>;
+};
+
+export type IMutationChangePwdByAdminArgs = {
+  employeeId?: InputMaybe<Scalars['String']>;
   pwd?: InputMaybe<Scalars['String']>;
 };
 
@@ -207,7 +223,14 @@ export type ILoginMutationVariables = Exact<{
 
 export type ILoginMutation = {
   __typename?: 'Mutation';
-  login?: { __typename?: 'AuthInfo'; accessToken?: string | null; startAt?: any | null; endAt?: any | null; workingType?: string | null } | null;
+  login?: {
+    __typename?: 'AuthInfo';
+    accessToken?: string | null;
+    startAt?: any | null;
+    endAt?: any | null;
+    workingType?: string | null;
+    lastLogin?: any | null;
+  } | null;
 };
 
 export type ICheckUserIdDuplicationQueryVariables = Exact<{
@@ -456,21 +479,22 @@ export type IChangePwdMutationVariables = Exact<{
   prevPwd?: InputMaybe<Scalars['String']>;
 }>;
 
-export type IChangePwdMutation = {
-  __typename?: 'Mutation';
-  changePwd?: {
-    __typename?: 'Employee';
-    employeeId?: string | null;
-    userId?: string | null;
-    name?: string | null;
-    position?: string | null;
-    email?: string | null;
-    contractType?: string | null;
-    phone?: string | null;
-    startDate?: any | null;
-    department?: { __typename?: 'Department'; departmentId?: number | null; departmentName?: string | null } | null;
-  } | null;
-};
+export type IChangePwdMutation = { __typename?: 'Mutation'; changePwd?: { __typename?: 'Employee'; employeeId?: string | null } | null };
+
+export type IChangeFirstPwdMutationVariables = Exact<{
+  email?: InputMaybe<Scalars['String']>;
+  pwd?: InputMaybe<Scalars['String']>;
+  prevPwd?: InputMaybe<Scalars['String']>;
+}>;
+
+export type IChangeFirstPwdMutation = { __typename?: 'Mutation'; changeFirstPwd?: { __typename?: 'Employee'; employeeId?: string | null } | null };
+
+export type IChangePwdByAdminMutationVariables = Exact<{
+  employeeId?: InputMaybe<Scalars['String']>;
+  pwd?: InputMaybe<Scalars['String']>;
+}>;
+
+export type IChangePwdByAdminMutation = { __typename?: 'Mutation'; changePwdByAdmin?: { __typename?: 'Employee'; employeeId?: string | null } | null };
 
 export const LoginDocument = gql`
   mutation login($email: String, $passwd: String) {
@@ -479,6 +503,7 @@ export const LoginDocument = gql`
       startAt
       endAt
       workingType
+      lastLogin
     }
   }
 `;
@@ -1146,17 +1171,6 @@ export const ChangePwdDocument = gql`
   mutation changePwd($employeeId: String, $pwd: String, $prevPwd: String) {
     changePwd(employeeId: $employeeId, pwd: $pwd, prevPwd: $prevPwd) {
       employeeId
-      userId
-      name
-      position
-      email
-      department {
-        departmentId
-        departmentName
-      }
-      contractType
-      phone
-      startDate
     }
   }
 `;
@@ -1188,3 +1202,72 @@ export function useChangePwdMutation(baseOptions?: Apollo.MutationHookOptions<IC
 export type ChangePwdMutationHookResult = ReturnType<typeof useChangePwdMutation>;
 export type ChangePwdMutationResult = Apollo.MutationResult<IChangePwdMutation>;
 export type ChangePwdMutationOptions = Apollo.BaseMutationOptions<IChangePwdMutation, IChangePwdMutationVariables>;
+export const ChangeFirstPwdDocument = gql`
+  mutation changeFirstPwd($email: String, $pwd: String, $prevPwd: String) {
+    changeFirstPwd(email: $email, pwd: $pwd, prevPwd: $prevPwd) {
+      employeeId
+    }
+  }
+`;
+export type IChangeFirstPwdMutationFn = Apollo.MutationFunction<IChangeFirstPwdMutation, IChangeFirstPwdMutationVariables>;
+
+/**
+ * __useChangeFirstPwdMutation__
+ *
+ * To run a mutation, you first call `useChangeFirstPwdMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFirstPwdMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFirstPwdMutation, { data, loading, error }] = useChangeFirstPwdMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      pwd: // value for 'pwd'
+ *      prevPwd: // value for 'prevPwd'
+ *   },
+ * });
+ */
+export function useChangeFirstPwdMutation(baseOptions?: Apollo.MutationHookOptions<IChangeFirstPwdMutation, IChangeFirstPwdMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IChangeFirstPwdMutation, IChangeFirstPwdMutationVariables>(ChangeFirstPwdDocument, options);
+}
+export type ChangeFirstPwdMutationHookResult = ReturnType<typeof useChangeFirstPwdMutation>;
+export type ChangeFirstPwdMutationResult = Apollo.MutationResult<IChangeFirstPwdMutation>;
+export type ChangeFirstPwdMutationOptions = Apollo.BaseMutationOptions<IChangeFirstPwdMutation, IChangeFirstPwdMutationVariables>;
+export const ChangePwdByAdminDocument = gql`
+  mutation changePwdByAdmin($employeeId: String, $pwd: String) {
+    changePwdByAdmin(employeeId: $employeeId, pwd: $pwd) {
+      employeeId
+    }
+  }
+`;
+export type IChangePwdByAdminMutationFn = Apollo.MutationFunction<IChangePwdByAdminMutation, IChangePwdByAdminMutationVariables>;
+
+/**
+ * __useChangePwdByAdminMutation__
+ *
+ * To run a mutation, you first call `useChangePwdByAdminMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangePwdByAdminMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changePwdByAdminMutation, { data, loading, error }] = useChangePwdByAdminMutation({
+ *   variables: {
+ *      employeeId: // value for 'employeeId'
+ *      pwd: // value for 'pwd'
+ *   },
+ * });
+ */
+export function useChangePwdByAdminMutation(baseOptions?: Apollo.MutationHookOptions<IChangePwdByAdminMutation, IChangePwdByAdminMutationVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<IChangePwdByAdminMutation, IChangePwdByAdminMutationVariables>(ChangePwdByAdminDocument, options);
+}
+export type ChangePwdByAdminMutationHookResult = ReturnType<typeof useChangePwdByAdminMutation>;
+export type ChangePwdByAdminMutationResult = Apollo.MutationResult<IChangePwdByAdminMutation>;
+export type ChangePwdByAdminMutationOptions = Apollo.BaseMutationOptions<IChangePwdByAdminMutation, IChangePwdByAdminMutationVariables>;

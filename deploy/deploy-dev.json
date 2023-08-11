@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "graoupware-frontend-dev",
+      "cwd": ".",
+      "args": ["run", "start:dev"],
+      "env": {},
+      "script": "npm",
+      "node_args": [],
+      "log_date_format": "YYYY-MM-DD HH:mm Z",
+      "exec_interpreter": "none",
+      "exec_file": "/dev/null",
+      "exec_mode": "fork",
+      "instances": 1
+    }
+  ]
+}

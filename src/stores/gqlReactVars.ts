@@ -16,6 +16,11 @@ export type AuthData = {
   adminYn?: string;
 };
 
+// First Login emailInfo
+export const emailVar = makeVar({
+  emailInfo: '',
+});
+
 // Today ComeToWork / LeaveWork time of currently login user
 export const startEndAtVar = makeVar({
   startAt: '',
