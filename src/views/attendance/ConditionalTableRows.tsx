@@ -33,7 +33,7 @@ const ConditionalTableRows = ({ data }: TableRowsProps) => {
               <TableCell cellData={e?.department?.departmentName} />
               <TableCell cellData={positionCodes.get(e?.position ?? '')} />
               <TableCell cellData={e.duration} />
-              <TableCell cellData={workingTypeCodes.get(e?.workingType ?? '')} />
+              <TableCell cellData={e?.workingType ? workingTypeCodes.get(e?.workingType ?? '') : '-'} />
               <TableCell cellData={e.startAt ? format(e.startAt, 'MM-dd HH:mm') : '-'} />
               <TableCell cellData={e.endAt ? format(e.endAt, 'MM-dd HH:mm') : '-'} />
             </tr>
