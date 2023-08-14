@@ -11,13 +11,22 @@ export interface IProfileProps {
   deptName?: string | null;
   position?: string | null;
   positionOptions: Map<string, string>;
+  email?: string | null;
   onClick?: () => void;
 }
 
-const Profile = ({ empName, photoUrl, deptName, position, positionOptions, onClick }: IProfileProps) => {
+const Profile = ({ empName, photoUrl, deptName, position, positionOptions, email, onClick }: IProfileProps) => {
   const useUserInfo = useUserToken();
+  const isAdmin = useUserInfo?.adminYn === 'YES';
+
+  const handleProfileClick = () => {
+    if (isAdmin && onClick) {
+      onClick();
+    }
+  };
+
   return (
-    <div className="mr-[35px] mb-[75px]">
+    <div className="mr-[35px] mb-[105px]">
       <div className="flex">
         <div className="w-[144px] h-[144px]">
           <div
@@ -26,9 +35,10 @@ const Profile = ({ empName, photoUrl, deptName, position, positionOptions, onCli
             data-te-ripple-init
             data-te-ripple-color="light"
             className="w-[144px] h-[144px] relative rounded-[8px] overflow-hidden"
+            // onClick={handleProfileClick}
           >
             <Image
-              className="cursor-pointer"
+              className={isAdmin ? 'cursor-pointer' : ''}
               src={photoUrl ? process.env.NEXT_PUBLIC_BASE_PROFILE_API + '/' + photoUrl : blankProfile}
               alt={empName || ''}
               width={0}
@@ -38,8 +48,9 @@ const Profile = ({ empName, photoUrl, deptName, position, positionOptions, onCli
               onClick={onClick}
             />
           </div>
-          <p className="text-[#484848] text-xs text-[16px] mt-[10px] pt-[2px] text-center">{deptName + ' ' + (positionOptions?.get(position || '') ?? '')}</p>
-          <p className="text-black font-bold text-[16px] pt-[2px] text-center">{empName}</p>
+          <p className="text-[#484848] text-xs mt-[10px] pt-[2px] text-center">{deptName + ' ' + (positionOptions?.get(position || '') ?? '')}</p>
+          <p className="text-black font-bold pt-[2px] text-center">{empName}</p>
+          <p className="text-cyan-500 text-xs text-center">{email}</p>
         </div>
       </div>
     </div>

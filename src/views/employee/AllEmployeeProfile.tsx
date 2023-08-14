@@ -42,6 +42,7 @@ const AllEmployeeProfile = ({ list }: { list: IGetAllEmployeeQuery | undefined }
             position={emp?.position}
             photoUrl={emp?.photoUrl || ''}
             positionOptions={positionOptions}
+            email={emp?.email}
           />
         ))}
         {useUserInfo?.adminYn === 'YES' && (

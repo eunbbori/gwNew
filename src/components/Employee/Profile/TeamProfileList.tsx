@@ -61,6 +61,7 @@ const TeamProfileList = ({ deptId, deptName, employees, positionOptions }: ITeam
                 position={emp?.position}
                 photoUrl={emp?.photoUrl || ''}
                 positionOptions={positionOptions}
+                email={emp?.email}
                 onClick={() => clickHandler(emp?.userId || '', emp?.employeeId || '')}
               />
             ))}
