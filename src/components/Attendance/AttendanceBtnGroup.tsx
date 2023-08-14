@@ -43,7 +43,7 @@ const AttendanceBtnGroup = ({ setIsWorking }: IAttendanceRecordProps) => {
   //const btnClass = startEndAt.startAt ? `${basicAttendBtnClass}`
 
   return (
-    <ul className="flex mr-8 mt-[-10px]">
+    <ul className="flex mt-[-10px]">
       <>
         <li className="flex items-center">
           <div className="block px-0 py-2 font-semibold transition-all ease-nav-brand text-sm text-slate-500 ml-6">
