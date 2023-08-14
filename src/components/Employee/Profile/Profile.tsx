@@ -2,7 +2,6 @@ import React from 'react';
 import Image from 'next/image';
 
 import blankProfile from 'src/assets/img/profile/blank-profile-picture-640.png';
-import swal from 'sweetalert';
 import { useUserToken } from '@/repository/AccessToken';
 export interface IProfileProps {
   empName?: string | null;
@@ -19,23 +18,18 @@ const Profile = ({ empName, photoUrl, deptName, position, positionOptions, email
   const useUserInfo = useUserToken();
   const isAdmin = useUserInfo?.adminYn === 'YES';
 
-  const handleProfileClick = () => {
-    if (isAdmin && onClick) {
-      onClick();
-    }
-  };
-
   return (
     <div className="mr-[35px] mb-[105px]">
       <div className="flex">
         <div className="w-[144px] h-[144px]">
           <div
-            data-te-toggle="modal"
             data-te-target="#detailModal"
-            data-te-ripple-init
             data-te-ripple-color="light"
             className="w-[144px] h-[144px] relative rounded-[8px] overflow-hidden"
-            // onClick={handleProfileClick}
+            {...(isAdmin && {
+              'data-te-toggle': 'modal',
+              'data-te-ripple-init': '',
+            })}
           >
             <Image
               className={isAdmin ? 'cursor-pointer' : ''}
