@@ -26,12 +26,15 @@ const nextConfig = {
         pathname: '/employees/**',
       },
       {
-        protocol: 'https',
+        protocol: 'http',
         hostname: '192.168.0.203',
         pathname: '/employees/**',
       },
     ],
   },
+  // serverOptions: {
+  //   secure: process.env.NODE_ENV === 'production',
+  // },
   // async headers() {
   //   return [
   //     {
