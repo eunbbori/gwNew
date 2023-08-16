@@ -32,22 +32,22 @@ const nextConfig = {
       },
     ],
   },
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value:
-              process.env.NODE_ENV === 'production'
-                ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://192.168.0.203:8080/graphql; upgrade-insecure-requests;"
-                : '', // 개발 환경에서는 CSP 설정을 비활성화
-          },
-        ],
-      },
-    ];
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: '/(.*)',
+  //       headers: [
+  //         {
+  //           key: 'Content-Security-Policy',
+  //           value:
+  //             process.env.NODE_ENV === 'production'
+  //               ? "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://192.168.0.204:8080/graphql; upgrade-insecure-requests;"
+  //               : '', // 개발 환경에서는 CSP 설정을 비활성화
+  //         },
+  //       ],
+  //     },
+  //   ];
+  // },
 };
 
 module.exports = nextConfig;
