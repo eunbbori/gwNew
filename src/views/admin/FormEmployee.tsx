@@ -92,7 +92,7 @@ const FormEmployee = ({
                         }}
                       />
                       {!errors.userId?.message && (
-                        <div className={classNames.guide}>아이디값은 특수문자인 space,₩,|,/ 등을 제외하고 최대 20자가 제한입니다.</div>
+                        <div className={classNames.guide}>아이디값은 알파벳 대소문자, 숫자, -, _ 만 허용가능하고 최대 20자가 제한입니다.</div>
                       )}
                       <div className={classNames.error}>{errors.userId?.message}</div>
                     </div>
@@ -100,7 +100,7 @@ const FormEmployee = ({
                       <button
                         type="button"
                         className={
-                          'self-center mr-[15px] h-[30px] inline-block px-4 mb-0 text-xs text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg cursor-pointer xl-max:cursor-not-allowed xl-max:opacity-65 xl-max:pointer-events-none xl-max:bg-gradient-to-tl xl-max:from-purple-700 xl-max:to-pink-500 xl-max:text-white xl-max:border-0 hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 border-fuchsia-500 bg-none text-fuchsia-500 hover:border-fuchsia-500'
+                          'self-center mr-[15px] h-[30px] inline-block px-4 mb-0 text-xs text-center uppercase align-middle transition-all bg-transparent border border-solid rounded-lg cursor-pointer hover:scale-102 hover:shadow-soft-xs active:opacity-85 leading-pro ease-soft-in tracking-tight-soft shadow-soft-md bg-150 bg-x-25 border-fuchsia-500 bg-none text-fuchsia-500 hover:border-fuchsia-500'
                         }
                         onClick={doubleCheckHandler}
                       >
