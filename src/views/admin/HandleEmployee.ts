@@ -67,8 +67,8 @@ const yupStringRequiredMinMax = (title: string, min: number, max: number) =>
 
 export const editSchema = yup.object().shape({
   userId: yupStringRequiredNotTrim('아이디는').matches(
-    /^[a-zA-Z0-9\-_]{1,20}$/,
-    '아이디값은 알파벳 대소문자, 숫자, -, _ 만 허용가능하고 최대 20자가 제한입니다.',
+    /^[a-zA-Z0-9\-_.]{1,20}$/,
+    '아이디값은 알파벳 대소문자, 숫자, -, _, .만 허용가능하고 최대 20자가 제한입니다.',
   ),
   name: yupStringRequiredMax('이름은', 50),
   phone: yupStringRequired('핸드폰 번호는').matches(/^01([016789])-?(\d{3,4})-?(\d{4})$/, '유효한 핸드폰 번호 형식이 아닙니다.'),
